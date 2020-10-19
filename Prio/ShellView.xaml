@@ -1,0 +1,29 @@
+﻿<Window x:Class="Prio.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://www.codeplex.com/prism"
+        xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
+        xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="Prio" Height="500" Width="600" ResizeMode="NoResize">
+	<!--
+        WindowStyle="None"
+		AllowsTransparency="True" to remove drop-shadow
+        
+	<WindowChrome.WindowChrome>
+		<WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+	</WindowChrome.WindowChrome>
+	
+	-->
+
+
+	<st:AutoGrid Columns="Auto, *" RowHeight="*">
+		<ContentControl Margin="0" prism:RegionManager.RegionName="{x:Static constants:RegionNames.MENU_REGION}" />
+		<ContentControl Margin="10, 0" Background="#ACACAC"
+		                prism:RegionManager.RegionName="{x:Static constants:RegionNames.SHELL_CONFIG_REGION}" />
+	</st:AutoGrid>
+
+</Window>

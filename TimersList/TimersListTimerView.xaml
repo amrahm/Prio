@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="TimersList.TimersListTimerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:prism="http://www.codeplex.com/prism"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="100" d:DesignWidth="300">
+
+	<st:AutoGrid Columns="10*, *, 40, 2*" RowHeight="*">
+		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 20 0">
+			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+				<Label Content="Timer Name" Background="AntiqueWhite" />
+			</Viewbox>
+			<Label Content="" Background="Beige" />
+			<Grid Background="Azure" ColumnSpan="2" >
+				<Viewbox Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox" >
+					<Label Content="00:00" FontSize="45" HorizontalContentAlignment="Center" 
+						   Padding="10, 0" x:Name="TimerText" FontFamily="Global Monospace" />
+				</Viewbox>
+			</Grid>
+		</st:AutoGrid>
+		<Border />
+		<st:AutoGrid Rows="*, *, *" ChildMargin="5" ColumnWidth="*">
+			<Button Command="{Binding OpenTimerSettings}">
+				<Image>
+					<Image.Source>
+						<BitmapImage UriSource="/images/settings.png" />
+					</Image.Source>
+				</Image>
+			</Button>
+			<Button Background="GreenYellow" />
+			<Button Background="Red" />
+		</st:AutoGrid>
+	</st:AutoGrid>
+</UserControl>

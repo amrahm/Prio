@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+ 
+	<!--Fonts-->
+	<system:Double x:Key="NormalFontSize">26</system:Double>
+	<FontFamily x:Key="NormalFont">Century Gothic</FontFamily>
+ 
+	<!--Colors-->
+	<Color x:Key="NormalFontColor">#FF5F5F5F</Color>
+ 
+	<!--Brushes-->
+	<SolidColorBrush x:Key="NormalForegroundBrush" Color="{StaticResource NormalFontColor}" />
+ 
+	<!--TextBlocks-->
+	<Style x:Key="NormalTextBlockStyle" TargetType="TextBlock">
+		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
+		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+	</Style>
+ 
+	<!--Controls-->
+	<Style x:Key="BaseControlStyle" TargetType="Control">
+		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
+		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+	</Style>
+     
+</ResourceDictionary>
