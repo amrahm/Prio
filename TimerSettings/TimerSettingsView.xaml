@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:msnry="clr-namespace:Masonry;assembly=Masonry"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              x:Name="Root">
 
@@ -12,61 +13,86 @@
 			<Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
 			<Setter Property="Height" Value="800" />
 			<Setter Property="Width" Value="600" />
-			<Setter Property="MinHeight" Value="400" />
-			<Setter Property="MinWidth" Value="450" />
+			<Setter Property="MinHeight" Value="200" />
+			<Setter Property="MinWidth" Value="470" />
 			<Setter Property="ShowInTaskbar" Value="False" />
+			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
 		</Style>
 	</prism:Dialog.WindowStyle>
 
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
 
 	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-		<WrapPanel MinWidth="250"
-		           Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=Window}}">
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" Background="#00F8FF">
-				<StackPanel Orientation="Vertical" Background="AliceBlue"
-				            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=UIElement}}">
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<Label Content="Timer Name:" />
-						<xctk:WatermarkTextBox Watermark="Give the Timer a Name" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<Label Content="Show Name:" />
-						<CheckBox VerticalAlignment="Center" IsChecked="True"/>
-					</StackPanel>
-					<Label Content="Starting Time:" />
-					<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
-					             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
-						<StackPanel Orientation="Horizontal">
-							<CheckBox VerticalAlignment="Center" IsChecked="True" />
-							<Label Content="Hours" />
-						</StackPanel>
-						<xctk:WatermarkTextBox Watermark="00" Text="00" />
-						<Rectangle />
-						<Label Content=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-						<StackPanel Orientation="Horizontal">
-							<CheckBox VerticalAlignment="Center" IsChecked="True" />
-							<Label Content="Minutes" />
-						</StackPanel>
-						<xctk:WatermarkTextBox Watermark="00" Text="00" />
-						<Rectangle />
-						<Label Content=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-						<StackPanel Orientation="Horizontal">
-							<CheckBox VerticalAlignment="Center" />
-							<Label Content="Seconds" />
-						</StackPanel>
-						<xctk:WatermarkTextBox Watermark="00" Text="00" />
-					</st:AutoGrid>
+		<msnry:MasonryControl Background="Gainsboro" Spacing="3"
+		                      Width="{Binding ElementName=Root, Path=MasonWidth, FallbackValue=603}">
+			<StackPanel Orientation="Vertical" Background="AliceBlue"
+			            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}">
+				<TextBox HorizontalAlignment="Center" Margin="0, 10, 0, 0" MinWidth="60"
+				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="Give the Timer a Name"
+				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Timer Name:"
+				         Style="{StaticResource NormalTextBox}" />
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+					<Label Content="Show Name:" Style="{StaticResource NormalLabelStyle}" />
+					<CheckBox VerticalAlignment="Center" IsChecked="True" />
 				</StackPanel>
-			</WrapPanel>
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#FF0006" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#00FFAD" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#EB08E9" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#0078FF" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#FF008D" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#00FFD6" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#FF00C8" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#00B3FF" />
-			<WrapPanel Width="{Binding ElementName=Root, Path=CtrlWidth}" MinHeight="20" Background="#D03A3D" />
-		</WrapPanel>
+				<Label Content="Starting Time" Style="{StaticResource SubHeaderLabelStyle}" />
+				<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
+				             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
+					<StackPanel Orientation="Horizontal">
+						<CheckBox VerticalAlignment="Center" IsChecked="True" />
+						<Label Content="Hours" Style="{StaticResource NormalLabelStyle}" />
+					</StackPanel>
+					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+					         hc:InfoElement.Placeholder="00" Text="01" TextAlignment="Center"
+					         Style="{StaticResource BigTextBox}" />
+					<Rectangle />
+					<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<StackPanel Orientation="Horizontal">
+						<CheckBox VerticalAlignment="Center" IsChecked="True" />
+						<Label Content="Minutes" Style="{StaticResource NormalLabelStyle}" />
+					</StackPanel>
+
+					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+					         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
+					         Style="{StaticResource BigTextBox}" />
+					<Rectangle />
+					<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					<StackPanel Orientation="Horizontal">
+						<CheckBox VerticalAlignment="Center" />
+						<Label Content="Seconds" Style="{StaticResource NormalLabelStyle}" />
+					</StackPanel>
+
+					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+					         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
+					         Style="{StaticResource BigTextBox}" />
+				</st:AutoGrid>
+			</StackPanel>
+			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="AliceBlue">
+				<Label Content="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
+				<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
+				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Show on desktops:"
+				         Style="{StaticResource NormalTextBox}" />
+				<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
+				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Auto-activate on desktops:"
+				         Style="{StaticResource NormalTextBox}" />
+			</StackPanel>
+			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="AliceBlue">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox VerticalAlignment="Center" IsChecked="True" Margin="5, 0, 0, 0"/>
+					<Label Content="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
+				</StackPanel>
+			</StackPanel>
+			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="AliceBlue" />
+		</msnry:MasonryControl>
 	</ScrollViewer>
 </UserControl>

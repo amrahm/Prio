@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:ModuleTemplate"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">

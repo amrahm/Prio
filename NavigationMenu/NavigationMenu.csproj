@@ -34,6 +34,12 @@
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="HandyControl, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HandyControl.2.5.0.2\lib\net47\HandyControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Masonry, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MasonryControl.2.1.1\lib\net452\Masonry.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=7.2.0.1422, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
@@ -77,26 +83,6 @@
       <HintPath>..\packages\Unity.Container.5.11.1\lib\net47\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.4.0.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NavigationMenuView.xaml.cs">

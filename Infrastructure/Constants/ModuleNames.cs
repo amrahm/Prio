@@ -3,6 +3,7 @@
         public const string EXAMPLE_MODULE = "ExampleModule";
         public const string NAVIGATION_MENU = "NavigationMenu";
         public const string TIMERS_LIST = "TimersList";
+        public const string TIMER = "Timer";
         public const string GENERAL_CONFIG = "GeneralConfig";
     }
 }

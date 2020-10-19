@@ -21,27 +21,7 @@
 		            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=UIElement}}">
 
 			<StackPanel.Resources>
-				<Style TargetType="Button" BasedOn="{StaticResource BaseControlStyle}">
-					<Setter Property="Background" Value="Transparent" />
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="Button">
-								<Border Padding="10" Background="{TemplateBinding Background}">
-									<ContentPresenter VerticalAlignment="Center" />
-								</Border>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-					<Style.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Foreground" Value="#2D82B9" />
-						</Trigger>
-						<Trigger Property="IsPressed" Value="True">
-							<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
-							<Setter Property="Background" Value="LightGray" />
-						</Trigger>
-					</Style.Triggers>
-				</Style>
+				<Style TargetType="Button" BasedOn="{StaticResource BigButton}" />
 			</StackPanel.Resources>
 
 			<Button Content="General" Command="{Binding GenConfigButton}" />

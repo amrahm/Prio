@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Timer.TimerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="400">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+
+	<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 20 0" Background="Beige"
+	             Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ActualWidth}">
+		<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+			<Label Content="Timer Name" Background="AntiqueWhite" />
+		</Viewbox>
+		<Separator />
+		<Grid Background="Azure" st:AutoGrid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="14*" />
+				<ColumnDefinition Width="31*" />
+			</Grid.ColumnDefinitions>
+			<Viewbox Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox" Grid.ColumnSpan="2" Margin="0,0,0,0.4">
+				<Label Content="00:00" HorizontalContentAlignment="Center"
+				       Padding="10, 0" x:Name="TimerText" Style="{StaticResource BigLabelStyle}" />
+			</Viewbox>
+		</Grid>
+	</st:AutoGrid>
+</UserControl>

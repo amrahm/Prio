@@ -1,29 +1,102 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:system="clr-namespace:System;assembly=mscorlib">
- 
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:hc="https://handyorg.github.io/handycontrol">
+
 	<!--Fonts-->
-	<system:Double x:Key="NormalFontSize">26</system:Double>
+	<system:Double x:Key="NormalFontSize">14</system:Double>
 	<FontFamily x:Key="NormalFont">Century Gothic</FontFamily>
- 
+	<system:Double x:Key="SubHeaderFontSize">26</system:Double>
+	<FontFamily x:Key="SubHeaderFont">Corbel</FontFamily>
+	<system:Double x:Key="BigFontSize">36</system:Double>
+	<FontFamily x:Key="BigFont">Nirmala UI</FontFamily>
+
 	<!--Colors-->
-	<Color x:Key="NormalFontColor">#FF5F5F5F</Color>
- 
+	<Color x:Key="NormalFontColor">#353535</Color>
+	<Color x:Key="SubHeaderFontColor">#A05D5D5D</Color>
+
 	<!--Brushes-->
 	<SolidColorBrush x:Key="NormalForegroundBrush" Color="{StaticResource NormalFontColor}" />
- 
-	<!--TextBlocks-->
-	<Style x:Key="NormalTextBlockStyle" TargetType="TextBlock">
+	<SolidColorBrush x:Key="SubHeaderForegroundBrush" Color="{StaticResource SubHeaderFontColor}" />
+
+	<!--Labels-->
+	<Style x:Key="NormalLabelStyle" TargetType="Label">
 		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
 		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
 	</Style>
- 
+	<Style x:Key="SubHeaderLabelStyle" TargetType="Label">
+		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
+		<Setter Property="Foreground" Value="{StaticResource SubHeaderForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+	<Style x:Key="BigLabelStyle" TargetType="Label">
+		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
+		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource BigFontSize}" />
+	</Style>
+
 	<!--Controls-->
 	<Style x:Key="BaseControlStyle" TargetType="Control">
 		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
 		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
 	</Style>
-     
+	<Style x:Key="BigControlStyle" TargetType="Control">
+		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
+		<Setter Property="Foreground" Value="{StaticResource SubHeaderForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+	<Style x:Key="BigButton" TargetType="Button" BasedOn="{StaticResource BigControlStyle}">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border Padding="10" Background="{TemplateBinding Background}">
+						<ContentPresenter VerticalAlignment="Center" />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Foreground" Value="#2D82B9" />
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+				<Setter Property="Background" Value="LightGray" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource BigButton}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border Padding="0" Background="{TemplateBinding Background}">
+						<ContentPresenter VerticalAlignment="Center" />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="#A1CEEA" />
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Background" Value="LightGray" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style x:Key="NormalTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtend}">
+		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
+		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+	</Style>
+	<Style x:Key="BigTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtend}">
+		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
+		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+
 </ResourceDictionary>

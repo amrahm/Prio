@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3E67931A-5313-48D6-B536-5ACC62CD123D}</ProjectGuid>
+    <ProjectGuid>{11A53EC0-290A-4724-B446-E13484D014A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModuleTemplate</RootNamespace>
-    <AssemblyName>ModuleTemplate</AssemblyName>
+    <RootNamespace>Timer</RootNamespace>
+    <AssemblyName>Timer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -87,11 +87,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExampleModule.cs" />
-    <Compile Include="ExampleView.xaml.cs">
-      <DependentUpon>ExampleView.xaml</DependentUpon>
+    <Compile Include="TimerModule.cs" />
+    <Compile Include="TimerView.xaml.cs">
+      <DependentUpon>TimerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExampleViewModel.cs" />
+    <Compile Include="TimerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,7 +104,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ExampleView.xaml">
+    <Page Include="TimerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

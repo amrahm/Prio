@@ -5,34 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:prism="http://www.codeplex.com/prism"
+             xmlns:timer="clr-namespace:Timer;assembly=Timer"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="300">
 
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+
 	<st:AutoGrid Columns="10*, *, 40, 2*" RowHeight="*">
-		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 20 0">
-			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-				<Label Content="Timer Name" Background="AntiqueWhite" />
-			</Viewbox>
-			<Label Content="" Background="Beige" />
-			<Grid Background="Azure" ColumnSpan="2" >
-				<Viewbox Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox" >
-					<Label Content="00:00" FontSize="45" HorizontalContentAlignment="Center" 
-						   Padding="10, 0" x:Name="TimerText" FontFamily="Global Monospace" />
-				</Viewbox>
-			</Grid>
-		</st:AutoGrid>
+		<timer:TimerView />
 		<Border />
 		<st:AutoGrid Rows="*, *, *" ChildMargin="5" ColumnWidth="*">
-			<Button Command="{Binding OpenTimerSettings}">
-				<Image>
-					<Image.Source>
-						<BitmapImage UriSource="/images/settings.png" />
-					</Image.Source>
-				</Image>
+			<Button Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
 			</Button>
-			<Button Background="GreenYellow" />
-			<Button Background="Red" />
+			<Button Background="GreenYellow" Style="{StaticResource BigControlStyle}" />
+			<Button Background="Red" Style="{StaticResource BigControlStyle}" />
 		</st:AutoGrid>
 	</st:AutoGrid>
 </UserControl>

@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using TimerSettings.Annotations;
 
-namespace TimerSettings
-{
+namespace TimerSettings {
     /// <summary>
     /// Interaction logic for TimerSettingsView.xaml
     /// </summary>
@@ -18,16 +18,25 @@ namespace TimerSettings
                 OnPropertyChanged();
             }
         }
+        private double _masonWidth = 605;
 
-        public TimerSettingsView()
-        {
-            InitializeComponent();
-            SizeChanged += TimerAspectRatioLimits;
+        public double MasonWidth {
+            get => _masonWidth;
+            set {
+                _masonWidth = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void TimerAspectRatioLimits(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
+        public TimerSettingsView() {
+            InitializeComponent();
+            SizeChanged += SettingsBoxWidthAdjust;
+        }
+
+        private void SettingsBoxWidthAdjust(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
             double newSizeWidth = sizeChangedEventArgs.NewSize.Width;
-            CtrlWidth = newSizeWidth < 900 ? newSizeWidth : newSizeWidth / 2;
+            CtrlWidth = newSizeWidth / Math.Floor(newSizeWidth / 450);
+            MasonWidth = newSizeWidth + 7;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
