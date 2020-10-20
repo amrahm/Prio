@@ -21,9 +21,7 @@
 		            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=UIElement}}">
 
 			<StackPanel.Resources>
-				<Style TargetType="Button" BasedOn="{StaticResource BigButton}">
-					<Setter Property="Foreground" Value="{StaticResource LightAccent2Brush}" />
-				</Style>
+				<Style TargetType="Button" BasedOn="{StaticResource MediumButtonRed}" />
 			</StackPanel.Resources>
 
 			<Button Content="General" Command="{Binding GenConfigButton}" />

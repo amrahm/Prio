@@ -21,17 +21,17 @@
 
 
 	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
-		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource DarkAccentBrush}">
+		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource MediumBrush}">
 			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-				<Label Content="Timer Name" Background="{StaticResource DarkBrush}"
-				       Foreground="{StaticResource LightAccentBrush}" Style="{StaticResource NormalLabelStyle}" />
+				<Label Content="Timer Name" Background="{StaticResource DarkHintBrush}"
+				       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
 			</Viewbox>
-			<Separator />
-			<Grid Background="{StaticResource SemiDarkBrush}" st:AutoGrid.ColumnSpan="2">
+			<Separator Background="{StaticResource Light2Brush}" />
+			<Grid Background="{StaticResource MediumBrush}" st:AutoGrid.ColumnSpan="2">
 				<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"
 				         Grid.ColumnSpan="2">
-					<Label Content="00:00" HorizontalContentAlignment="Center" Foreground="{StaticResource LightBrush}"
-					       Padding="10, 0" x:Name="TimerText" Style="{StaticResource BigLabelStyle}" />
+					<Label Content="00:00" HorizontalContentAlignment="Center" Foreground="{StaticResource LightAccentBrush}"
+					       Padding="6, 0" x:Name="TimerText" Style="{StaticResource BigControlStyle}" Margin="0, -4, 0, 0" />
 				</Viewbox>
 			</Grid>
 		</st:AutoGrid>

@@ -11,9 +11,10 @@
 	<prism:Dialog.WindowStyle>
 		<Style TargetType="Window">
 			<Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
-			<Setter Property="Height" Value="800" />
-			<Setter Property="Width" Value="600" />
-			<Setter Property="MinHeight" Value="200" />
+			<Setter Property="WindowStyle" Value="None" />
+			<Setter Property="AllowsTransparency" Value="True" />
+			<Setter Property="Width" Value="470" />
+			<Setter Property="MinHeight" Value="100" />
 			<Setter Property="MinWidth" Value="470" />
 			<Setter Property="ShowInTaskbar" Value="False" />
 			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
@@ -29,70 +30,138 @@
 	</UserControl.Resources>
 
 
-	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-		<msnry:MasonryControl Background="{StaticResource SemiDarkBrush}" Spacing="5"
-		                      Width="603" x:Name="Masonry">
-			<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}"
-			            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}">
-				<TextBox HorizontalAlignment="Center" Margin="0, 10, 0, 0" MinWidth="60"
-				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="Give the Timer a Name"
-				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Timer Name:"
-				         Style="{StaticResource NormalTextBox}" />
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
+	              Template="{StaticResource RoundedWithShadowRedBorder}">
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+			<DockPanel Background="{StaticResource MediumBrush}">
+				<msnry:MasonryControl Spacing="3" Width="474" x:Name="Masonry" DockPanel.Dock="Top">
+					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}"
+					            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}">
+						<TextBox HorizontalAlignment="Center" Margin="0, 10, 0, 0" MinWidth="60"
+						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="Give the Timer a Name"
+						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer Name:"
+						         Style="{StaticResource NormalTextBox}" />
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-					<Label Content="Show Name:" Style="{StaticResource NormalLabelStyle}" />
-					<CheckBox VerticalAlignment="Center" IsChecked="True" />
-				</StackPanel>
-				<Label Content="Starting Time" Style="{StaticResource SubHeaderLabelStyle}" />
-				<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
-				             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
-					<StackPanel Orientation="Horizontal">
-						<CheckBox VerticalAlignment="Center" IsChecked="True" />
-						<Label Content="Hours" Style="{StaticResource NormalLabelStyle}" />
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<TextBlock Text="Show Name:" Style="{StaticResource BaseControlStyle}" />
+							<CheckBox VerticalAlignment="Center" IsChecked="True" />
+						</StackPanel>
+						<TextBlock Text="Starting Time" Style="{StaticResource SubHeaderLabelStyle}" />
+						<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
+						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
+							<StackPanel Orientation="Horizontal">
+								<CheckBox VerticalAlignment="Center" IsChecked="True" />
+								<TextBlock Text="Hours" Style="{StaticResource BaseControlStyle}" />
+							</StackPanel>
+							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+							         hc:InfoElement.Placeholder="00" Text="01" TextAlignment="Center"
+							         Style="{StaticResource BiggishBox}" />
+							<Rectangle />
+							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							<StackPanel Orientation="Horizontal">
+								<CheckBox VerticalAlignment="Center" IsChecked="True" />
+								<TextBlock Text="Minutes" Style="{StaticResource BaseControlStyle}" />
+							</StackPanel>
+
+							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+							         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
+							         Style="{StaticResource BiggishBox}" />
+							<Rectangle />
+							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
+							<StackPanel Orientation="Horizontal">
+								<CheckBox VerticalAlignment="Center" />
+								<TextBlock Text="Seconds" Style="{StaticResource BaseControlStyle}" />
+							</StackPanel>
+
+							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
+							         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
+							         Style="{StaticResource BiggishBox}" />
+						</st:AutoGrid>
 					</StackPanel>
-					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-					         hc:InfoElement.Placeholder="00" Text="01" TextAlignment="Center"
-					         Style="{StaticResource BigTextBox}" />
-					<Rectangle />
-					<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-					<StackPanel Orientation="Horizontal">
-						<CheckBox VerticalAlignment="Center" IsChecked="True" />
-						<Label Content="Minutes" Style="{StaticResource NormalLabelStyle}" />
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
+						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
+						         Style="{StaticResource NormalTextBox}" />
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
+						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
+						         Style="{StaticResource NormalTextBox}" />
 					</StackPanel>
 
-					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-					         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
-					         Style="{StaticResource BigTextBox}" />
-					<Rectangle />
-					<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-					<StackPanel Orientation="Horizontal">
-						<CheckBox VerticalAlignment="Center" />
-						<Label Content="Seconds" Style="{StaticResource NormalLabelStyle}" />
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound:" />
+							</StackPanel>
+						</StackPanel>
 					</StackPanel>
+					<StackPanel Width="{Binding CtrlWidth, ElementName=Root, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
 
-					<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-					         hc:InfoElement.Placeholder="00" Text="00" TextAlignment="Center"
-					         Style="{StaticResource BigTextBox}" />
-				</st:AutoGrid>
-			</StackPanel>
-			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="{StaticResource LightBrush}">
-				<Label Content="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
-				<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
-				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
-				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Show on desktops:"
-				         Style="{StaticResource NormalTextBox}" />
-				<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
-				         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
-				         hc:InfoElement.TitleAlignment="Left" hc:InfoElement.Title="Auto-activate on desktops:"
-				         Style="{StaticResource NormalTextBox}" />
-			</StackPanel>
-			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="{StaticResource LightBrush}">
-				<StackPanel Orientation="Horizontal">
-					<CheckBox VerticalAlignment="Center" IsChecked="True" Margin="5, 0, 0, 0"/>
-					<Label Content="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
-				</StackPanel>
-			</StackPanel>
-			<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=600}" Background="{StaticResource LightBrush}" />
-		</msnry:MasonryControl>
+						<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlStyle}"
+						           Margin="10, -5, 0, 2" />
+						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
+							<st:AutoGrid Columns="*, *" ChildHorizontalAlignment="Center">
+								<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}"
+								         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+								         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Start" />
+								<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}"
+								         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+								         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Stop" />
+							</st:AutoGrid>
+						</Border>
+						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
+							<hc:FlexPanel JustifyContent="SpaceAround">
+								<StackPanel>
+									<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}" TextAlignment="Center"
+									         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+									         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Keep On Top" />
+									<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}" TextAlignment="Center"
+									         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+									         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title=" Keep Behind" />
+								</StackPanel>
+								<StackPanel>
+									<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}" TextAlignment="Center"
+									         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+									         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Show" />
+									<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}" TextAlignment="Center"
+									         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+									         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title=" Hide" />
+								</StackPanel>
+							</hc:FlexPanel>
+						</Border>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
+
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
+					</StackPanel>
+				</msnry:MasonryControl>
+
+				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False"
+				           x:Name="ConfirmationBar" Margin="0, 3, 0, 0">
+					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource NormalButtonDarkBordered}"
+					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" />
+					<Button DockPanel.Dock="Right" Content="Apply" Style="{StaticResource NormalButtonDarkBordered}"
+					        Margin="5" Width="70" />
+					<Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource NormalButtonDarkBordered}"
+					        Margin="5" Width="70" />
+
+				</DockPanel>
+
+			</DockPanel>
+		</ScrollViewer>
 	</ScrollViewer>
+
 </UserControl>

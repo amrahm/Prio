@@ -31,8 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HandyControl, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HandyControl.2.5.0.2\lib\net47\HandyControl.dll</HintPath>
+    <Reference Include="HandyControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HandyControl.3.0.0-rc.2\lib\net47\HandyControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Masonry, Version=2.0.2010.1215, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\wpfmasonry.2.0.2010.1215\lib\net461\Masonry.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -41,6 +44,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,6 +59,7 @@
     <Compile Include="Constants\ModuleNames.cs" />
     <Compile Include="Constants\RegionNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedResources\Extensions.cs" />
     <Compile Include="SharedResources\WidthAndHeightToRectConverter.cs" />
   </ItemGroup>
   <ItemGroup>
