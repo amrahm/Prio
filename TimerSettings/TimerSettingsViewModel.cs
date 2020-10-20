@@ -1,6 +1,5 @@
 ﻿using System;
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 

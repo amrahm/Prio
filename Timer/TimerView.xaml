@@ -6,10 +6,12 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              mc:Ignorable="d"
-             d:DesignHeight="200" d:DesignWidth="400">
+             d:DesignHeight="100" d:DesignWidth="200">
 
 	<UserControl.Resources>
+		
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
@@ -18,21 +20,22 @@
 	</UserControl.Resources>
 
 
-	<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 20 0" Background="Beige"
-	             Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ActualWidth}">
-		<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-			<Label Content="Timer Name" Background="AntiqueWhite" />
-		</Viewbox>
-		<Separator />
-		<Grid Background="Azure" st:AutoGrid.ColumnSpan="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="14*" />
-				<ColumnDefinition Width="31*" />
-			</Grid.ColumnDefinitions>
-			<Viewbox Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox" Grid.ColumnSpan="2" Margin="0,0,0,0.4">
-				<Label Content="00:00" HorizontalContentAlignment="Center"
-				       Padding="10, 0" x:Name="TimerText" Style="{StaticResource BigLabelStyle}" />
+	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
+		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource DarkAccentBrush}">
+			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+				<Label Content="Timer Name" Background="{StaticResource DarkBrush}"
+				       Foreground="{StaticResource LightAccentBrush}" Style="{StaticResource NormalLabelStyle}" />
 			</Viewbox>
-		</Grid>
-	</st:AutoGrid>
+			<Separator />
+			<Grid Background="{StaticResource SemiDarkBrush}" st:AutoGrid.ColumnSpan="2">
+				<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"
+				         Grid.ColumnSpan="2">
+					<Label Content="00:00" HorizontalContentAlignment="Center" Foreground="{StaticResource LightBrush}"
+					       Padding="10, 0" x:Name="TimerText" Style="{StaticResource BigLabelStyle}" />
+				</Viewbox>
+			</Grid>
+		</st:AutoGrid>
+	</Border>
+
+
 </UserControl>

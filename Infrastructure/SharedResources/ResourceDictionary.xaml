@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:hc="https://handyorg.github.io/handycontrol">
+                    xmlns:local="clr-namespace:Infrastructure">
 
 	<!--Fonts-->
 	<system:Double x:Key="NormalFontSize">14</system:Double>
@@ -12,39 +12,57 @@
 	<FontFamily x:Key="BigFont">Nirmala UI</FontFamily>
 
 	<!--Colors-->
-	<Color x:Key="NormalFontColor">#353535</Color>
-	<Color x:Key="SubHeaderFontColor">#A05D5D5D</Color>
+	<Color x:Key="Dark">#0D2340</Color>
+	<Color x:Key="SemiDark">#184A8C</Color>
+	<Color x:Key="Light">#B5E6D1</Color>
+	<Color x:Key="LightAccent">#F1EEC1</Color>
+	<Color x:Key="LightAccent2">#F26F63</Color>
+	<Color x:Key="DarkAccent">#8C184E</Color>
 
 	<!--Brushes-->
-	<SolidColorBrush x:Key="NormalForegroundBrush" Color="{StaticResource NormalFontColor}" />
-	<SolidColorBrush x:Key="SubHeaderForegroundBrush" Color="{StaticResource SubHeaderFontColor}" />
+	<SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}" />
+	<SolidColorBrush x:Key="SemiDarkBrush" Color="{StaticResource SemiDark}" />
+	<SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}" />
+	<SolidColorBrush x:Key="LightAccentBrush" Color="{StaticResource LightAccent}" />
+	<SolidColorBrush x:Key="LightAccent2Brush" Color="{StaticResource LightAccent2}" />
+	<SolidColorBrush x:Key="DarkAccentBrush" Color="{StaticResource DarkAccent}" />
 
 	<!--Labels-->
 	<Style x:Key="NormalLabelStyle" TargetType="Label">
 		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
-		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
 	</Style>
 	<Style x:Key="SubHeaderLabelStyle" TargetType="Label">
 		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
-		<Setter Property="Foreground" Value="{StaticResource SubHeaderForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource SemiDarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+		<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowEffect
+					ShadowDepth="3"
+					Direction="250"
+					Color="Black"
+					Opacity="0.36"
+					BlurRadius="3" />
+			</Setter.Value>
+		</Setter>
 	</Style>
 	<Style x:Key="BigLabelStyle" TargetType="Label">
 		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
-		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource BigFontSize}" />
 	</Style>
 
 	<!--Controls-->
 	<Style x:Key="BaseControlStyle" TargetType="Control">
 		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
-		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
 	</Style>
 	<Style x:Key="BigControlStyle" TargetType="Control">
 		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
-		<Setter Property="Foreground" Value="{StaticResource SubHeaderForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource SemiDarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
 	</Style>
 	<Style x:Key="BigButton" TargetType="Button" BasedOn="{StaticResource BigControlStyle}">
@@ -60,11 +78,11 @@
 		</Setter>
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Foreground" Value="#2D82B9" />
+				<Setter Property="Foreground" Value="{StaticResource LightAccentBrush}" />
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
-				<Setter Property="Background" Value="LightGray" />
+				<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
+				<Setter Property="Background" Value="{StaticResource SemiDarkBrush}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -78,25 +96,56 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		
+
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" Value="#A1CEEA" />
+				<Setter Property="Background" Value="{StaticResource LightAccentBrush}" />
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Background" Value="LightGray" />
+				<Setter Property="Background" Value="{StaticResource SemiDarkBrush}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
+	<Style x:Key="BorderButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+		<Setter Property="BorderBrush" Value="{StaticResource LightAccent2Brush}" />
+		<Setter Property="BorderThickness" Value="2" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+	</Style>
 	<Style x:Key="NormalTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtend}">
 		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
-		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
 	</Style>
 	<Style x:Key="BigTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtend}">
 		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
-		<Setter Property="Foreground" Value="{StaticResource NormalForegroundBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+
+
+	<local:WidthAndHeightToRectConverter x:Key="WidthAndHeightToRectConverter" />
+	<Style x:Key="BorderClip" TargetType="Border">
+
+		<Setter Property="Clip">
+			<Setter.Value>
+				<RectangleGeometry
+					RadiusX="{Binding CornerRadius.TopLeft, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
+					RadiusY="{Binding RadiusX, RelativeSource={RelativeSource Self}}">
+					<RectangleGeometry.Rect>
+						<MultiBinding
+							Converter="{StaticResource WidthAndHeightToRectConverter}">
+							<Binding
+								Path="ActualWidth"
+								RelativeSource="{RelativeSource AncestorType={x:Type Border}}" />
+							<Binding
+								Path="ActualHeight"
+								RelativeSource="{RelativeSource AncestorType={x:Type Border}}" />
+						</MultiBinding>
+					</RectangleGeometry.Rect>
+				</RectangleGeometry>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 </ResourceDictionary>

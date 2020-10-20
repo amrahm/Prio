@@ -4,14 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TimersList"
-             xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:msnry="clr-namespace:Masonry;assembly=Masonry"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="500">
-	<ScrollViewer VerticalScrollBarVisibility="Auto">
-		<StackPanel>
-			<local:TimersListTimerView MaxHeight="100" MinHeight="50" Padding="5" />
-			<local:TimersListTimerView MaxHeight="100" MinHeight="50" Padding="5" Background="#7F808488"/>
-			<local:TimersListTimerView MaxHeight="100" MinHeight="50" Padding="5" />
-		</StackPanel>
+             d:DesignHeight="400" d:DesignWidth="420"
+             x:Name="Root">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+	              Background="{StaticResource LightBrush}">
+		<WrapPanel x:Name="TimerWrapPanel">
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+			<local:TimersListTimerView  Height="100" Margin="5"
+			                            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
+
+		</WrapPanel>
 	</ScrollViewer>
 </UserControl>

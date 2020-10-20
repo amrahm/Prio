@@ -9,21 +9,13 @@ namespace TimerSettings {
     /// Interaction logic for TimerSettingsView.xaml
     /// </summary>
     public partial class TimerSettingsView : INotifyPropertyChanged {
+        private const int MinCtrlWidth = 450;
         private double _ctrlWidth = 600;
 
         public double CtrlWidth {
             get => _ctrlWidth;
             set {
                 _ctrlWidth = value;
-                OnPropertyChanged();
-            }
-        }
-        private double _masonWidth = 605;
-
-        public double MasonWidth {
-            get => _masonWidth;
-            set {
-                _masonWidth = value;
                 OnPropertyChanged();
             }
         }
@@ -35,8 +27,11 @@ namespace TimerSettings {
 
         private void SettingsBoxWidthAdjust(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
             double newSizeWidth = sizeChangedEventArgs.NewSize.Width;
-            CtrlWidth = newSizeWidth / Math.Floor(newSizeWidth / 450);
-            MasonWidth = newSizeWidth + 7;
+            double maxPerRow = Math.Floor(newSizeWidth / MinCtrlWidth);
+            CtrlWidth = newSizeWidth / Math.Min(maxPerRow, Masonry.Items.Count) -
+                        Masonry.Spacing / (double) Masonry.Items.Count + 2;
+            Masonry.Width = newSizeWidth + Masonry.Items.Count * Masonry.Spacing + 10;
+            Masonry.Spacing = (int) maxPerRow == 1 ? 3 : 5;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

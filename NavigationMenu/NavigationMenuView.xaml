@@ -17,11 +17,13 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<StackPanel Background="WhiteSmoke"
+		<StackPanel Background="{StaticResource DarkBrush}"
 		            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=UIElement}}">
 
 			<StackPanel.Resources>
-				<Style TargetType="Button" BasedOn="{StaticResource BigButton}" />
+				<Style TargetType="Button" BasedOn="{StaticResource BigButton}">
+					<Setter Property="Foreground" Value="{StaticResource LightAccent2Brush}" />
+				</Style>
 			</StackPanel.Resources>
 
 			<Button Content="General" Command="{Binding GenConfigButton}" />

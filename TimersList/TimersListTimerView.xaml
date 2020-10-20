@@ -20,15 +20,31 @@
 	</UserControl.Resources>
 
 
-	<st:AutoGrid Columns="10*, *, 40, 2*" RowHeight="*">
-		<timer:TimerView />
-		<Border />
-		<st:AutoGrid Rows="*, *, *" ChildMargin="5" ColumnWidth="*">
-			<Button Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+	<st:AutoGrid Columns="*, Auto" RowHeight="*">
+		<timer:TimerView>
+			<timer:TimerView.Effect>
+				<DropShadowEffect
+					ShadowDepth="3"
+					Direction="330"
+					Color="Black"
+					Opacity="0.36"
+					BlurRadius="3" />
+			</timer:TimerView.Effect>
+		</timer:TimerView>
+
+		<st:AutoGrid Rows="*, *, *" ChildMargin="3" ColumnWidth="*" Margin="5, 0">
+			<Button Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
 				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
 			</Button>
-			<Button Background="GreenYellow" Style="{StaticResource BigControlStyle}" />
-			<Button Background="Red" Style="{StaticResource BigControlStyle}" />
+			<Button Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
+			</Button>
+			<Button Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
+			</Button>
 		</st:AutoGrid>
 	</st:AutoGrid>
 </UserControl>
