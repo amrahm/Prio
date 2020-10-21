@@ -16,7 +16,7 @@ namespace TimerSettings {
     /// </summary>
     public partial class TimerSettingsView : INotifyPropertyChanged {
         private const int MinCtrlWidth = 450;
-        private const int SnappingIncrement = MinCtrlWidth + 20;
+        private const int SnappingIncrement = MinCtrlWidth + 50;
         private double _ctrlWidth = MinCtrlWidth;
 
         public double CtrlWidth {
@@ -45,23 +45,29 @@ namespace TimerSettings {
                 _startHeight = _dialogWindow.Height;
                 _dialogWindow.SizeToContent = SizeToContent.Height;
 
-
-                PresentationSource presentationsource = PresentationSource.FromVisual(this);
-                double dpiHeightFactor = presentationsource?.CompositionTarget?.TransformToDevice.M22 ?? 1;
+                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_dialogWindow);
+                Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
+                Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
+                Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
+                double dpiWidthFactor = m.M11;
+                double dpiHeightFactor = m.M22;
 
                 while(_dialogWindow.CurrentScreen().WorkingArea.Height - 50 < MainWrapPanel.ActualHeight * dpiHeightFactor &&
-                      _dialogWindow.CurrentScreen().WorkingArea.Width - 50 > _dialogWindow.Width + SnappingIncrement) {
-                    Debug.WriteLine(
-                        $"{_dialogWindow.CurrentScreen().WorkingArea.Height - 50}, {MainWrapPanel.ActualHeight * dpiHeightFactor}, {_dialogWindow.Height}");
+                      _dialogWindow.CurrentScreen().WorkingArea.Width - 50 >
+                      MainWrapPanel.ActualWidth * dpiWidthFactor + SnappingIncrement) {
+                    MainWrapPanel.Width += SnappingIncrement;
                     _dialogWindow.Width += SnappingIncrement;
+                    _dialogWindow.SizeToContent = SizeToContent.WidthAndHeight;
                 }
 
-                _dialogWindow.MaxHeight = _dialogWindow.CurrentScreen().WorkingArea.Height - 50;
+                _dialogWindow.MaxHeight = (_dialogWindow.CurrentScreen().WorkingArea.Height - 50) / dpiHeightFactor;
 
                 _dialogWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-                _dialogWindow.Left = (_dialogWindow.CurrentScreen().WorkingArea.Width - _dialogWindow.ActualWidth) / 2 +
-                                     _dialogWindow.CurrentScreen().WorkingArea.Left;
-                _dialogWindow.Top = (_dialogWindow.CurrentScreen().WorkingArea.Height - _dialogWindow.ActualHeight) / 2 +
+                _dialogWindow.Left =
+                    (_dialogWindow.CurrentScreen().WorkingArea.Width / dpiWidthFactor - _dialogWindow.ActualWidth) / 2 +
+                    _dialogWindow.CurrentScreen().WorkingArea.Left;
+                _dialogWindow.Top = (_dialogWindow.CurrentScreen().WorkingArea.Height / dpiHeightFactor -
+                                     _dialogWindow.ActualHeight) / 2 +
                                     _dialogWindow.CurrentScreen().WorkingArea.Top;
             };
 
@@ -73,7 +79,6 @@ namespace TimerSettings {
                 int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
                 MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
                 CtrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
-
 
                 for(int i = 0; i < MainWrapPanel.Children.Count; i++) {
                     FrameworkElement child = (FrameworkElement) MainWrapPanel.Children[i];
