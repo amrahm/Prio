@@ -54,16 +54,28 @@ namespace TimerSettings {
                 }
 
                 _dialogWindow.MaxHeight = _dialogWindow.CurrentScreen().WorkingArea.Height - 50;
+
+                _dialogWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+                _dialogWindow.Left = (SystemParameters.WorkArea.Width - _dialogWindow.ActualWidth) / 2 +
+                                     SystemParameters.WorkArea.Left;
+                _dialogWindow.Top = (SystemParameters.WorkArea.Height - _dialogWindow.ActualHeight) / 2 +
+                                    SystemParameters.WorkArea.Top;
             };
 
             SizeChanged += (o, args) => {
+                const double spacing = 3;
+
                 double newSizeWidth = args.NewSize.Width;
                 int maxPerRow = (int) Math.Floor(newSizeWidth / MinCtrlWidth);
-                int numPerRow = Math.Min(maxPerRow, Masonry.Items.Count);
-                Masonry.Width = newSizeWidth + numPerRow * Masonry.Spacing + 20;
-                CtrlWidth = newSizeWidth / numPerRow - (Masonry.Spacing * (numPerRow - 1) + 15) / (double) numPerRow;
-                Masonry.Spacing = numPerRow == 1 ? 3 : 5;
-                ConfirmationBar.Margin = new Thickness(0, Masonry.Spacing, 0, 0);
+                int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
+                MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
+                CtrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
+
+
+                for(int i = 0; i < MainWrapPanel.Children.Count; i++) {
+                    FrameworkElement child = (FrameworkElement) MainWrapPanel.Children[i];
+                    child.Margin = new Thickness(0, 0, (i + 1) % numPerRow == 0 ? 0 : spacing, spacing);
+                }
 
                 if(_dialogWindow != null && _sizeToContent) {
                     _dialogWindow.SizeToContent = SizeToContent.Height;

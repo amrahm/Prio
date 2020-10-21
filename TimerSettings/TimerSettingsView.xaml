@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:msnry="clr-namespace:Masonry;assembly=Masonry"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              x:Name="Root">
@@ -29,12 +28,11 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-
-	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
-	              Template="{StaticResource RoundedWithShadowRedBorder}">
+	<ContentControl Template="{StaticResource RoundedWithShadowTemplate}" BorderThickness="2, 0, 2, 0"
+	                BorderBrush="{StaticResource MediumAccentBrush}">
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 			<DockPanel Background="{StaticResource MediumBrush}">
-				<msnry:MasonryControl Spacing="3" Width="474" x:Name="Masonry" DockPanel.Dock="Top">
+				<WrapPanel Width="470" x:Name="MainWrapPanel" DockPanel.Dock="Top">
 					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}"
 					            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}">
 						<TextBox HorizontalAlignment="Center" Margin="0, 10, 0, 0" MinWidth="60"
@@ -78,29 +76,6 @@
 							         Style="{StaticResource BiggishBox}" />
 						</st:AutoGrid>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
-					            Background="{StaticResource LightBrush}">
-						<TextBlock Text="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
-						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
-						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
-						         Style="{StaticResource NormalTextBox}" />
-						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
-						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
-						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
-						         Style="{StaticResource NormalTextBox}" />
-					</StackPanel>
-
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
-					            Background="{StaticResource LightBrush}">
-						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
-						<StackPanel>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Margin="5" />
-								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound:" />
-							</StackPanel>
-						</StackPanel>
-					</StackPanel>
 					<StackPanel Width="{Binding CtrlWidth, ElementName=Root, FallbackValue=470}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -141,16 +116,79 @@
 					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
+						</StackPanel>
+						<Button HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
+						        Style="{StaticResource NormalButtonLight2Bordered}">
+							<TextBlock Text="+" FontSize="36" Margin="0, -16, 0, -8" Style="{StaticResource HintControlStyle}" />
 
+						</Button>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound:" />
+								<Button Style="{StaticResource NormalButtonLight2Bordered}" Content="&lt;No File Selected&gt;" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" />
+								<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5"
+								         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="enter message"
+								         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show Message:"
+								         Style="{StaticResource NormalTextBox}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="20, -5, 0, 0">
+								<CheckBox Margin="5" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="As Alert" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Overflow" />
+								<TextBlock Style="{StaticResource HintControlStyle}" Text="(Count Up)" />
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
+						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
+						         Style="{StaticResource NormalTextBox}" />
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
+						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
+						         Style="{StaticResource NormalTextBox}" />
 					</StackPanel>
 					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
-					</StackPanel>
-				</msnry:MasonryControl>
 
-				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False"
-				           x:Name="ConfirmationBar" Margin="0, 3, 0, 0">
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+								<hc:TimePicker.Clock>
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+								</hc:TimePicker.Clock>
+							</hc:TimePicker>
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
+					</StackPanel>
+				</WrapPanel>
+
+				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0">
 					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource NormalButtonDarkBordered}"
 					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" />
 					<Button DockPanel.Dock="Right" Content="Apply" Style="{StaticResource NormalButtonDarkBordered}" Width="70" />
@@ -160,6 +198,6 @@
 
 			</DockPanel>
 		</ScrollViewer>
-	</ScrollViewer>
+	</ContentControl>
 
 </UserControl>

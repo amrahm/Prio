@@ -24,6 +24,7 @@
 	<Color x:Key="DarkHint">#7A90AC</Color>
 	<Color x:Key="Medium">#184A8C</Color>
 	<Color x:Key="Light">#BEF2DC</Color>
+	<Color x:Key="SemiLight">#87BAC1</Color>
 	<Color x:Key="Light2">#F1EEC1</Color>
 	<Color x:Key="LightHint">#F8E1DF</Color>
 	<Color x:Key="LightAccent">#F26F63</Color>
@@ -35,6 +36,7 @@
 	<SolidColorBrush x:Key="DarkHintBrush" Color="{StaticResource DarkHint}" />
 	<SolidColorBrush x:Key="MediumBrush" Color="{StaticResource Medium}" />
 	<SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}" />
+	<SolidColorBrush x:Key="SemiLightBrush" Color="{StaticResource SemiLight}" />
 	<SolidColorBrush x:Key="Light2Brush" Color="{StaticResource Light2}" />
 	<SolidColorBrush x:Key="LightHintBrush" Color="{StaticResource LightHint}" />
 	<SolidColorBrush x:Key="LightAccentBrush" Color="{StaticResource LightAccent}" />
@@ -45,6 +47,7 @@
 	<!-- Border Styles-->
 	<local:WidthAndHeightToRectConverter x:Key="WidthAndHeightToRectConverter" />
 	<Style x:Key="BorderClip" TargetType="Border">
+		<Setter Property="CornerRadius" Value="15" />
 		<Setter Property="Clip">
 			<Setter.Value>
 				<RectangleGeometry
@@ -62,7 +65,7 @@
 		</Setter>
 	</Style>
 
-	<ControlTemplate x:Key="RoundedWithShadowRedBorder" TargetType="ContentControl">
+	<ControlTemplate x:Key="RoundedWithShadowTemplate" TargetType="ContentControl">
 		<Border BorderBrush="Transparent" BorderThickness="6"
 		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
 		        Background="Transparent">
@@ -72,28 +75,24 @@
 				</Border.Effect>
 				<Border Style="{StaticResource BorderClip}"
 				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
-				        BorderBrush="{StaticResource MediumAccentBrush}"
-				        BorderThickness="2, 0, 2, 0">
+				        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 					<ContentPresenter />
 				</Border>
 			</Border>
 		</Border>
 	</ControlTemplate>
 
-	<ControlTemplate x:Key="RoundedWithShadow" TargetType="ContentControl">
-		<Border BorderBrush="Transparent" BorderThickness="6"
-		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
-		        Background="Transparent">
-			<Border>
-				<Border.Effect>
-					<DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10" Color="Black" />
-				</Border.Effect>
+	<ControlTemplate x:Key="RoundedTemplate" TargetType="ContentControl">
+		<Border>
+			<Border CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
+			        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 				<Border Style="{StaticResource BorderClip}"
 				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
 					<ContentPresenter />
 				</Border>
 			</Border>
 		</Border>
+
 	</ControlTemplate>
 
 	<!--Controls-->
@@ -124,12 +123,7 @@
 	       BasedOn="{StaticResource MediumControlStyle}">
 		<Setter Property="Effect">
 			<Setter.Value>
-				<DropShadowEffect
-					ShadowDepth="3"
-					Direction="250"
-					Color="Black"
-					Opacity="0.36"
-					BlurRadius="3" />
+				<DropShadowEffect ShadowDepth="3" Direction="250" Color="Black" Opacity="0.36" BlurRadius="3" />
 			</Setter.Value>
 		</Setter>
 	</Style>
@@ -216,6 +210,25 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
+
+	<Style x:Key="NormalButtonLight2Bordered" TargetType="Button" BasedOn="{StaticResource NormalButtonDarkBordered}">
+		<Setter Property="Background" Value="{StaticResource Light2Brush}" />
+		<Setter Property="BorderBrush" Value="{StaticResource DarkHintBrush}" />
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Foreground" Value="{StaticResource SemiLightBrush}" />
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
+				<Setter Property="Background" Value="{StaticResource DarkHintBrush}" />
+				<Setter Property="Effect">
+					<Setter.Value>
+						<DropShadowEffect Opacity="0" />
+					</Setter.Value>
+				</Setter>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 	<Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
 		<Setter Property="Padding" Value="2" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -244,6 +257,69 @@
 		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
 		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+
+
+	<Style x:Key="Clok" TargetType="hc:Clock">
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="Focusable" Value="False" />
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+		<Setter Property="Width" Value="210" />
+		<Setter Property="Height" Value="310" />
+		<Setter Property="VerticalAlignment" Value="Top" />
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+		<Setter Property="ClockRadioButtonStyle" Value="{StaticResource ClockRadioButtonStyle}" />
+		<Setter Property="hc:TitleElement.Background" Value="{DynamicResource TitleBrush}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="hc:Clock">
+					<Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="50" />
+								<RowDefinition />
+							</Grid.RowDefinitions>
+							<Border Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}"
+							        Name="PART_BorderTitle">
+								<TextBlock x:Name="PART_TimeStr" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"
+								           Foreground="White" />
+							</Border>
+							<Border Grid.Row="1" Background="{TemplateBinding Background}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition />
+										<ColumnDefinition />
+										<ColumnDefinition />
+									</Grid.ColumnDefinitions>
+									<Canvas Grid.ColumnSpan="3" Margin="0,16,0,0" VerticalAlignment="Top" Name="PART_Canvas" Width="178"
+									        Height="178">
+										<Border Background="{DynamicResource SecondaryRegionBrush}" Width="178" Height="178" CornerRadius="89" />
+										<hc:CirclePanel Diameter="130" x:Name="PART_PanelNum" KeepVertical="True" Margin="24,24,0,0"
+										                OffsetAngle="-60" />
+										<Border Focusable="False" Name="PART_BorderClock" Background="{DynamicResource PrimaryBrush}"
+										        RenderTransformOrigin="0.5,1" Height="63" Width="2" Canvas.Left="88" Canvas.Top="26" />
+										<Ellipse Fill="White" Width="8" Height="8" StrokeThickness="2" Stroke="{DynamicResource PrimaryBrush}"
+										         Canvas.Top="85" Canvas.Left="85" />
+									</Canvas>
+									<hc:ClockRadioButton Background="{DynamicResource PrimaryBrush}" Grid.Column="0" x:Name="PART_ButtonAm"
+									                     IsChecked="True" Height="30" Width="30" HorizontalAlignment="Left"
+									                     VerticalAlignment="Bottom" Margin="16,0,0,16" Content="AM"
+									                     Style="{StaticResource ClockRadioButtonStyle}" />
+									<hc:ClockRadioButton Background="{DynamicResource PrimaryBrush}" Grid.Column="2" x:Name="PART_ButtonPm"
+									                     Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+									                     Margin="0,0,16,16" Content="PM" Style="{StaticResource ClockRadioButtonStyle}" />
+									<Button Grid.Column="1"
+									        Name="PART_ButtonConfirm" Content="Confirm"
+									        Foreground="{DynamicResource PrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,19" Height="24"
+									        Width="60" VerticalAlignment="Bottom" Background="Transparent" Style="{StaticResource ButtonCustom}" />
+								</Grid>
+							</Border>
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 </ResourceDictionary>
