@@ -135,9 +135,10 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Button">
-					<Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+					<Border BorderBrush="{TemplateBinding BorderBrush}"
+					        BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=1}"
 					        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
-						<Border Style="{StaticResource BorderClip}"
+						<Border Style="{StaticResource BorderClip}" Margin="-1"
 						        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
 							<Grid Background="{TemplateBinding Background}">
 								<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
@@ -186,7 +187,7 @@
 		<Setter Property="FontWeight" Value="Bold" />
 		<Setter Property="Padding" Value="5" />
 		<Setter Property="BorderBrush" Value="{StaticResource LightAccentBrush}" />
-		<Setter Property="BorderThickness" Value="2" />
+		<Setter Property="BorderThickness" Value="3" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Tag" Value="15" />

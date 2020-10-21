@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -30,7 +31,6 @@ namespace TimerSettings {
 
 
         private double _startHeight;
-        private bool _sizeToContent = true;
 
         public TimerSettingsView() {
             InitializeComponent();
@@ -42,24 +42,27 @@ namespace TimerSettings {
                 };
                 WindowChrome.SetWindowChrome(_dialogWindow, windowChrome);
                 _dialogWindow.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-                _dialogWindow.SizeToContent = SizeToContent.Height;
                 _startHeight = _dialogWindow.Height;
+                _dialogWindow.SizeToContent = SizeToContent.Height;
 
-                while(_dialogWindow.CurrentScreen().WorkingArea.Height - 50 < _dialogWindow.Height) {
-                    if(_dialogWindow.CurrentScreen().WorkingArea.Width - 50 < _dialogWindow.Width + SnappingIncrement) {
-                        _sizeToContent = false;
-                        break;
-                    }
+
+                PresentationSource presentationsource = PresentationSource.FromVisual(this);
+                double dpiHeightFactor = presentationsource?.CompositionTarget?.TransformToDevice.M22 ?? 1;
+
+                while(_dialogWindow.CurrentScreen().WorkingArea.Height - 50 < MainWrapPanel.ActualHeight * dpiHeightFactor &&
+                      _dialogWindow.CurrentScreen().WorkingArea.Width - 50 > _dialogWindow.Width + SnappingIncrement) {
+                    Debug.WriteLine(
+                        $"{_dialogWindow.CurrentScreen().WorkingArea.Height - 50}, {MainWrapPanel.ActualHeight * dpiHeightFactor}, {_dialogWindow.Height}");
                     _dialogWindow.Width += SnappingIncrement;
                 }
 
                 _dialogWindow.MaxHeight = _dialogWindow.CurrentScreen().WorkingArea.Height - 50;
 
                 _dialogWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-                _dialogWindow.Left = (SystemParameters.WorkArea.Width - _dialogWindow.ActualWidth) / 2 +
-                                     SystemParameters.WorkArea.Left;
-                _dialogWindow.Top = (SystemParameters.WorkArea.Height - _dialogWindow.ActualHeight) / 2 +
-                                    SystemParameters.WorkArea.Top;
+                _dialogWindow.Left = (_dialogWindow.CurrentScreen().WorkingArea.Width - _dialogWindow.ActualWidth) / 2 +
+                                     _dialogWindow.CurrentScreen().WorkingArea.Left;
+                _dialogWindow.Top = (_dialogWindow.CurrentScreen().WorkingArea.Height - _dialogWindow.ActualHeight) / 2 +
+                                    _dialogWindow.CurrentScreen().WorkingArea.Top;
             };
 
             SizeChanged += (o, args) => {
@@ -77,7 +80,7 @@ namespace TimerSettings {
                     child.Margin = new Thickness(0, 0, (i + 1) % numPerRow == 0 ? 0 : spacing, spacing);
                 }
 
-                if(_dialogWindow != null && _sizeToContent) {
+                if(_dialogWindow != null) {
                     _dialogWindow.SizeToContent = SizeToContent.Height;
                     if(numPerRow == 1) _dialogWindow.Height = _startHeight;
                 }

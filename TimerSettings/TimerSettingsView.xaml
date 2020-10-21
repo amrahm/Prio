@@ -9,12 +9,12 @@
 
 	<prism:Dialog.WindowStyle>
 		<Style TargetType="Window">
-			<Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
 			<Setter Property="WindowStyle" Value="None" />
 			<Setter Property="AllowsTransparency" Value="True" />
-			<Setter Property="Width" Value="470" />
+			<Setter Property="Width" Value="550" />
+			<Setter Property="SizeToContent" Value="Height" />
 			<Setter Property="MinHeight" Value="100" />
-			<Setter Property="MinWidth" Value="470" />
+			<Setter Property="MinWidth" Value="450" />
 			<Setter Property="ShowInTaskbar" Value="False" />
 			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
 		</Style>
@@ -83,14 +83,17 @@
 						<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlStyle}"
 						           Margin="10, -5, 0, 2" />
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
-							<st:AutoGrid Columns="*, *" ChildHorizontalAlignment="Center">
+							<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
 								<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}"
 								         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
 								         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Start" />
 								<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}"
 								         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
 								         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Stop" />
-							</st:AutoGrid>
+								<TextBox Margin="5, 2" Style="{StaticResource NormalTextBox}"
+								         hc:TitleElement.TitleWidth="Auto" hc:InfoElement.Placeholder="No Shortcut Set"
+								         hc:TitleElement.TitlePlacement="Left" hc:TitleElement.Title="Reset" />
+							</hc:FlexPanel>
 						</Border>
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 							<hc:FlexPanel JustifyContent="SpaceAround">
@@ -133,7 +136,7 @@
 							<StackPanel Orientation="Horizontal">
 								<CheckBox Margin="5" />
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound:" />
-								<Button Style="{StaticResource NormalButtonLight2Bordered}" Content="&lt;No File Selected&gt;" />
+								<Button Style="{StaticResource NormalButtonLight2Bordered}" Content="&lt;No File Selected&gt;" Tag="10" />
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<CheckBox Margin="5" />
@@ -164,6 +167,90 @@
 						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
 						         Style="{StaticResource NormalTextBox}" />
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+								<hc:TimePicker.Clock>
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+								</hc:TimePicker.Clock>
+							</hc:TimePicker>
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+								<hc:TimePicker.Clock>
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+								</hc:TimePicker.Clock>
+							</hc:TimePicker>
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+								<hc:TimePicker.Clock>
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+								</hc:TimePicker.Clock>
+							</hc:TimePicker>
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
+					</StackPanel>
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					            Background="{StaticResource LightBrush}">
+						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+								<hc:TimePicker.Clock>
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+								</hc:TimePicker.Clock>
+							</hc:TimePicker>
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
 					</StackPanel>
 					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
 					            Background="{StaticResource LightBrush}">
