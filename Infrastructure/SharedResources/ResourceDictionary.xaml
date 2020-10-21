@@ -113,7 +113,7 @@
 		<Setter Property="Label.FontFamily" Value="{StaticResource BigFont}" />
 		<Setter Property="Label.FontSize" Value="{StaticResource BigFontSize}" />
 	</Style>
-	<Style x:Key="HintControlStyle" TargetType="{x:Type FrameworkElement}"  BasedOn="{StaticResource BaseControlStyle}">
+	<Style x:Key="HintControlStyle" TargetType="{x:Type FrameworkElement}" BasedOn="{StaticResource BaseControlStyle}">
 		<Setter Property="Label.FontFamily" Value="{StaticResource HintFont}" />
 		<Setter Property="Label.Foreground" Value="{StaticResource DarkHintBrush}" />
 		<Setter Property="Label.FontSize" Value="{StaticResource HintFontSize}" />
@@ -135,9 +135,33 @@
 	</Style>
 
 	<!--Buttons-->
-	<Style x:Key="MediumButtonDark" TargetType="Button" BasedOn="{StaticResource MediumControlStyle}">
+	<Style x:Key="BaseButton" TargetType="Button" BasedOn="{StaticResource BaseControlStyle}">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+					        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
+						<Border Style="{StaticResource BorderClip}"
+						        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
+							<Grid Background="{TemplateBinding Background}">
+								<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
+								                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								                  TextBlock.Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}"
+								                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+							</Grid>
+						</Border>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="MediumButtonDark" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
+		<Setter Property="Foreground" Value="{StaticResource MediumBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
 		<Setter Property="Padding" Value="10" />
 		<Setter Property="HorizontalContentAlignment" Value="Left" />
 		<Style.Triggers>
@@ -162,7 +186,7 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-	<Style x:Key="NormalButtonDarkBordered" TargetType="Button" BasedOn="{StaticResource BaseControlStyle}">
+	<Style x:Key="NormalButtonDarkBordered" TargetType="Button" BasedOn="{StaticResource BaseButton}">
 		<Setter Property="Foreground" Value="{StaticResource MediumBrush}" />
 		<Setter Property="Background" Value="{StaticResource LightHintBrush}" />
 		<Setter Property="FontWeight" Value="Bold" />
@@ -171,27 +195,10 @@
 		<Setter Property="BorderThickness" Value="2" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Tag" Value="15" />
 		<Setter Property="Effect">
 			<Setter.Value>
 				<DropShadowEffect ShadowDepth="2" Direction="330" Color="Black" Opacity="0.36" BlurRadius="3" />
-			</Setter.Value>
-		</Setter>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Border Margin="3" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
-					        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
-						<Border Style="{StaticResource BorderClip}"
-						        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
-							<Grid Background="{TemplateBinding Background}">
-								<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
-								                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-								                  TextBlock.Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}"
-								                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-							</Grid>
-						</Border>
-					</Border>
-				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 		<Style.Triggers>
@@ -209,16 +216,20 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-	<Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource MediumButtonDark}">
+	<Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
 		<Setter Property="Padding" Value="2" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
-		<Setter Property="Margin" Value="0" />
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" Value="{StaticResource Light2Brush}" />
+				<Setter Property="Padding" Value="0" />
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Background" Value="{StaticResource MediumBrush}" />
+				<Setter Property="Effect">
+					<Setter.Value>
+						<hc:ColorComplementEffect />
+					</Setter.Value>
+				</Setter>
+				<Setter Property="Padding" Value="4" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
