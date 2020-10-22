@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
-             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:Timer"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="200">
 
+
+	<UserControl.DataContext>
+		<local:TimerViewModel />
+	</UserControl.DataContext>
+
 	<UserControl.Resources>
-		
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />

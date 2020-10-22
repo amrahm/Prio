@@ -90,10 +90,6 @@
       <DependentUpon>TimersListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimersListModule.cs" />
-    <Compile Include="TimersListTimerView.xaml.cs">
-      <DependentUpon>TimersListTimerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TimersListTimerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -104,10 +100,6 @@
       <Project>{43496dac-19e2-4107-8886-3f5c98a4f531}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TimerSettings\TimerSettings.csproj">
-      <Project>{02b61e1b-481d-4c4e-a0bf-0bf625e605c6}</Project>
-      <Name>TimerSettings</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Timer\Timer.csproj">
       <Project>{11a53ec0-290a-4724-b446-e13484d014a6}</Project>
       <Name>Timer</Name>
@@ -115,10 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="TimersListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TimersListTimerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

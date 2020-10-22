@@ -152,10 +152,6 @@
       <Project>{84024aaf-356f-4991-8475-30ce46879392}</Project>
       <Name>NavigationMenu</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TimerSettings\TimerSettings.csproj">
-      <Project>{02b61e1b-481d-4c4e-a0bf-0bf625e605c6}</Project>
-      <Name>TimerSettings</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TimersList\TimersList.csproj">
       <Project>{86e2a39c-db8c-468b-8fda-6bc39e9c8fa9}</Project>
       <Name>TimersList</Name>

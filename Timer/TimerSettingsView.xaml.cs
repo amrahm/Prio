@@ -6,11 +6,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
-using Prism.Services.Dialogs;
-using TimerSettings.Annotations;
 using Infrastructure.SharedResources;
+using Prism.Services.Dialogs;
+using Timer.Annotations;
 
-namespace TimerSettings {
+namespace Timer {
     /// <summary>
     /// Interaction logic for TimerSettingsView.xaml
     /// </summary>
@@ -92,8 +92,12 @@ namespace TimerSettings {
             };
 
             MouseDown += (o, args) => {
-                if(args.ChangedButton == MouseButton.Left)
+                if(args.ChangedButton == MouseButton.Left) {
+                    DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
+                    FocusManager.SetFocusedElement(scope, _dialogWindow);
+
                     _dialogWindow.DragMove();
+                }
             };
         }
 

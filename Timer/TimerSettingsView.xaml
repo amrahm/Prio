@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="TimerSettings.TimerSettingsView"
+﻿<UserControl x:Class="Timer.TimerSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:local="clr-namespace:Timer"
              x:Name="Root">
 
 	<prism:Dialog.WindowStyle>
@@ -20,6 +20,10 @@
 		</Style>
 	</prism:Dialog.WindowStyle>
 
+	<UserControl.DataContext>
+		<local:TimerSettingsViewModel />
+	</UserControl.DataContext>
+
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -32,13 +36,13 @@
 	                BorderBrush="{StaticResource MediumAccentBrush}">
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 			<DockPanel Background="{StaticResource MediumBrush}">
-				<WrapPanel Width="470" x:Name="MainWrapPanel" DockPanel.Dock="Top">
+				<WrapPanel Width="550" x:Name="MainWrapPanel" DockPanel.Dock="Top">
 					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}"
-					            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}">
+					            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}">
 						<TextBox HorizontalAlignment="Center" Margin="0, 10, 0, 0" MinWidth="60"
 						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="Give the Timer a Name"
 						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer Name:"
-						         Style="{StaticResource NormalTextBox}" />
+						         Style="{StaticResource NormalTextBox}" Text="{Binding Config.Name, Mode=TwoWay}" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 							<TextBlock Text="Show Name:" Style="{StaticResource BaseControlStyle}" />
@@ -76,7 +80,7 @@
 							         Style="{StaticResource BiggishBox}" />
 						</st:AutoGrid>
 					</StackPanel>
-					<StackPanel Width="{Binding CtrlWidth, ElementName=Root, FallbackValue=470}"
+					<StackPanel Width="{Binding CtrlWidth, ElementName=Root, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
 
@@ -116,7 +120,7 @@
 							</hc:FlexPanel>
 						</Border>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
 						<StackPanel Orientation="Horizontal">
@@ -130,7 +134,7 @@
 							</Viewbox>
 						</Button>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
 						<StackPanel>
@@ -157,7 +161,7 @@
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
 						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
@@ -169,7 +173,7 @@
 						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
 						         Style="{StaticResource NormalTextBox}" />
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
+					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 
@@ -195,8 +199,10 @@
 				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0">
 					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource NormalButtonDarkBordered}"
 					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" />
-					<Button DockPanel.Dock="Right" Content="Apply" Style="{StaticResource NormalButtonDarkBordered}" Width="70" />
-					<Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource NormalButtonDarkBordered}" Width="70" />
+					<Button DockPanel.Dock="Right" Content="Apply" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
+					        Command="{Binding ApplyCommand}" />
+					<Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
+					        Command="{Binding CancelCommand}" />
 
 				</DockPanel>
 

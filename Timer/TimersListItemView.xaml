@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TimersList.TimersListTimerView"
+﻿<UserControl x:Class="Timer.TimersListItemView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,7 +6,7 @@
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:prism="http://www.codeplex.com/prism"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:timer="clr-namespace:Timer;assembly=Timer"
+             xmlns:local="clr-namespace:Timer"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="300">
 
@@ -21,11 +21,11 @@
 
 
 	<st:AutoGrid Columns="*, Auto" RowHeight="*">
-		<timer:TimerView>
-			<timer:TimerView.Effect>
+		<local:TimerView>
+			<local:TimerView.Effect>
 				<DropShadowEffect ShadowDepth="3" Direction="330" Color="Black" Opacity="0.36" BlurRadius="3" />
-			</timer:TimerView.Effect>
-		</timer:TimerView>
+			</local:TimerView.Effect>
+		</local:TimerView>
 
 		<st:AutoGrid Rows="*, *, *" ChildMargin="2" ColumnWidth="*" Margin="5, 0">
 			<Button Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
