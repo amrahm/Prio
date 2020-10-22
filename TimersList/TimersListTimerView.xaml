@@ -28,16 +28,13 @@
 		</timer:TimerView>
 
 		<st:AutoGrid Rows="*, *, *" ChildMargin="2" ColumnWidth="*" Margin="5, 0">
-			<Button Width="{Binding Height, RelativeSource={RelativeSource Self}}"
-			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+			<Button Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
 				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
 			</Button>
-			<Button Width="{Binding Height, RelativeSource={RelativeSource Self}}"
-			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+			<Button Style="{StaticResource IconButton}">
 				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
 			</Button>
-			<Button Width="{Binding Height, RelativeSource={RelativeSource Self}}"
-			        Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}">
+			<Button Style="{StaticResource IconButton}">
 				<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
 			</Button>
 		</st:AutoGrid>

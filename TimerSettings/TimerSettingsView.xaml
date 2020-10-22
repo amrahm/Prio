@@ -123,10 +123,11 @@
 							<CheckBox Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
 						</StackPanel>
-						<Button HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
-						        Style="{StaticResource NormalButtonLight2Bordered}">
-							<TextBlock Text="+" FontSize="36" Margin="0, -16, 0, -8" Style="{StaticResource HintControlStyle}" />
-
+						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
+						        Style="{StaticResource IconButtonBordered}">
+							<Viewbox>
+								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlStyle}" />
+							</Viewbox>
 						</Button>
 					</StackPanel>
 					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=470}"
