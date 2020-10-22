@@ -37,9 +37,6 @@
     <Reference Include="HandyControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.0.0-rc.2\lib\net47\HandyControl.dll</HintPath>
     </Reference>
-    <Reference Include="Masonry, Version=2.0.2010.1215, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\wpfmasonry.2.0.2010.1215\lib\net461\Masonry.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>

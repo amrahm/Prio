@@ -10,6 +10,9 @@ using Timer.Annotations;
 namespace Timer {
     public class TimerSettingsViewModel : INotifyPropertyChanged, IDialogAware {
         private TimerConfig _config;
+        private int _hours = 1;
+        private int _minutes;
+        private int _seconds;
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
@@ -21,15 +24,49 @@ namespace Timer {
             }
         }
 
+        public int Hours {
+            get => _hours;
+            set {
+                Config.Duration = new TimeSpan(value, _minutes, _seconds);
+                _hours = (int) Config.Duration.TotalHours; //To allow values greater than 24
+                OnPropertyChanged();
+            }
+        }
 
-        public TimerSettingsViewModel() {
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
-            ApplyCommand = new DelegateCommand(() => Settings.SaveSettings(Config, ModuleNames.TIMER));
+        public int Minutes {
+            get => _minutes;
+            set {
+                Config.Duration = new TimeSpan(_hours, value, _seconds);
+                _minutes = Config.Duration.Minutes;
+                Hours = (int) Config.Duration.TotalHours;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Seconds {
+            get => _seconds;
+            set {
+                Config.Duration = new TimeSpan(_hours, _minutes, value);
+                _seconds = Config.Duration.Seconds;
+                int durationHours = (int) Config.Duration.TotalHours; //cache this before minutes calls OnPropertyChanged
+                Minutes = Config.Duration.Minutes;
+                Hours = durationHours;
+                OnPropertyChanged();
+            }
         }
 
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand ApplyCommand { get; }
+        public DelegateCommand OkCommand { get; }
 
+        public TimerSettingsViewModel() {
+            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
+            ApplyCommand = new DelegateCommand(() => Settings.SaveSettings(Config, ModuleNames.TIMER));
+            OkCommand = new DelegateCommand(() => {
+                Settings.SaveSettings(Config, ModuleNames.TIMER);
+                RequestClose?.Invoke(null);
+            });
+        }
 
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
