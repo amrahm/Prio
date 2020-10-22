@@ -28,7 +28,11 @@ namespace Timer {
             get => _hours;
             set {
                 Config.Duration = new TimeSpan(value, _minutes, _seconds);
-                _hours = (int) Config.Duration.TotalHours; //To allow values greater than 24
+                double totalHours = Config.Duration.TotalHours;
+                if(Math.Abs(totalHours) < 0.0001) {
+                    Minutes = 1;
+                }
+                _hours = (int) totalHours; //To allow values greater than 24
                 OnPropertyChanged();
             }
         }

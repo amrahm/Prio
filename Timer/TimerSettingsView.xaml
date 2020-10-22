@@ -56,7 +56,8 @@
 								<TextBlock Text="Hours" Style="{StaticResource BaseControlStyle}" />
 							</StackPanel>
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="00" Text="{Binding Hours, Mode=TwoWay, StringFormat=D2}" TextAlignment="Center"
+							         hc:InfoElement.Placeholder="##" Text="{Binding Hours, Mode=TwoWay, StringFormat=D2}"
+							         TextAlignment="Center" Name="Hours"
 							         Style="{StaticResource BiggishBox}" />
 							<Rectangle />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -66,7 +67,8 @@
 							</StackPanel>
 
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="00" Text="{Binding Minutes, Mode=TwoWay, StringFormat=D2}" TextAlignment="Center"
+							         hc:InfoElement.Placeholder="##" Text="{Binding Minutes, Mode=TwoWay, StringFormat=D2}"
+							         TextAlignment="Center" Name="Minutes"
 							         Style="{StaticResource BiggishBox}" />
 							<Rectangle />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -76,7 +78,8 @@
 							</StackPanel>
 
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="00" Text="{Binding Seconds, Mode=TwoWay, StringFormat=D2}" TextAlignment="Center"
+							         hc:InfoElement.Placeholder="##" Text="{Binding Seconds, Mode=TwoWay, StringFormat=D2}"
+							         TextAlignment="Center" Name="Seconds"
 							         Style="{StaticResource BiggishBox}" />
 						</st:AutoGrid>
 					</StackPanel>
@@ -164,11 +167,11 @@
 					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
 					            Background="{StaticResource LightBrush}">
 						<TextBlock Text="Virtual Desktops" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2"
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2" Name="ShowDesktops"
 						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
 						         Style="{StaticResource NormalTextBox}" />
-						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10"
+						<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5, 2, 5, 10" Name="ActiveDesktops"
 						         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 						         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
 						         Style="{StaticResource NormalTextBox}" />
@@ -185,7 +188,7 @@
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
-							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}"
+							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}" Name="TimePicker"
 							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
 								<hc:TimePicker.Clock>
 									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
@@ -197,9 +200,30 @@
 				</WrapPanel>
 
 				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0">
-					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource NormalButtonDarkBordered}"
+					<DockPanel.Resources>
+						<ResourceDictionary>
+							<Style x:Key="WithValidation" TargetType="{x:Type Button}" BasedOn="{StaticResource NormalButtonDarkBordered}">
+								<Setter Property="IsEnabled" Value="false" />
+								<Style.Triggers>
+									<!-- Require the controls to be valid in order to press OK -->
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding ElementName=Hours, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=Minutes, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=Seconds, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=ShowDesktops, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=ActiveDesktops, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
+										</MultiDataTrigger.Conditions>
+										<Setter Property="IsEnabled" Value="true" />
+									</MultiDataTrigger>
+								</Style.Triggers>
+							</Style>
+						</ResourceDictionary>
+					</DockPanel.Resources>
+					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource WithValidation}"
 					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" Command="{Binding OkCommand}" />
-					<Button DockPanel.Dock="Right" Content="Apply" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
+					<Button DockPanel.Dock="Right" Content="Apply" Width="70" Style="{StaticResource WithValidation}"
 					        Command="{Binding ApplyCommand}" />
 					<Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
 					        Command="{Binding CancelCommand}" />

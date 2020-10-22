@@ -151,6 +151,15 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="false">
+				<Setter Property="Effect">
+					<Setter.Value>
+						<hc:GrayScaleEffect />
+					</Setter.Value>
+				</Setter>
+			</Trigger>
+		</Style.Triggers>
 	</Style>
 
 	<Style x:Key="MediumButtonDark" TargetType="Button" BasedOn="{StaticResource BaseButton}">
@@ -265,7 +274,7 @@
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Tag" Value="5000" />
 		<Setter Property="Padding" Value="3" />
-		
+
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
 				<Setter Property="BorderThickness" Value="4" />
