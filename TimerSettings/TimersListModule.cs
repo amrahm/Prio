@@ -2,16 +2,16 @@
 using Prism.Ioc;
 using Prism.Modularity;
 
-namespace TimersList {
+namespace TimerSettings {
     /// <summary>
     ///     Register components of module with Unity/Prism
     /// </summary>
-    [Module(ModuleName = ModuleNames.TIMERS_LIST)]
-    public class TimersListModule : IModule {
-        public TimersListModule() { }
+    [Module(ModuleName = ModuleNames.TIMERS_SETTINGS)]
+    public class TimerSettingsModule : IModule {
+        public TimerSettingsModule() { }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<TimersListView>();
+            containerRegistry.RegisterDialog<TimerSettingsView, TimerSettingsViewModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) { }

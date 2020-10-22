@@ -5,5 +5,6 @@
         public const string TIMERS_LIST = "TimersList";
         public const string TIMER = "Timer";
         public const string GENERAL_CONFIG = "GeneralConfig";
+        public const string TIMERS_SETTINGS = "TimerSettings";
     }
 }
