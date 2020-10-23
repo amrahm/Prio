@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:Infrastructure"
-                    xmlns:hc="https://handyorg.github.io/handycontrol">
+                    xmlns:hc="https://handyorg.github.io/handycontrol"
+                    xmlns:adornedControl="clr-namespace:AdornedControl">
 
 
 	<ResourceDictionary.MergedDictionaries>
@@ -22,11 +23,13 @@
 	<!--Colors-->
 	<Color x:Key="Dark">#0D2340</Color>
 	<Color x:Key="DarkHint">#7A90AC</Color>
+	<Color x:Key="DarkHintBg">#C087BAC1</Color>
 	<Color x:Key="Medium">#184A8C</Color>
 	<Color x:Key="Light">#BEF2DC</Color>
 	<Color x:Key="SemiLight">#87BAC1</Color>
 	<Color x:Key="Light2">#F1EEC1</Color>
 	<Color x:Key="LightHint">#F8E1DF</Color>
+	<Color x:Key="LightHintBg">#C0184A8C</Color>
 	<Color x:Key="LightAccent">#F26F63</Color>
 	<Color x:Key="MediumAccent">#CD5146</Color>
 	<Color x:Key="DarkAccent">#8C184E</Color>
@@ -34,11 +37,13 @@
 	<!--Brushes-->
 	<SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}" />
 	<SolidColorBrush x:Key="DarkHintBrush" Color="{StaticResource DarkHint}" />
+	<SolidColorBrush x:Key="DarkHintBgBrush" Color="{StaticResource DarkHintBg}" />
 	<SolidColorBrush x:Key="MediumBrush" Color="{StaticResource Medium}" />
 	<SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}" />
 	<SolidColorBrush x:Key="SemiLightBrush" Color="{StaticResource SemiLight}" />
 	<SolidColorBrush x:Key="Light2Brush" Color="{StaticResource Light2}" />
 	<SolidColorBrush x:Key="LightHintBrush" Color="{StaticResource LightHint}" />
+	<SolidColorBrush x:Key="LightHintBgBrush" Color="{StaticResource LightHintBg}" />
 	<SolidColorBrush x:Key="LightAccentBrush" Color="{StaticResource LightAccent}" />
 	<SolidColorBrush x:Key="MediumAccentBrush" Color="{StaticResource MediumAccent}" />
 	<SolidColorBrush x:Key="DarkAccentBrush" Color="{StaticResource DarkAccent}" />
@@ -76,23 +81,31 @@
 				<Border Style="{StaticResource BorderClip}"
 				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
 				        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-					<ContentPresenter />
+					<Grid Background="{TemplateBinding Background}">
+						<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  TextBlock.Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+					</Grid>
 				</Border>
 			</Border>
 		</Border>
 	</ControlTemplate>
 
 	<ControlTemplate x:Key="RoundedTemplate" TargetType="ContentControl">
-		<Border>
-			<Border CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
-			        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-				<Border Style="{StaticResource BorderClip}"
-				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
-					<ContentPresenter />
-				</Border>
+		<Border BorderBrush="{TemplateBinding BorderBrush}"
+		        BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=1}"
+		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
+			<Border Style="{StaticResource BorderClip}" Margin="-1"
+			        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
+				<Grid Background="{TemplateBinding Background}">
+					<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
+					                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+					                  TextBlock.Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}"
+					                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+				</Grid>
 			</Border>
 		</Border>
-
 	</ControlTemplate>
 
 	<!--Controls-->
@@ -112,10 +125,13 @@
 		<Setter Property="Label.FontFamily" Value="{StaticResource BigFont}" />
 		<Setter Property="Label.FontSize" Value="{StaticResource BigFontSize}" />
 	</Style>
-	<Style x:Key="HintControlStyle" TargetType="{x:Type FrameworkElement}" BasedOn="{StaticResource BaseControlStyle}">
+	<Style x:Key="HintControlDark" TargetType="{x:Type FrameworkElement}" BasedOn="{StaticResource BaseControlStyle}">
 		<Setter Property="Label.FontFamily" Value="{StaticResource HintFont}" />
 		<Setter Property="Label.Foreground" Value="{StaticResource DarkHintBrush}" />
 		<Setter Property="Label.FontSize" Value="{StaticResource HintFontSize}" />
+	</Style>
+	<Style x:Key="HintControlLight" TargetType="{x:Type FrameworkElement}" BasedOn="{StaticResource HintControlDark}">
+		<Setter Property="Label.Foreground" Value="{StaticResource LightHintBrush}" />
 	</Style>
 
 	<!--Labels/TextBlocks-->
@@ -161,7 +177,6 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-
 	<Style x:Key="MediumButtonDark" TargetType="Button" BasedOn="{StaticResource BaseButton}">
 		<Setter Property="FontFamily" Value="{StaticResource SubHeaderFont}" />
 		<Setter Property="Foreground" Value="{StaticResource MediumBrush}" />
@@ -220,7 +235,6 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-
 	<Style x:Key="NormalButtonLight2Bordered" TargetType="Button" BasedOn="{StaticResource NormalButtonDarkBordered}">
 		<Setter Property="Background" Value="{StaticResource Light2Brush}" />
 		<Setter Property="BorderBrush" Value="{StaticResource DarkHintBrush}" />
@@ -297,6 +311,22 @@
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
 	</Style>
 
+	
+	<!--Adorners-->
+	<ControlTemplate x:Key="HintAdorner" TargetType="ContentControl">
+		<adornedControl:AdornedControl VerticalAdornerPlacement="Outside" IsMouseOverShowEnabled="True"
+		                   OpenAdornerTimeOut="0.4" AdornerOffsetY="2">
+			<adornedControl:AdornedControl.AdornerContent>
+				<ContentControl Template="{StaticResource RoundedTemplate}" Tag="10"
+				                HorizontalAlignment="Center" VerticalAlignment="Top"
+				                Background="{StaticResource LightHintBgBrush}">
+					<TextBlock Text="{TemplateBinding Tag}" Style="{StaticResource HintControlLight}" />
+				</ContentControl>
+
+			</adornedControl:AdornedControl.AdornerContent>
+			<ContentPresenter />
+		</adornedControl:AdornedControl>
+	</ControlTemplate>
 
 	<Style x:Key="Clok" TargetType="hc:Clock">
 		<Setter Property="BorderThickness" Value="1" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -9,13 +10,15 @@ using System.Windows.Shell;
 using Infrastructure.SharedResources;
 using Prism.Services.Dialogs;
 using Timer.Annotations;
+using Color = System.Windows.Media.Color;
 
 namespace Timer {
     /// <summary>
     /// Interaction logic for TimerSettingsView.xaml
     /// </summary>
     public partial class TimerSettingsView : INotifyPropertyChanged {
-        private const int MinCtrlWidth = 450;
+        private const int MinCtrlWidth = 470;
+        private const int ScreenMargin = 50;
         private const int SnappingIncrement = MinCtrlWidth + 50;
         private double _ctrlWidth = MinCtrlWidth;
 
@@ -27,7 +30,7 @@ namespace Timer {
             }
         }
 
-        private DialogWindow _dialogWindow;
+        private DialogWindow _window;
 
 
         private double _startHeight;
@@ -35,40 +38,36 @@ namespace Timer {
         public TimerSettingsView() {
             InitializeComponent();
             Loaded += (o, args) => {
-                _dialogWindow = (DialogWindow) Root.Parent;
+                _window = (DialogWindow) Root.Parent;
                 WindowChrome windowChrome = new WindowChrome {
                     ResizeBorderThickness = new Thickness(9, 0, 9, 0),
                     CaptionHeight = 0
                 };
-                WindowChrome.SetWindowChrome(_dialogWindow, windowChrome);
-                _dialogWindow.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-                _startHeight = _dialogWindow.Height;
-                _dialogWindow.SizeToContent = SizeToContent.Height;
+                WindowChrome.SetWindowChrome(_window, windowChrome);
+                _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                _startHeight = _window.Height;
+                _window.SizeToContent = SizeToContent.Height;
 
-                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_dialogWindow);
+                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
                 Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
                 Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
                 Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
                 double dpiWidthFactor = m.M11;
                 double dpiHeightFactor = m.M22;
 
-                while(_dialogWindow.CurrentScreen().WorkingArea.Height - 50 < MainWrapPanel.ActualHeight * dpiHeightFactor &&
-                      _dialogWindow.CurrentScreen().WorkingArea.Width - 50 >
-                      MainWrapPanel.ActualWidth * dpiWidthFactor + SnappingIncrement) {
-                    MainWrapPanel.Width += SnappingIncrement;
-                    _dialogWindow.Width += SnappingIncrement;
-                    _dialogWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                Rectangle screen = _window.CurrentScreen().WorkingArea;
+                while(screen.Height - ScreenMargin < Root.ActualHeight * dpiHeightFactor &&
+                      screen.Width - ScreenMargin > Root.ActualWidth * dpiWidthFactor + SnappingIncrement) {
+                    Root.Width += SnappingIncrement;
+                    _window.Width += SnappingIncrement;
+                    _window.SizeToContent = SizeToContent.WidthAndHeight;
                 }
 
-                _dialogWindow.MaxHeight = (_dialogWindow.CurrentScreen().WorkingArea.Height - 50) / dpiHeightFactor;
+                _window.MaxHeight = (screen.Height - ScreenMargin) / dpiHeightFactor;
 
-                _dialogWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-                _dialogWindow.Left =
-                    (_dialogWindow.CurrentScreen().WorkingArea.Width / dpiWidthFactor - _dialogWindow.ActualWidth) / 2 +
-                    _dialogWindow.CurrentScreen().WorkingArea.Left;
-                _dialogWindow.Top = (_dialogWindow.CurrentScreen().WorkingArea.Height / dpiHeightFactor -
-                                     _dialogWindow.ActualHeight) / 2 +
-                                    _dialogWindow.CurrentScreen().WorkingArea.Top;
+                _window.WindowStartupLocation = WindowStartupLocation.Manual;
+                _window.Left =  (screen.Width / dpiWidthFactor - _window.ActualWidth) / 2 +  screen.Left;
+                _window.Top = (screen.Height / dpiHeightFactor -  _window.ActualHeight) / 2 + screen.Top;
             };
 
             SizeChanged += (o, args) => {
@@ -85,18 +84,18 @@ namespace Timer {
                     child.Margin = new Thickness(0, 0, (i + 1) % numPerRow == 0 ? 0 : spacing, spacing);
                 }
 
-                if(_dialogWindow != null) {
-                    _dialogWindow.SizeToContent = SizeToContent.Height;
-                    if(numPerRow == 1) _dialogWindow.Height = _startHeight;
+                if(_window != null) {
+                    _window.SizeToContent = SizeToContent.Height;
+                    if(numPerRow == 1) _window.Height = _startHeight;
                 }
             };
 
             MouseDown += (o, args) => {
                 if(args.ChangedButton == MouseButton.Left) {
                     DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
-                    FocusManager.SetFocusedElement(scope, _dialogWindow);
+                    FocusManager.SetFocusedElement(scope, _window);
 
-                    _dialogWindow.DragMove();
+                    _window.DragMove();
                 }
             };
         }
