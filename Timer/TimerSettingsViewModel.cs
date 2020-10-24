@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using Infrastructure.Constants;
@@ -58,6 +59,8 @@ namespace Timer {
                 OnPropertyChanged();
             }
         }
+
+        public void HandleKeyDown(KeyEventArgs e) { /* ... */ }
 
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand ApplyCommand { get; }

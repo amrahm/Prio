@@ -2,12 +2,14 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
+using Microsoft.Xaml.Behaviors;
 using Prism.Services.Dialogs;
 using Timer.Annotations;
 using Color = System.Windows.Media.Color;
@@ -37,7 +39,7 @@ namespace Timer {
 
         public TimerSettingsView() {
             InitializeComponent();
-            Loaded += (o, args) => {
+            Loaded += (o, e) => {
                 _window = (DialogWindow) Root.Parent;
                 WindowChrome windowChrome = new WindowChrome {
                     ResizeBorderThickness = new Thickness(9, 0, 9, 0),
@@ -70,11 +72,11 @@ namespace Timer {
                 _window.Top = (screen.Height / dpiHeightFactor -  _window.ActualHeight) / 2 + screen.Top;
             };
 
-            SizeChanged += (o, args) => {
+            SizeChanged += (o, e) => {
                 const double spacing = 3;
 
-                double newSizeWidth = args.NewSize.Width;
-                int maxPerRow = (int) Math.Floor(newSizeWidth / MinCtrlWidth);
+                double newSizeWidth = e.NewSize.Width;
+                int maxPerRow = (int) (newSizeWidth / MinCtrlWidth);
                 int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
                 MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
                 CtrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
@@ -90,20 +92,32 @@ namespace Timer {
                 }
             };
 
-            MouseDown += (o, args) => {
-                if(args.ChangedButton == MouseButton.Left) {
+            MouseDown += (o, e) => {
+                if(e.ChangedButton == MouseButton.Left) {
                     DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
                     FocusManager.SetFocusedElement(scope, _window);
 
                     _window.DragMove();
                 }
             };
+
+            TimerSettingsViewModel vm = DataContext as TimerSettingsViewModel;
+            KeyDown += (o, e) => {
+                if(vm == null) return;
+
+
+                //if((Keyboard.FocusedElement as FrameworkElement).GetSelfAndAncestors()
+                //    .Any(oo => oo.GetType() == typeof(ShortcutSetter))) {
+                //    Debug.WriteLine(e.Key);
+                //    vm.HandleKeyDown(e);
+                //}
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

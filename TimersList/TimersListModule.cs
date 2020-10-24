@@ -7,6 +7,7 @@ namespace TimersList {
     ///     Register components of module with Unity/Prism
     /// </summary>
     [Module(ModuleName = ModuleNames.TIMERS_LIST)]
+    [ModuleDependency(ModuleNames.TIMER)]
     public class TimersListModule : IModule {
         public TimersListModule() { }
 
