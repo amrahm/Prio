@@ -31,8 +31,7 @@ namespace Timer {
                 if(Math.Abs(totalHours) < 0.0001) {
                     Minutes = 1;
                 }
-                SetProperty(ref _hours, (int) totalHours); //To allow values greater than 24
-                Config.Name = "OOO";
+                _hours =  (int) totalHours; //To allow values greater than 24
             }
         }
 
@@ -40,8 +39,8 @@ namespace Timer {
             get => _minutes;
             set {
                 Config.Duration = new TimeSpan(_hours, value, _seconds);
-                SetProperty(ref _minutes, Config.Duration.Minutes);
-                Hours = (int) Config.Duration.TotalHours;
+                _minutes = Config.Duration.Minutes;
+                Hours = (int)Config.Duration.TotalHours;
             }
         }
 
@@ -49,7 +48,7 @@ namespace Timer {
             get => _seconds;
             set {
                 Config.Duration = new TimeSpan(_hours, _minutes, value);
-                SetProperty(ref _seconds, Config.Duration.Seconds);
+                _seconds = Config.Duration.Seconds;
                 int durationHours = (int) Config.Duration.TotalHours; //cache this before minutes calls OnPropertyChanged
                 Minutes = Config.Duration.Minutes;
                 Hours = durationHours;
