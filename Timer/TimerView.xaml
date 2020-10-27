@@ -4,14 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
-             xmlns:local="clr-namespace:Timer"
+             xmlns:prism="http://www.codeplex.com/prism"
+			 prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="200">
-
-
-	<UserControl.DataContext>
-		<local:TimerViewModel />
-	</UserControl.DataContext>
 
 	<UserControl.Resources>
 		<ResourceDictionary>

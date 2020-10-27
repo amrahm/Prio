@@ -1,22 +1,17 @@
-﻿using System;
-using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
 namespace Timer {
-    internal class TimerViewModel : BindableBase, IDialogAware {
+    public class TimerViewModel : BindableBase, ITimer {
         public string Title { get; set; } = "Timer";
-        public event Action<IDialogResult> RequestClose;
+        private readonly IDialogService _dialogService;
 
-        public TimerViewModel() {
-            CloseCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
+        public TimerViewModel(IDialogService dialogService) {
+            _dialogService = dialogService;
         }
 
-        public DelegateCommand CloseCommand { get; }
-
-
-        public bool CanCloseDialog() => true;
-        public void OnDialogClosed() { }
-        public void OnDialogOpened(IDialogParameters parameters) { }
+        public void OpenSettings() {
+            _dialogService.ShowDialog(nameof(TimerSettingsView), new DialogParameters(), result => { });
+        }
     }
 }

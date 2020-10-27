@@ -3,6 +3,8 @@
     ///     Interaction logic for ShellView.xaml
     /// </summary>
     public partial class ShellView {
-        public ShellView() { InitializeComponent(); }
+        public ShellView() {
+            InitializeComponent();
+        }
     }
 }

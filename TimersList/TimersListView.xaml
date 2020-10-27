@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:timer="clr-namespace:Timer;assembly=Timer"
+             xmlns:local="clr-namespace:TimersList"
+             xmlns:prism="http://www.codeplex.com/prism"
+             xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="420"
              x:Name="Root">
+
+	<UserControl.DataContext>
+		<local:TimersListViewModel />
+	</UserControl.DataContext>
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -18,20 +24,15 @@
 
 	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
 	              Background="{StaticResource LightBrush}">
-		<WrapPanel x:Name="TimerWrapPanel">
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-			<timer:TimersListItemView Height="100" Margin="5"
-			                          Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=200}" />
-
-		</WrapPanel>
+		<StackPanel>
+			<WrapPanel Name="TimerWrapPanel"
+			           prism:RegionManager.RegionName="{x:Static constants:RegionNames.TIMERS_LIST_REGION}" />
+			<Button Margin="10" Height="40" HorizontalAlignment="Center" Background="Transparent"
+			        Style="{StaticResource IconButtonBordered}" Command="{Binding AddTimerCommand}">
+				<Viewbox>
+					<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
+				</Viewbox>
+			</Button>
+		</StackPanel>
 	</ScrollViewer>
 </UserControl>

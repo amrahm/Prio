@@ -1,18 +1,16 @@
-﻿using Infrastructure.Constants;
-using Prism.Ioc;
+﻿using Prism.Ioc;
 using Prism.Modularity;
+using static Infrastructure.Constants.ModuleNames;
 
 namespace TimersList {
     /// <summary>
     ///     Register components of module with Unity/Prism
     /// </summary>
-    [Module(ModuleName = ModuleNames.TIMERS_LIST)]
-    [ModuleDependency(ModuleNames.TIMER)]
+    [Module(ModuleName = TIMERS_LIST)]
+    [ModuleDependency(TIMER)]
     public class TimersListModule : IModule {
-        public TimersListModule() { }
-
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<TimersListView>();
+            containerRegistry.RegisterForNavigation<TimersListView, TimersListViewModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) { }

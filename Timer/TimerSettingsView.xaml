@@ -4,8 +4,8 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
-             xmlns:ad="clr-namespace:AdornedControl;assembly=Infrastructure"
              xmlns:local="clr-namespace:Timer"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              x:Name="Root">
 
 	<prism:Dialog.WindowStyle>
@@ -38,12 +38,11 @@
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 			<DockPanel Background="{StaticResource MediumBrush}">
 				<WrapPanel Width="550" x:Name="MainWrapPanel" DockPanel.Dock="Top">
-					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}"
-					            Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}">
+					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}" Width="550">
 						<ContentControl MinWidth="200" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch">
-							<TextBox Margin="0, 10, 0, 0" MinWidth="60"
+							<TextBox Margin="0, 10, 0, 0" MinWidth="60" Name="TimerName"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="Give the Timer a Name"
-							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer Name:"
+							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer Name:" hc:InfoElement.Necessary="True"
 							         Style="{StaticResource NormalTextBox}" Text="{Binding Config.Name, Mode=TwoWay}" />
 						</ContentControl>
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -51,6 +50,7 @@
 							<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowName, Mode=TwoWay}" />
 						</StackPanel>
 						<TextBlock Text="Duration" Style="{StaticResource SubHeaderLabelStyle}" />
+						<Label Style="{StaticResource BigControlStyle}" Content="{Binding Hours}" />
 						<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
 						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
 							<StackPanel Orientation="Horizontal">
@@ -59,7 +59,7 @@
 							</StackPanel>
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Hours, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="Hours"
+							         TextAlignment="Center" Name="HoursBox"
 							         Style="{StaticResource BiggishBox}" />
 							<Rectangle />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -70,7 +70,7 @@
 
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Minutes, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="Minutes"
+							         TextAlignment="Center" Name="MinutesBox"
 							         Style="{StaticResource BiggishBox}" />
 							<Rectangle />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -81,12 +81,11 @@
 
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Seconds, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="Seconds"
+							         TextAlignment="Center" Name="SecondsBox"
 							         Style="{StaticResource BiggishBox}" />
 						</st:AutoGrid>
 					</StackPanel>
-					<StackPanel Width="{Binding CtrlWidth, ElementName=Root, FallbackValue=550}"
-					            Background="{StaticResource LightBrush}">
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
 						<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
@@ -109,8 +108,7 @@
 							</hc:FlexPanel>
 						</Border>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
-					            Background="{StaticResource LightBrush}">
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />
@@ -123,8 +121,7 @@
 							</Viewbox>
 						</Button>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
-					            Background="{StaticResource LightBrush}">
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
 						<StackPanel>
 							<StackPanel Orientation="Horizontal">
@@ -150,13 +147,11 @@
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
-					            Background="{StaticResource LightBrush}">
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
 						<TextBlock Text="TODO" Style="{StaticResource BaseControlStyle}" />
 					</StackPanel>
-					<StackPanel Width="{Binding ElementName=Root, Path=CtrlWidth, FallbackValue=550}"
-					            Background="{StaticResource LightBrush}">
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 
 						<ContentControl MinWidth="220" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
@@ -199,14 +194,20 @@
 									<!-- Require the controls to be valid in order to press OK -->
 									<MultiDataTrigger>
 										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding ElementName=Hours, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=Minutes, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=Seconds, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=HoursBox, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=MinutesBox, Path=(Validation.HasError)}" Value="false" />
+											<Condition Binding="{Binding ElementName=SecondsBox, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=ShowDesktops, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=ActiveDesktops, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
 										</MultiDataTrigger.Conditions>
 										<Setter Property="IsEnabled" Value="true" />
+									</MultiDataTrigger>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition Binding="{Binding Text, ElementName=TimerName}" Value="{x:Static s:String.Empty}" />
+										</MultiDataTrigger.Conditions>
+										<Setter Property="IsEnabled" Value="False" />
 									</MultiDataTrigger>
 								</Style.Triggers>
 							</Style>

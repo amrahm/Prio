@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Timer;
 
 namespace TimersList {
     class TimersListModel {
-        private IList<Timer.ITimer> _timers;
-        public TimersListModel() {
+        private IList<ITimer> _timers;
+        private TimersListViewModel _vm;
+
+        public TimersListModel(TimersListViewModel vm) {
+            //TODO load timers
+            _vm = vm;
+            //_timers = new List<ITimer> {new TimerViewModel()};
+            //vm.Timers = _timers;
         }
     }
 }

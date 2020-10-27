@@ -9,16 +9,13 @@ namespace NavigationMenu {
     /// </summary>
     [Module(ModuleName = ModuleNames.NAVIGATION_MENU)]
     public class NavigationMenuModule : IModule {
-        private readonly IRegionManager _regionManager;
-
-        public NavigationMenuModule(IRegionManager regionManager) {
-            _regionManager = regionManager;
-        }
+        public NavigationMenuModule() { }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) { }
 
         public void OnInitialized(IContainerProvider containerProvider) {
-            _regionManager.RegisterViewWithRegion(RegionNames.MENU_REGION, typeof(NavigationMenuView));
+            var regionManager = containerProvider.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion(RegionNames.MENU_REGION, typeof(NavigationMenuView));
         }
     }
 }

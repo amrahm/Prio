@@ -16,7 +16,7 @@ namespace GeneralConfig {
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<GeneralConfigView>();
+            containerRegistry.RegisterForNavigation<GeneralConfigView, GeneralConfigViewModel>();
 
         }
 

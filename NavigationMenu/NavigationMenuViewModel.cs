@@ -1,9 +1,9 @@
 ﻿using GeneralConfig;
-using Infrastructure.Constants;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using TimersList;
+using static Infrastructure.Constants.RegionNames;
 
 namespace NavigationMenu {
     public class NavigationMenuViewModel : BindableBase {
@@ -12,10 +12,10 @@ namespace NavigationMenu {
 
         public NavigationMenuViewModel(IRegionManager regionManager) {
             GenConfigButton = new DelegateCommand(() => {
-                regionManager.RequestNavigate(RegionNames.SHELL_CONFIG_REGION, nameof(GeneralConfigView));
+                regionManager.RequestNavigate(SHELL_CONFIG_REGION, nameof(GeneralConfigView));
             });
             TimersButton = new DelegateCommand(() => {
-                regionManager.RequestNavigate(RegionNames.SHELL_CONFIG_REGION, nameof(TimersListView));
+                regionManager.RequestNavigate(SHELL_CONFIG_REGION, nameof(TimersListView));
             });
         }
     }

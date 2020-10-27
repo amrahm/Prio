@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
-using static Infrastructure.Constants.ModuleNames;
-using static Infrastructure.SharedResources.Settings;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace TimersList {
-    class TimersListViewModel : BindableBase {
-        private readonly TimersListModel _model;
+    public class TimersListViewModel : BindableBase {
+        public ObservableCollection<TimersListItemView> Timers { get; } = new ObservableCollection<TimersListItemView>();
+        //private readonly TimersListModel _model;
+
+        public DelegateCommand AddTimerCommand { get; set; }
 
         public TimersListViewModel() {
-            _model = LoadSettings<TimersListModel>(TIMERS_LIST) ?? new TimersListModel();
+            //_model = LoadSettings<TimersListModel>(TIMERS_LIST) ?? new TimersListModel(this);
+            var  container = GetContainer();
+            AddTimerCommand = new DelegateCommand(() => {
+                TimersListItemView view = container.Resolve<TimersListItemView>();
+                Timers.Add(view);
+            });
         }
     }
 }

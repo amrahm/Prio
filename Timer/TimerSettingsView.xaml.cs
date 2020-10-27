@@ -1,36 +1,22 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
-using Microsoft.Xaml.Behaviors;
 using Prism.Services.Dialogs;
-using Timer.Annotations;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
     /// <summary>
     /// Interaction logic for TimerSettingsView.xaml
     /// </summary>
-    public partial class TimerSettingsView : INotifyPropertyChanged {
+    public partial class TimerSettingsView {
         private const int MinCtrlWidth = 470;
         private const int ScreenMargin = 50;
         private const int SnappingIncrement = MinCtrlWidth + 50;
-        private double _ctrlWidth = MinCtrlWidth;
-
-        public double CtrlWidth {
-            get => _ctrlWidth;
-            set {
-                _ctrlWidth = value;
-                OnPropertyChanged();
-            }
-        }
 
         private DialogWindow _window;
 
@@ -79,11 +65,12 @@ namespace Timer {
                 int maxPerRow = (int) (newSizeWidth / MinCtrlWidth);
                 int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
                 MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
-                CtrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
+                double ctrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
 
                 for(int i = 0; i < MainWrapPanel.Children.Count; i++) {
                     FrameworkElement child = (FrameworkElement) MainWrapPanel.Children[i];
                     child.Margin = new Thickness(0, 0, (i + 1) % numPerRow == 0 ? 0 : spacing, spacing);
+                    child.Width = ctrlWidth;
                 }
 
                 if(_window != null) {
@@ -112,13 +99,6 @@ namespace Timer {
                 //    vm.HandleKeyDown(e);
                 //}
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

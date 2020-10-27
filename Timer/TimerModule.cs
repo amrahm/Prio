@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Constants;
 using Prism.Ioc;
 using Prism.Modularity;
+using Unity;
 
 namespace Timer {
     /// <summary>
@@ -8,11 +9,12 @@ namespace Timer {
     /// </summary>
     [Module(ModuleName = ModuleNames.TIMER)]
     public class TimerModule : IModule {
-        public TimerModule() { }
+        public TimerModule(IUnityContainer container) {
+            container.RegisterType<ITimer, TimerViewModel>();
+        }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterDialog<TimerSettingsView, TimerSettingsViewModel>();
-            containerRegistry.RegisterDialog<TimerView, TimerViewModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) { }

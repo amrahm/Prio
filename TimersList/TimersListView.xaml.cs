@@ -1,41 +1,43 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Collections.Specialized;
 using System.Windows;
-using Timer.Annotations;
+using Prism.Regions;
+using static Infrastructure.Constants.RegionNames;
 
 namespace TimersList {
     /// <summary>
     /// Interaction logic for TimersListView.xaml
     /// </summary>
-    public partial class TimersListView : INotifyPropertyChanged {
+    public partial class TimersListView {
         private const int MinCtrlWidth = 250;
-        private double _ctrlWidth = 600;
 
-        public double CtrlWidth {
-            get => _ctrlWidth;
-            set {
-                _ctrlWidth = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public TimersListView() {
+        public TimersListView(IRegionManager regionManager) {
             InitializeComponent();
-            SizeChanged += SettingsBoxWidthAdjust;
-        }
 
-        private void SettingsBoxWidthAdjust(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
-            double newSizeWidth = sizeChangedEventArgs.NewSize.Width;
-            double maxPerRow = Math.Floor(newSizeWidth / MinCtrlWidth);
-            CtrlWidth = newSizeWidth / Math.Min(maxPerRow, TimerWrapPanel.Children.Count) - 10;
-        }
+            TimersListViewModel vm = (TimersListViewModel) DataContext;
+            vm.Timers.CollectionChanged += (o, e) => {
+                IRegion region = regionManager.Regions[TIMERS_LIST_REGION];
+                if(e.Action == NotifyCollectionChangedAction.Add)
+                    foreach(object newItem in e.NewItems) {
+                        region.Add(newItem, null, true);
+                        region.Activate(newItem);
+                        SizeChangedEventHandler();
+                    }
+                else if(e.Action == NotifyCollectionChangedAction.Remove)
+                    foreach(object newItem in e.NewItems) {
+                        region.Remove(newItem);
+                        SizeChangedEventHandler();
+                    }
+            };
 
-        public event PropertyChangedEventHandler PropertyChanged;
+            void SizeChangedEventHandler(object sender = null, SizeChangedEventArgs sizeChangedEventArgs = null) {
+                double newSizeWidth = TimerWrapPanel.ActualWidth;
+                double maxPerRow = Math.Floor(newSizeWidth / MinCtrlWidth);
+                double ctrlWidth = newSizeWidth / Math.Min(maxPerRow, TimerWrapPanel.Children.Count) - 10;
+                foreach(object item in TimerWrapPanel.Children) { ((FrameworkElement) item).Width = ctrlWidth; }
+            }
 
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            SizeChanged += SizeChangedEventHandler;
         }
     }
 }
