@@ -5,7 +5,7 @@ using Prism.Regions;
 using TimersList;
 using static Infrastructure.Constants.RegionNames;
 
-namespace NavigationMenu {
+namespace MainConfig {
     public class NavigationMenuViewModel : BindableBase {
         public DelegateCommand GenConfigButton { get; }
         public DelegateCommand TimersButton { get; }

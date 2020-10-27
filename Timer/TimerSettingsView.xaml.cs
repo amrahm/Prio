@@ -87,18 +87,6 @@ namespace Timer {
                     _window.DragMove();
                 }
             };
-
-            TimerSettingsViewModel vm = DataContext as TimerSettingsViewModel;
-            KeyDown += (o, e) => {
-                if(vm == null) return;
-
-
-                //if((Keyboard.FocusedElement as FrameworkElement).GetSelfAndAncestors()
-                //    .Any(oo => oo.GetType() == typeof(ShortcutSetter))) {
-                //    Debug.WriteLine(e.Key);
-                //    vm.HandleKeyDown(e);
-                //}
-            };
         }
     }
 }

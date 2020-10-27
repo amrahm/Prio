@@ -115,7 +115,6 @@
       <DependentUpon>TimersListItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimersListItemViewModel.cs" />
-    <Compile Include="TimersListModel.cs" />
     <Compile Include="TimersListView.xaml.cs">
       <DependentUpon>TimersListView.xaml</DependentUpon>
     </Compile>

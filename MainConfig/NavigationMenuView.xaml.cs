@@ -1,4 +1,4 @@
-﻿namespace NavigationMenu {
+﻿namespace MainConfig {
     /// <summary>
     ///     Interaction logic for NavigationMenuView.xaml
     /// </summary>

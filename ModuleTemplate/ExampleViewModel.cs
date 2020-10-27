@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace ModuleTemplate {
+namespace ExampleModule {
     class ExampleViewModel : BindableBase {
         public ExampleViewModel() { }
     }

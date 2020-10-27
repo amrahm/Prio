@@ -113,9 +113,13 @@
     <Compile Include="NavigationMenuView.xaml.cs">
       <DependentUpon>NavigationMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NavigationMenuModule.cs" />
+    <Compile Include="MainConfigModule.cs" />
     <Compile Include="NavigationMenuViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MainConfigView.xaml.cs">
+      <DependentUpon>MainConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainConfigViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -142,6 +146,10 @@
     <Page Include="NavigationMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainConfigView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

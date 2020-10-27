@@ -4,10 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
-             xmlns:prism="http://www.codeplex.com/prism"
-			 prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
+             x:Name="Root"
              d:DesignHeight="100" d:DesignWidth="200">
+
+	<prism:Dialog.WindowStyle>
+		<Style TargetType="Window">
+			<Setter Property="WindowStyle" Value="None" />
+			<Setter Property="AllowsTransparency" Value="True" />
+			<Setter Property="Width" Value="200" />
+			<Setter Property="Height" Value="100" />
+			<Setter Property="ShowInTaskbar" Value="False" />
+			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
+		</Style>
+	</prism:Dialog.WindowStyle>
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -21,7 +33,8 @@
 	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
 		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource MediumBrush}">
 			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-				<Label Content="Timer Name" Background="{StaticResource DarkHintBrush}"
+				<Label Content="{Binding Config.Name, FallbackValue=Timer_Name, Mode=TwoWay}"
+				       Background="{StaticResource DarkHintBrush}"
 				       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
 			</Viewbox>
 			<Separator Background="{StaticResource Light2Brush}" />

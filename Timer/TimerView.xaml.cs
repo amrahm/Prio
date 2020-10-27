@@ -1,13 +1,41 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shell;
+using Prism.Services.Dialogs;
+using Color = System.Windows.Media.Color;
 
 namespace Timer {
     /// <summary>
     /// Interaction logic for TimerView.xaml
     /// </summary>
     public partial class TimerView  {
+        private DialogWindow _window;
+
         public TimerView() {
             InitializeComponent();
             SizeChanged += TimerAspectRatioLimits;
+
+            
+            Loaded += (o, e) => {
+                _window = (DialogWindow) Root.Parent;
+                WindowChrome windowChrome = new WindowChrome {
+                    CaptionHeight = 0
+                };
+                WindowChrome.SetWindowChrome(_window, windowChrome);
+                _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+            };
+
+            MouseDown += (o, e) => {
+                if(e.ChangedButton == MouseButton.Left) {
+                    DependencyObject scope = FocusManager.GetFocusScope(Root);
+                    FocusManager.SetFocusedElement(scope, _window);
+
+                    _window.DragMove();
+                }
+            };
         }
 
         private void TimerAspectRatioLimits(object sender, SizeChangedEventArgs sizeChangedEventArgs) {

@@ -1,17 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prism.Mvvm;
-using Timer.Annotations;
 
 namespace Timer {
     public class TimerSettingsViewModel : BindableBase, IDialogAware {
-        private readonly TimerModel _model;
+        private  TimerModel _model;
         private int _hours = 1;
         private int _minutes;
         private int _seconds;
@@ -55,8 +52,6 @@ namespace Timer {
             }
         }
 
-        public void HandleKeyDown(KeyEventArgs e) { /* ... */ }
-
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand ApplyCommand { get; }
         public DelegateCommand OkCommand { get; }
@@ -68,17 +63,14 @@ namespace Timer {
                 Settings.SaveSettings(Config, ModuleNames.TIMER, Config.InstanceID);
                 RequestClose?.Invoke(null);
             });
-
-            //TODO how to load config
-            _model = new TimerModel(new TimerConfig(), this);
         }
 
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
 
         public void OnDialogOpened(IDialogParameters parameters) {
-            //TODO load config from parameters
-            Config = new TimerConfig();
+            //TODO actually pass model as parameter
+            _model = parameters.GetValue<TimerModel>(nameof(TimerModel));
         }
     }
 }

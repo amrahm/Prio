@@ -10,11 +10,13 @@ namespace Prio {
     ///     Interaction logic for App.xaml
     /// </summary>
     internal partial class App {
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry) { }
 
         protected override Window CreateShell() {
             Current.Resources.Add(Infrastructure.SharedResources.UnityInstance.CONTAINER_NAME, Container);
-            return Container.Resolve<ShellView>();
+            FindResource("MyNotifyIcon");
+            return null;
         }
 
         protected override IModuleCatalog CreateModuleCatalog() {

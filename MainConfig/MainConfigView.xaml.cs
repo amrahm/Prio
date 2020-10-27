@@ -1,9 +1,9 @@
-﻿namespace Prio {
+﻿namespace MainConfig {
     /// <summary>
     ///     Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class ShellView {
-        public ShellView() {
+    public partial class MainConfigView {
+        public MainConfigView() {
             InitializeComponent();
         }
     }

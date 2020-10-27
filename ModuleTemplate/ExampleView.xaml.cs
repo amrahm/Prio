@@ -1,4 +1,4 @@
-﻿namespace ModuleTemplate {
+﻿namespace ExampleModule {
     /// <summary>
     /// Interaction logic for ExampleView.xaml
     /// </summary>

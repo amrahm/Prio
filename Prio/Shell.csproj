@@ -53,6 +53,9 @@
     <Reference Include="HandyControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.0.0-rc.2\lib\net47\HandyControl.dll</HintPath>
     </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -123,19 +126,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NotificationTrayCommands.cs" />
     <Compile Include="RegionAdapters\StackPanelRegionAdapter.cs" />
     <Compile Include="RegionAdapters\WrapPanelRegionAdapter.cs" />
-    <Compile Include="ShellViewModel.cs" />
-    <Page Include="ShellView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ShellView.xaml.cs">
-      <DependentUpon>ShellView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -175,9 +170,9 @@
       <Project>{43496dac-19e2-4107-8886-3f5c98a4f531}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NavigationMenu\NavigationMenu.csproj">
+    <ProjectReference Include="..\MainConfig\MainConfig.csproj">
       <Project>{84024aaf-356f-4991-8475-30ce46879392}</Project>
-      <Name>NavigationMenu</Name>
+      <Name>MainConfig</Name>
     </ProjectReference>
     <ProjectReference Include="..\TimersList\TimersList.csproj">
       <Project>{86e2a39c-db8c-468b-8fda-6bc39e9c8fa9}</Project>
