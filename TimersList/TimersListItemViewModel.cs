@@ -1,8 +1,8 @@
 ﻿using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Timer;
-using static Infrastructure.SharedResources.UnityInstance;
+using Infrastructure.SharedResources;
+using Prism.Ioc;
 
 namespace TimersList {
     public class TimersListItemViewModel : BindableBase {
@@ -10,7 +10,7 @@ namespace TimersList {
         public DelegateCommand OpenTimerSettings { get; }
 
         public TimersListItemViewModel() {
-            var  container = GetContainer();
+            IContainerProvider container = UnityInstance.GetContainer();
             Timer = container.Resolve<ITimer>();
             OpenTimerSettings = new DelegateCommand(() => {
                 Timer.OpenSettings();

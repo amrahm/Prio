@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
@@ -18,9 +16,11 @@ namespace Timer {
             InitializeComponent();
             SizeChanged += TimerAspectRatioLimits;
 
-            
+
             Loaded += (o, e) => {
-                _window = (DialogWindow) Root.Parent;
+                _window = Root.Parent as DialogWindow;
+                if(_window == null) return;
+
                 WindowChrome windowChrome = new WindowChrome {
                     CaptionHeight = 0
                 };
@@ -29,6 +29,7 @@ namespace Timer {
             };
 
             MouseDown += (o, e) => {
+                if(_window == null) return;
                 if(e.ChangedButton == MouseButton.Left) {
                     DependencyObject scope = FocusManager.GetFocusScope(Root);
                     FocusManager.SetFocusedElement(scope, _window);

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Timer {
@@ -101,7 +97,7 @@ namespace Timer {
                 if(string.IsNullOrEmpty(_key)) ResetShortcut();
             };
 
-            Dictionary<string, ToggleButton> modMap = new Dictionary<string, ToggleButton> {
+            var modMap = new Dictionary<string, ToggleButton> {
                 {Alt, AltToggle},
                 {Ctrl, CtrlToggle},
                 {Shift, ShiftToggle},

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Infrastructure.Prism;
 using Prio.RegionAdapters;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -27,6 +28,11 @@ namespace Prio {
             base.ConfigureRegionAdapterMappings(regionAdapterMappings);
             regionAdapterMappings.RegisterMapping<StackPanel>(Container.Resolve<StackPanelRegionAdapter>());
             regionAdapterMappings.RegisterMapping<WrapPanel>(Container.Resolve<WrapPanelRegionAdapter>());
+        }
+
+        protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors) {
+            base.ConfigureDefaultRegionBehaviors(regionBehaviors);
+            regionBehaviors.AddIfMissing(RegionManagerAwareBehavior.BEHAVIOR_KEY, typeof(RegionManagerAwareBehavior));
         }
     }
 }

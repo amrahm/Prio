@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
-using static Infrastructure.SharedResources.UnityInstance;
+using Infrastructure.SharedResources;
+using Prism.Ioc;
 
 namespace TimersList {
     public class TimersListViewModel : BindableBase {
@@ -11,7 +11,7 @@ namespace TimersList {
         public DelegateCommand AddTimerCommand { get; set; }
 
         public TimersListViewModel() {
-            var  container = GetContainer();
+            IContainerProvider container = UnityInstance.GetContainer();
             AddTimerCommand = new DelegateCommand(() => {
                 TimersListItemView view = container.Resolve<TimersListItemView>();
                 Timers.Add(view);

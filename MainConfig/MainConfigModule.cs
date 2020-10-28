@@ -2,7 +2,6 @@
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
-using GeneralConfig;
 
 namespace MainConfig {
     /// <summary>
@@ -14,12 +13,13 @@ namespace MainConfig {
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterDialog<MainConfigView, MainConfigViewModel>();
+            containerRegistry.RegisterSingleton<IMainConfigService, MainConfigService>();
+            containerRegistry.RegisterForNavigation<NavigationMenuView, NavigationMenuViewModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion(RegionNames.MENU_REGION, typeof(NavigationMenuView));
-            regionManager.RequestNavigate(RegionNames.SHELL_CONFIG_REGION, nameof(GeneralConfigView));
+            //regionManager.RegisterViewWithRegion(RegionNames.MENU_REGION, typeof(NavigationMenuView));
         }
     }
 }

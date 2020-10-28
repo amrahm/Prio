@@ -136,6 +136,9 @@
   <ItemGroup>
     <Compile Include="Constants\ModuleNames.cs" />
     <Compile Include="Constants\RegionNames.cs" />
+    <Compile Include="Prism\IRegionManagerAware.cs" />
+    <Compile Include="Prism\RegionManagerAware.cs" />
+    <Compile Include="Prism\RegionManagerAwareBehavior.cs" />
     <Compile Include="SharedResources\UnityInstance.cs" />
     <Compile Include="SharedResources\AdornedControl\AdornedControl.cs" />
     <Compile Include="SharedResources\AdornedControl\AdornerPlacement.cs" />
@@ -166,6 +169,7 @@
   <ItemGroup>
     <Resource Include="SharedResources\images\squanchy.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.3.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.3.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

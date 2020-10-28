@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Windows;
+using Infrastructure.Prism;
 using Prism.Regions;
 using static Infrastructure.Constants.RegionNames;
 
@@ -8,15 +9,15 @@ namespace TimersList {
     /// <summary>
     /// Interaction logic for TimersListView.xaml
     /// </summary>
-    public partial class TimersListView {
+    public partial class TimersListView : IRegionManagerAware {
         private const int MinCtrlWidth = 250;
 
-        public TimersListView(IRegionManager regionManager) {
+        public TimersListView() {
             InitializeComponent();
 
             TimersListViewModel vm = (TimersListViewModel) DataContext;
             vm.Timers.CollectionChanged += (o, e) => {
-                IRegion region = regionManager.Regions[TIMERS_LIST_REGION];
+                IRegion region = RegionManagerA.Regions[TIMERS_LIST_REGION];
                 if(e.Action == NotifyCollectionChangedAction.Add)
                     foreach(object newItem in e.NewItems) {
                         region.Add(newItem, null, true);
@@ -39,5 +40,7 @@ namespace TimersList {
 
             SizeChanged += SizeChangedEventHandler;
         }
+
+        public IRegionManager RegionManagerA { get; set; }
     }
 }

@@ -110,6 +110,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMainConfigService.cs" />
+    <Compile Include="MainConfigService.cs" />
     <Compile Include="NavigationMenuView.xaml.cs">
       <DependentUpon>NavigationMenuView.xaml</DependentUpon>
     </Compile>

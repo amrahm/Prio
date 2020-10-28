@@ -2,21 +2,20 @@
 using System.Windows.Input;
 using Infrastructure.SharedResources;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
 using MainConfig;
 
 namespace Prio {
     public class OpenShell : ICommand {
-        private IDialogService _dialogService;
+        private readonly IContainerProvider _container;
 
         public OpenShell() {
-            _dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
+            _container = UnityInstance.GetContainer();
         }
 
         public bool CanExecute(object parameter) => true;
 
         public void Execute(object parameter) {
-            _dialogService.Show(nameof(MainConfigView), new DialogParameters(), result => { });
+            _container.Resolve<IMainConfigService>().ShowConfigWindow();
         }
 
         public event EventHandler CanExecuteChanged;
