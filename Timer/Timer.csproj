@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITimer.cs" />
+    <Compile Include="ITimersService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ShortcutSetter.xaml.cs">
       <DependentUpon>ShortcutSetter.xaml</DependentUpon>
@@ -125,6 +126,7 @@
       <DependentUpon>TimerSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimerSettingsViewModel.cs" />
+    <Compile Include="TimersService.cs" />
     <Compile Include="TimerView.xaml.cs">
       <DependentUpon>TimerView.xaml</DependentUpon>
     </Compile>

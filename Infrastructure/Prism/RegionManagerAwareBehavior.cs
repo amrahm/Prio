@@ -30,11 +30,9 @@ namespace Infrastructure.Prism {
                         foreach(object item in e.NewItems) {
                             IRegionManager regionManager = Region.RegionManager;
 
-                            if(item is FrameworkElement element) {
-                                if(element.GetValue(RegionManager.RegionManagerProperty) is IRegionManager
-                                       scopedRegionManager) {
-                                    regionManager = scopedRegionManager;
-                                }
+                            if(item is FrameworkElement element && element.GetValue(RegionManager.RegionManagerProperty) is IRegionManager
+                                   scopedRegionManager) {
+                                regionManager = scopedRegionManager;
                             }
 
                             InvokeOnRegionManagerAwareElement(item, x => x.RegionManagerA = regionManager);

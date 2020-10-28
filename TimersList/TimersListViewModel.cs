@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Infrastructure.SharedResources;
 using Prism.Ioc;
+using Timer;
 
 namespace TimersList {
     public class TimersListViewModel : BindableBase {
@@ -12,9 +13,21 @@ namespace TimersList {
 
         public TimersListViewModel() {
             IContainerProvider container = UnityInstance.GetContainer();
+            var timersService = container.Resolve<ITimersService>();
+
+            // Load existing timers
+            foreach(ITimer timer in timersService.Timers) Timers.Add(new TimersListItemView(timer));
+
+            // Update if a timer is added elsewhere
+            timersService.Timers.CollectionChanged += (sender, e) => {
+                foreach(ITimer timer in e.NewItems) Timers.Add(new TimersListItemView(timer));
+            };
+
+            // Add new timer on button press
             AddTimerCommand = new DelegateCommand(() => {
-                TimersListItemView view = container.Resolve<TimersListItemView>();
-                Timers.Add(view);
+                ITimer timer = container.Resolve<ITimer>();
+                Timers.Add(new TimersListItemView(timer));
+                timer.OpenSettings(); //TODO they can cancel and leave a null timer name
             });
         }
     }

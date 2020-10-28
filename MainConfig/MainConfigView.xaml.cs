@@ -11,8 +11,7 @@ namespace MainConfig {
         public MainConfigView() {
             InitializeComponent();
             Loaded += (o,  e) => {
-                RegionManagerA.RegisterViewWithRegionManagerAware<NavigationMenuView>(RegionNames.MENU_REGION);
-                //RegionManagerA.RequestNavigate(RegionNames.MENU_REGION, nameof(NavigationMenuView));
+                RegionManagerA.RegisterViewWithRMAware<NavigationMenuView>(RegionNames.MENU_REGION);
                 RegionManagerA.RequestNavigate(RegionNames.SHELL_CONFIG_REGION, nameof(GeneralConfigView));
             };
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Timer.Annotations;
@@ -7,28 +8,22 @@ namespace Timer {
     public class TimerViewModel : BindableBase, IDialogAware {
         public string Title { get; set; } = "Timer";
         public event Action<IDialogResult> RequestClose;
-        private readonly IDialogService _dialogService;
-        [CanBeNull] private TimerModel _model;
+        [CanBeNull] public ITimer Model { get; private set; }
 
         public TimerConfig Config {
-            get => _model?.Config;
+            get => Model?.Config;
             set {
-                if(_model != null) _model.Config = value;
+                if(Model != null) Model.Config = value;
             }
         }
 
-        public TimerViewModel(IDialogService dialogService) {
-            _dialogService = dialogService;
+        public TimerViewModel(ITimer timerModel) {
+            Model = timerModel;
         }
 
         public void OnDialogOpened(IDialogParameters parameters) {
-            TimerConfig config = parameters.GetValue<TimerConfig>(nameof(TimerConfig));
-            _model = new TimerModel(config, this);
-        }
-
-        public void OpenSettings() {
-            _dialogService.ShowDialog(nameof(TimerSettingsView), new DialogParameters {{nameof(TimerModel), _model}},
-                                      result => { });
+            Model = parameters.GetValue<ITimer>(nameof(ITimer));
+            Debug.Assert(Model != null, nameof(Model) + " != null");
         }
 
         public bool CanCloseDialog() => true;

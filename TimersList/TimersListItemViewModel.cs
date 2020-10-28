@@ -11,7 +11,7 @@ namespace TimersList {
 
         public TimersListItemViewModel() {
             IContainerProvider container = UnityInstance.GetContainer();
-            Timer = container.Resolve<ITimer>();
+            Timer = container.Resolve<ITimer>(); //TODO load instead
             OpenTimerSettings = new DelegateCommand(() => {
                 Timer.OpenSettings();
             });

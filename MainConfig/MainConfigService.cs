@@ -20,10 +20,8 @@ namespace MainConfig {
             _configView.Closed += (o,  e) => {
                 _configView = null;
             };
-            var scopedRegion = _regionManager.CreateRegionManager();
-            RegionManager.SetRegionManager(_configView, scopedRegion);
 
-            scopedRegion.SetRegionManagerAware(_configView);
+            _regionManager.CreateScopedRMAware(_configView);
 
             _configView.Show();
         }

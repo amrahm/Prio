@@ -33,7 +33,7 @@
 	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
 		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource MediumBrush}">
 			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-				<Label Content="{Binding Config.Name, FallbackValue=Timer_Name, Mode=TwoWay}"
+				<Label Content="{Binding Config.Name, FallbackValue=Timer_Name, TargetNullValue=Timer_Name, Mode=TwoWay}"
 				       Background="{StaticResource DarkHintBrush}"
 				       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
 			</Viewbox>
