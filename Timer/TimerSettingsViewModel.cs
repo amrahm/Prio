@@ -1,26 +1,18 @@
 ﻿using System;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using Infrastructure.Constants;
-using Infrastructure.SharedResources;
 using Prism.Mvvm;
-using Timer.Annotations;
 
 namespace Timer {
     public class TimerSettingsViewModel : BindableBase, IDialogAware {
-        [CanBeNull] public ITimer Model { get; private set; }
+        private ITimer Model { get;  set; }
         private int _hours = 1;
         private int _minutes;
         private int _seconds;
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
-        public TimerConfig Config {
-            get => Model?.Config;
-            set {
-                if(Model != null) Model.Config = value;
-            }
-        }
+        public TimerConfig Config { get; set; }
 
         public int Hours {
             get => _hours;
@@ -39,7 +31,7 @@ namespace Timer {
             set {
                 Config.Duration = new TimeSpan(_hours, value, _seconds);
                 _minutes = Config.Duration.Minutes;
-                Hours = (int)Config.Duration.TotalHours;
+                Hours = (int) Config.Duration.TotalHours;
             }
         }
 
@@ -60,8 +52,12 @@ namespace Timer {
 
         public TimerSettingsViewModel() {
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
-            ApplyCommand = new DelegateCommand(() => Model?.SaveSettings());
+            ApplyCommand = new DelegateCommand(() => {
+                Model.Config = Config;
+                Model?.SaveSettings();
+            });
             OkCommand = new DelegateCommand(() => {
+                Model.Config = Config;
                 Model?.SaveSettings();
                 RequestClose?.Invoke(null);
             });
@@ -72,6 +68,7 @@ namespace Timer {
 
         public void OnDialogOpened(IDialogParameters parameters) {
             Model = parameters.GetValue<ITimer>(nameof(ITimer));
+            Config = Model.Config;
         }
     }
 }

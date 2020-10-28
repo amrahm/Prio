@@ -8,14 +8,14 @@ namespace TimersList {
     /// Interaction logic for TimersListItemView.xaml
     /// </summary>
     public partial class TimersListItemView : IRegionManagerAware  {
-        public ITimer Timer { get; }
 
         public TimersListItemView(ITimer timer) {
-            Timer = timer;
             InitializeComponent();
+            var vm = (TimersListItemViewModel) DataContext;
+            vm.Timer = timer;
             Loaded += (o,  e) => {
                 RegionManagerA.AddToRegionRMAware(TIMER_IN_LIST_REGION, new TimerView {
-                    DataContext = new TimerViewModel(Timer)
+                    DataContext = new TimerViewModel(timer)
                 });
             };
         }

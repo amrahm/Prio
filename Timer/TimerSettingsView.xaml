@@ -50,7 +50,7 @@
 							<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowName, Mode=TwoWay}" />
 						</StackPanel>
 						<TextBlock Text="Duration" Style="{StaticResource SubHeaderLabelStyle}" />
-						<Label Style="{StaticResource BigControlStyle}" Content="{Binding Hours}" />
+						<Label Style="{StaticResource BigControlStyle}" Content="{Binding Config.InstanceID}" />
 						<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
 						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
 							<StackPanel Orientation="Horizontal">
