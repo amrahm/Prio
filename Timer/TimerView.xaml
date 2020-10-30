@@ -14,9 +14,9 @@
 		<Style TargetType="Window">
 			<Setter Property="WindowStyle" Value="None" />
 			<Setter Property="AllowsTransparency" Value="True" />
+			<Setter Property="ShowInTaskbar" Value="False" />
 			<Setter Property="Width" Value="200" />
 			<Setter Property="Height" Value="100" />
-			<Setter Property="ShowInTaskbar" Value="False" />
 			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
 		</Style>
 	</prism:Dialog.WindowStyle>
@@ -33,20 +33,48 @@
 	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
 		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource MediumBrush}">
 			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-				<Label Content="{Binding Config.Name, FallbackValue=Timer_Name, TargetNullValue=Timer_Name, Mode=TwoWay}"
-				       Background="{StaticResource DarkHintBrush}"
-				       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
+				<Border Margin="5" Style="{StaticResource BorderClip}">
+					<Label Margin="0" Padding="10, 5" Content="{Binding Config.Name, FallbackValue=Timer_Name, TargetNullValue=Timer_Name, Mode=TwoWay}"
+					       Background="{StaticResource DarkHintBrush}"
+					       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
+				</Border>
 			</Viewbox>
 			<Separator Background="{StaticResource Light2Brush}" />
 			<Grid Background="{StaticResource MediumBrush}" st:AutoGrid.ColumnSpan="2">
 				<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"
 				         Grid.ColumnSpan="2">
-					<Label Content="00:00" HorizontalContentAlignment="Center" Foreground="{StaticResource LightAccentBrush}"
-					       Padding="6, 0" x:Name="TimerText" Style="{StaticResource BigControlStyle}" Margin="0, -4, 0, 0" />
+					<Label Content="{Binding TimeLeft, FallbackValue=00:00}" HorizontalContentAlignment="Center"
+					       Foreground="{StaticResource LightAccentBrush}"
+					       Padding="6, 0" x:Name="TimerText" Style="{StaticResource BigControlStyle}" Margin="0" />
 				</Viewbox>
 			</Grid>
 		</st:AutoGrid>
 	</Border>
 
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Edit Timer" Command="{Binding OpenTimerSettings}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Prio Settings" Command="{Binding OpenMainSettings}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/prio.ico" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<Separator />
+			<MenuItem Header="Start/Stop Timer" Command="{Binding StartStopTimer}" />
+			<MenuItem Header="Reset Timer" />
+			<MenuItem Header="Add 5 Minutes" />
+			<MenuItem Header="Add 10 Minutes" />
+			<MenuItem Header="Add 30 Minutes" />
+			<MenuItem Header="Set Current Time" />
+			<Separator />
+			<MenuItem Header="Hide Timer" />
+			<MenuItem Header="Exit (Disable) Timer" />
+			<MenuItem Header="Exit Program" Command="{Binding ExitProgram}" />
+		</ContextMenu>
+	</UserControl.ContextMenu>
 
 </UserControl>

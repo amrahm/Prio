@@ -1,8 +1,11 @@
 ﻿namespace Timer {
     public interface ITimer {
-        public void ShowTimer();
-        public void OpenSettings();
         TimerConfig Config { get; set; }
+        void ShowTimer();
+        void StartTimer();
+        void StopTimer();
+        bool IsRunning { get; }
+        void OpenSettings();
         void SaveSettings();
     }
 }

@@ -18,12 +18,18 @@ namespace TimersList {
 
             TimersListViewModel vm = (TimersListViewModel) DataContext;
             IRegion region = null;
-            Loaded += (o,  e) => {
-                region = RegionManagerA.Regions[TIMERS_LIST_REGION];
+            Initialized += (o,  e) => {
                 foreach(TimersListItemView timersListItemView in vm.Timers) {
                     region.AddToRegionScopedRMAware(timersListItemView);
                     SizeChangedEventHandler();
                 }
+            };
+            Loaded += (o,  e) => {
+                region = RegionManagerA.Regions[TIMERS_LIST_REGION];
+                //foreach(TimersListItemView timersListItemView in vm.Timers) {
+                //    region.AddToRegionScopedRMAware(timersListItemView);
+                //    SizeChangedEventHandler();
+                //}
             };
             vm.Timers.CollectionChanged += (o, e) => {
                 if(e.Action == NotifyCollectionChangedAction.Add)

@@ -12,13 +12,13 @@
 
 	<!--Fonts-->
 	<system:Double x:Key="NormalFontSize">14</system:Double>
-	<FontFamily x:Key="NormalFont">Century Gothic</FontFamily>
+	<FontFamily x:Key="NormalFont">Nirmala UI</FontFamily>
 	<system:Double x:Key="HintFontSize">12</system:Double>
 	<FontFamily x:Key="HintFont">Segoe UI</FontFamily>
 	<system:Double x:Key="SubHeaderFontSize">26</system:Double>
 	<FontFamily x:Key="SubHeaderFont">Corbel</FontFamily>
 	<system:Double x:Key="BigFontSize">36</system:Double>
-	<FontFamily x:Key="BigFont">Nirmala UI</FontFamily>
+	<FontFamily x:Key="BigFont">Bahnschrift Light</FontFamily>
 
 	<!--Colors-->
 	<Color x:Key="Dark">#0D2340</Color>

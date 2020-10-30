@@ -75,7 +75,7 @@
 							<Rectangle />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
 							<StackPanel Orientation="Horizontal">
-								<CheckBox VerticalAlignment="Center" />
+								<CheckBox VerticalAlignment="Center" IsChecked="True" />
 								<TextBlock Text="Seconds" Style="{StaticResource BaseControlStyle}" />
 							</StackPanel>
 

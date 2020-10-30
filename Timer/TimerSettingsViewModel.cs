@@ -2,6 +2,7 @@
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using Prism.Mvvm;
+using Timer.Annotations;
 
 namespace Timer {
     public class TimerSettingsViewModel : BindableBase, IDialogAware {
@@ -12,17 +13,20 @@ namespace Timer {
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
-        public TimerConfig Config { get; set; }
+        [CanBeNull] public TimerConfig Config { get; set; }
 
-        public int Hours {
-            get => _hours;
+        public int? Hours {
+            get => Config != null ? (int?) (int) Config.Duration.TotalHours : null;
             set {
-                Config.Duration = new TimeSpan(value, _minutes, _seconds);
-                double totalHours = Config.Duration.TotalHours;
-                if(Math.Abs(totalHours) < 0.0001) {
-                    Minutes = 1;
+                if(Config != null && value != null) {
+                    Config.Duration = new TimeSpan((int) value, _minutes, _seconds);
+                    Config.TimeLeft = Config.Duration;
+                    double totalHours = Config.Duration.TotalHours;
+                    if(Math.Abs(totalHours) < 0.0001) {
+                        Minutes = 1;
+                    }
+                    _hours =  (int) totalHours; //To allow values greater than 24
                 }
-                _hours =  (int) totalHours; //To allow values greater than 24
             }
         }
 

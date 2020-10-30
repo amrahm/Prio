@@ -11,7 +11,7 @@
 		<ResourceDictionary>
 			<local:OpenShell x:Key="OpenShell" />
 			<tb:TaskbarIcon x:Key="MyNotifyIcon"
-			                IconSource="squanchy.ico"
+			                IconSource="/Infrastructure;component/SharedResources/images/prio.ico"
 			                ToolTipText="hello world"
 			                LeftClickCommand="{StaticResource OpenShell}" />
 		</ResourceDictionary>

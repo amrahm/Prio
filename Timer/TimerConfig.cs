@@ -8,6 +8,7 @@ namespace Timer {
         public string Name { get; set; }
         public bool ShowName { get; set; } = true;
         public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
+        public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
         public IList<int> DesktopsVisible { get; set; } = new List<int> {0};
         public IList<int> DesktopsActive { get; set; } = new List<int> {0};
     }
