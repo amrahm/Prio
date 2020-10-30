@@ -8,67 +8,53 @@ using Infrastructure.SharedResources;
 using MainConfig;
 using Prism.Commands;
 using Prism.Ioc;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Timer.Annotations;
 
 namespace Timer {
-    public class TimerViewModel : INotifyPropertyChanged, IDialogAware {
+    public class TimerViewModel : NotifyPropertyWithDependencies, IDialogAware {
         public string Title { get; set; } = "Timer";
         public event Action<IDialogResult> RequestClose;
 
-        [CanBeNull] private ITimer _model;
+        [CanBeNull] private ITimer _timer;
 
-        public ITimer Model {
-            get => _model;
-            set { // Bubble up changes from within
-                if(_model != value) {
-                    // Clean-up old event handler:
-                    if(_model != null) _model.PropertyChanged -= ThisChanged;
-
-                    _model = value;
-
-                    if(_model != null) _model.PropertyChanged += ThisChanged;
-                }
-
-                void ThisChanged(object sender, PropertyChangedEventArgs args) {
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TimeLeftVm));
-                }
-            }
+        public ITimer Timer {
+            get => _timer;
+            set => NotificationBubbler.BubbleSetter(ref _timer, value, (o, e) => OnPropertyChanged());
         }
 
         //TODO enable/disable for hours, minutes, seconds
-        [UsedImplicitly] public string TimeLeftVm => Model.Config.TimeLeft.ToString(@"hh\:mm\:ss");
+
+        [DependsOnProperty(nameof(Timer))]
+        [UsedImplicitly] public string TimeLeftVm => Timer.Config.TimeLeft.ToString(@"hh\:mm\:ss");
 
         public DelegateCommand OpenTimerSettings { [UsedImplicitly] get; }
         public DelegateCommand OpenMainSettings { [UsedImplicitly] get; }
         public DelegateCommand StartStopTimer { [UsedImplicitly] get; }
         public DelegateCommand ExitProgram { [UsedImplicitly] get; }
 
-        public TimerViewModel(ITimer timerModel) {
-            Model = timerModel;
+        public TimerViewModel(ITimer timerTimer) {
+            Timer = timerTimer;
             IContainerProvider container = UnityInstance.GetContainer();
-            OpenTimerSettings = new DelegateCommand(() => Model?.OpenSettings());
+            OpenTimerSettings = new DelegateCommand(() => Timer?.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {
-                Debug.Assert(Model != null, nameof(Model) + " != null");
-                if(Model.IsRunning) Model.StopTimer();
-                else Model.StartTimer();
+                Debug.Assert(Timer != null, nameof(Timer) + " != null");
+                if(Timer.IsRunning) Timer.StopTimer();
+                else Timer.StartTimer();
             });
-            ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
+            ExitProgram = new DelegateCommand(() => {
+                Timer.SaveSettings();
+                Application.Current.Shutdown();
+            });
         }
 
         public void OnDialogOpened(IDialogParameters parameters) {
-            Model = parameters.GetValue<ITimer>(nameof(ITimer));
+            Timer = parameters.GetValue<ITimer>(nameof(ITimer));
         }
 
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

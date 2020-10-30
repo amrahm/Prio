@@ -134,6 +134,7 @@
     <Compile Include="Prism\RegionManagerAwareExtensions.cs" />
     <Compile Include="Prism\RegionManagerAwareBehavior.cs" />
     <Compile Include="ServiceInterfaces\IMainConfigService.cs" />
+    <Compile Include="SharedResources\NotifyPropertyWithDependencies.cs" />
     <Compile Include="SharedResources\UnityInstance.cs" />
     <Compile Include="SharedResources\AdornedControl\AdornedControl.cs" />
     <Compile Include="SharedResources\AdornedControl\AdornerPlacement.cs" />

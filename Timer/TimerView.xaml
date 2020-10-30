@@ -34,7 +34,7 @@
 		<st:AutoGrid Columns="Auto, *" Rows="Auto, *" Margin="0 0 0 0" Background="{StaticResource MediumBrush}">
 			<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
 				<Border Margin="5" Style="{StaticResource BorderClip}">
-					<Label Margin="0" Padding="10, 5" Content="{Binding Model.Config.Name, FallbackValue=Timer_Name, TargetNullValue=Timer_Name, Mode=TwoWay}"
+					<Label Margin="0" Padding="10, 5" Content="{Binding Timer.Config.Name, FallbackValue=Timer_Name, TargetNullValue=Timer_Name, Mode=TwoWay}"
 					       Background="{StaticResource DarkHintBrush}"
 					       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
 				</Border>

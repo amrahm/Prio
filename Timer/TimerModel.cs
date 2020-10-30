@@ -14,18 +14,7 @@ namespace Timer {
 
         public TimerConfig Config {
             get => _config;
-            set { // Bubble up changes from within
-                if(_config != value) {
-                    // Clean-up old event handler:
-                    if(_config != null) _config.PropertyChanged -= ThisChanged;
-
-                    _config = value;
-
-                    if(_config != null) _config.PropertyChanged += ThisChanged;
-                }
-
-                void ThisChanged(object sender, PropertyChangedEventArgs args) => OnPropertyChanged();
-            }
+            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => OnPropertyChanged());
         }
 
 
