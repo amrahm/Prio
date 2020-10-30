@@ -1,13 +1,33 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
+using Timer.Annotations;
 
 namespace Timer {
-    public class TimerModel : ITimer {
-        public TimerConfig Config { get; set; }
+    public class TimerModel: ITimer {
+        private TimerConfig _config;
+
+        public TimerConfig Config {
+            get => _config;
+            set { // Bubble up changes from within
+                if(_config != value) {
+                    // Clean-up old event handler:
+                    if(_config != null) _config.PropertyChanged -= ThisChanged;
+
+                    _config = value;
+
+                    if(_config != null) _config.PropertyChanged += ThisChanged;
+                }
+
+                void ThisChanged(object sender, PropertyChangedEventArgs args) => OnPropertyChanged();
+            }
+        }
+
 
         private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer;
@@ -18,9 +38,7 @@ namespace Timer {
             _dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
 
             _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
-            _timer.Tick += (o,  e) => {
-                Config.TimeLeft -= TimeSpan.FromSeconds(1);
-            };
+            _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
         }
 
 
@@ -39,6 +57,13 @@ namespace Timer {
 
         public void SaveSettings() {
             Settings.SaveSettings(Config, ModuleNames.TIMER, Config.InstanceID);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

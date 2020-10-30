@@ -26,6 +26,7 @@ namespace TimersList {
             };
             Loaded += (o,  e) => {
                 region = RegionManagerA.Regions[TIMERS_LIST_REGION];
+                //TODO fix loading timers (breaks when you navigate to/from multiple times
                 //foreach(TimersListItemView timersListItemView in vm.Timers) {
                 //    region.AddToRegionScopedRMAware(timersListItemView);
                 //    SizeChangedEventHandler();
