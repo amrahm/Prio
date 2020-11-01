@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -211,49 +212,49 @@ namespace AdornedControl {
                                         new FrameworkPropertyMetadata(IsAdornerVisible_PropertyChanged));
 
         public static readonly DependencyProperty AdornerContentProperty =
-            DependencyProperty.Register("AdornerContent", typeof(FrameworkElement), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(AdornerContent), typeof(FrameworkElement), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(AdornerContent_PropertyChanged));
 
         public static readonly DependencyProperty HorizontalAdornerPlacementProperty =
-            DependencyProperty.Register("HorizontalAdornerPlacement", typeof(AdornerPlacement), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(HorizontalAdornerPlacement), typeof(AdornerPlacement), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(AdornerPlacement.Inside));
 
         public static readonly DependencyProperty VerticalAdornerPlacementProperty =
-            DependencyProperty.Register("VerticalAdornerPlacement", typeof(AdornerPlacement), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(VerticalAdornerPlacement), typeof(AdornerPlacement), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(AdornerPlacement.Inside));
 
         public static readonly DependencyProperty AdornerOffsetXProperty =
-            DependencyProperty.Register("AdornerOffsetX", typeof(double), typeof(AdornedControl));
+            DependencyProperty.Register(nameof(AdornerOffsetX), typeof(double), typeof(AdornedControl));
 
         public static readonly DependencyProperty AdornerOffsetYProperty =
-            DependencyProperty.Register("AdornerOffsetY", typeof(double), typeof(AdornedControl));
+            DependencyProperty.Register(nameof(AdornerOffsetY), typeof(double), typeof(AdornedControl));
 
         public static readonly DependencyProperty IsMouseOverShowEnabledProperty =
             DependencyProperty.Register("IsMouseOverShowEnabled", typeof(bool), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(false, IsMouseOverShowEnabled_PropertyChanged));
 
         public static readonly DependencyProperty IsFocusShowEnabledProperty =
-            DependencyProperty.Register("IsFocusShowEnabled", typeof(bool), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(IsFocusShowEnabled), typeof(bool), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(false, IsFocusShowEnabled_PropertyChanged));
 
         public static readonly DependencyProperty FadeInTimeProperty =
-            DependencyProperty.Register("FadeInTime", typeof(double), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(FadeInTime), typeof(double), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(0.25));
 
         public static readonly DependencyProperty FadeOutTimeProperty =
-            DependencyProperty.Register("FadeOutTime", typeof(double), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(FadeOutTime), typeof(double), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(0.25));
 
         public static readonly DependencyProperty OpenAdornerTimeOutProperty =
-            DependencyProperty.Register("OpenAdornerTimeOut", typeof(double), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(OpenAdornerTimeOut), typeof(double), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(0.0, OpenAdornerTimeOut_PropertyChanged));
 
         public static readonly DependencyProperty CloseAdornerTimeOutProperty =
-            DependencyProperty.Register("CloseAdornerTimeOut", typeof(double), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(CloseAdornerTimeOut), typeof(double), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(0.0, CloseAdornerTimeOut_PropertyChanged));
 
         public static readonly DependencyProperty AdornedTemplatePartNameProperty =
-            DependencyProperty.Register("AdornedTemplatePartName", typeof(string), typeof(AdornedControl),
+            DependencyProperty.Register(nameof(AdornedTemplatePartName), typeof(string), typeof(AdornedControl),
                                         new FrameworkPropertyMetadata(null));
 
         #endregion Dependency Properties

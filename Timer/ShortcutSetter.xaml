@@ -26,7 +26,7 @@
 		<ad:AdornedControl VerticalAdornerPlacement="Outside" IsFocusShowEnabled="True">
 			<ad:AdornedControl.AdornerContent>
 				<ContentControl Template="{StaticResource RoundedTemplate}" Tag="5"
-				                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0">
+				                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
 					<StackPanel Orientation="Horizontal" Background="{StaticResource LightHintBrush}" Focusable="False">
 						<ToggleButton Content="CtrlToggle" Margin="5, 5, 3, 5" Focusable="False" Name="CtrlToggle" />
 						<ToggleButton Content="ShiftToggle" Margin="3" Focusable="False" Name="ShiftToggle" />

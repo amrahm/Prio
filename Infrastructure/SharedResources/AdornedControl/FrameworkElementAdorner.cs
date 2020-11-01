@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -167,21 +168,13 @@ namespace AdornedControl {
             if(!double.IsNaN(PositionX)) return _child.DesiredSize.Width;
 
             switch(_child.HorizontalAlignment) {
-                case HorizontalAlignment.Left: {
+                case HorizontalAlignment.Left:
+                case HorizontalAlignment.Right:
+                case HorizontalAlignment.Center:
                     return _child.DesiredSize.Width;
-                }
-                case HorizontalAlignment.Right: {
-                    return _child.DesiredSize.Width;
-                }
-                case HorizontalAlignment.Center: {
-                    return _child.DesiredSize.Width;
-                }
-                case HorizontalAlignment.Stretch: {
+                default:
                     return AdornedElement.ActualWidth;
-                }
             }
-
-            return 0.0;
         }
 
         /// <summary>
@@ -191,21 +184,25 @@ namespace AdornedControl {
             if(!double.IsNaN(PositionY)) return _child.DesiredSize.Height;
 
             switch(_child.VerticalAlignment) {
-                case VerticalAlignment.Top: {
+                case VerticalAlignment.Top:
+                case VerticalAlignment.Bottom:
+                case VerticalAlignment.Center:
                     return _child.DesiredSize.Height;
-                }
-                case VerticalAlignment.Bottom: {
-                    return _child.DesiredSize.Height;
-                }
-                case VerticalAlignment.Center: {
-                    return _child.DesiredSize.Height;
-                }
-                case VerticalAlignment.Stretch: {
+                default:
                     return AdornedElement.ActualHeight;
-                }
             }
+        }
 
-            return 0.0;
+        private Rect MoveRectInBounds(double x, double y, double adornerWidth, double adornerHeight) {
+            Window window = Window.GetWindow(AdornedElement);
+            if(window != null) {
+                var translatedPoint = AdornedElement.TranslatePoint(new Point(x, y), window);
+                x -= Math.Max(translatedPoint.X + adornerWidth + Margin.Right - window.ActualWidth, 0);
+                x -= Math.Min(translatedPoint.X - Margin.Left, 0);
+                y -= Math.Max(translatedPoint.Y + adornerHeight + Margin.Bottom - window.ActualHeight, 0);
+                y -= Math.Min(translatedPoint.Y - Margin.Top, 0);
+            }
+            return new Rect(x, y, adornerWidth, adornerHeight);
         }
 
         protected override Size ArrangeOverride(Size finalSize) {
@@ -215,17 +212,13 @@ namespace AdornedControl {
             if(double.IsNaN(y)) y = DetermineY();
             double adornerWidth = DetermineWidth();
             double adornerHeight = DetermineHeight();
-            _child.Arrange(new Rect(x, y, adornerWidth, adornerHeight));
+            _child.Arrange(MoveRectInBounds(x, y, adornerWidth, adornerHeight));
             return finalSize;
         }
 
-        protected override Visual GetVisualChild(int index) {
-            return _child;
-        }
+        protected override Visual GetVisualChild(int index) => _child;
 
-        /// <summary>
-        ///     Disconnect the child element from the visual tree so that it may be reused later.
-        /// </summary>
+        /// <summary>  Disconnect the child element from the visual tree so that it may be reused later. </summary>
         public void DisconnectChild() {
             RemoveLogicalChild(_child);
             RemoveVisualChild(_child);
