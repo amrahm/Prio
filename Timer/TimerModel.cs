@@ -6,10 +6,9 @@ using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
-using Timer.Annotations;
 
 namespace Timer {
-    public class TimerModel: ITimer {
+    public class TimerModel : NotifyPropertyWithDependencies, ITimer {
         private TimerConfig _config;
 
         public TimerConfig Config {
@@ -46,13 +45,6 @@ namespace Timer {
 
         public void SaveSettings() {
             Settings.SaveSettings(Config, ModuleNames.TIMER, Config.InstanceID);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -2,7 +2,7 @@
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using Prism.Mvvm;
-using Timer.Annotations;
+using JetBrains.Annotations;
 
 namespace Timer {
     public class TimerSettingsViewModel : BindableBase, IDialogAware {

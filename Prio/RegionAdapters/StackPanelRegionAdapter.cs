@@ -1,9 +1,11 @@
 ﻿using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
+using JetBrains.Annotations;
 using Prism.Regions;
 
 namespace Prio.RegionAdapters {
+    [UsedImplicitly]
     public class StackPanelRegionAdapter : RegionAdapterBase<StackPanel> {
         public StackPanelRegionAdapter(IRegionBehaviorFactory factory)
             : base(factory) { }

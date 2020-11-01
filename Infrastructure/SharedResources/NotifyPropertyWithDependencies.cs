@@ -7,10 +7,7 @@ using System.Runtime.CompilerServices;
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
 public class DependsOnPropertyAttribute : Attribute {
     public readonly string dependence;
-
-    public DependsOnPropertyAttribute(string otherProperty) {
-        dependence = otherProperty;
-    }
+    public DependsOnPropertyAttribute(string otherProperty) => dependence = otherProperty;
 }
 
 public abstract class NotifyPropertyWithDependencies : INotifyPropertyChanged {
@@ -20,11 +17,7 @@ public abstract class NotifyPropertyWithDependencies : INotifyPropertyChanged {
         _dependencyMap = new Dictionary<string, List<string>>();
 
         foreach(var property in GetType().GetProperties()) {
-            IEnumerable<DependsOnPropertyAttribute> attributes = property.GetCustomAttributes<DependsOnPropertyAttribute>();
-            foreach(var dependsAttr in attributes) {
-                if(dependsAttr == null)
-                    continue;
-
+            foreach(var dependsAttr in property.GetCustomAttributes<DependsOnPropertyAttribute>()) {
                 string dependence = dependsAttr.dependence;
                 if(!_dependencyMap.ContainsKey(dependence))
                     _dependencyMap.Add(dependence, new List<string>());
@@ -37,16 +30,13 @@ public abstract class NotifyPropertyWithDependencies : INotifyPropertyChanged {
 
     protected  void OnPropertyChanged([CallerMemberName] string propertyName = null) {
         var handler = PropertyChanged;
-        if(handler == null)
-            return;
+        if(handler == null) return;
 
         handler(this, new PropertyChangedEventArgs(propertyName));
 
-        if(!_dependencyMap.ContainsKey(propertyName))
-            return;
+        if(!_dependencyMap.ContainsKey(propertyName)) return;
 
-        foreach(var dependentProperty in _dependencyMap[propertyName]) {
+        foreach(string dependentProperty in _dependencyMap[propertyName])
             handler(this, new PropertyChangedEventArgs(dependentProperty));
-        }
     }
 }

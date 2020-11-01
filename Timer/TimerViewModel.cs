@@ -2,18 +2,18 @@
 using System.Diagnostics;
 using System.Windows;
 using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 using MainConfig;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
-using Timer.Annotations;
 
 namespace Timer {
     public class TimerViewModel : NotifyPropertyWithDependencies, IDialogAware {
         public string Title { get; set; } = "Timer";
         public event Action<IDialogResult> RequestClose;
 
-        [CanBeNull] private ITimer _timer;
+        private ITimer _timer;
 
         public ITimer Timer {
             get => _timer;
