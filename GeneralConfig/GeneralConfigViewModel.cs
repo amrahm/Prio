@@ -1,7 +1,4 @@
-﻿using Prism.Mvvm;
-
-namespace GeneralConfig {
-    class GeneralConfigViewModel : BindableBase {
-        public GeneralConfigViewModel() { }
+﻿namespace GeneralConfig {
+    class GeneralConfigViewModel {
     }
 }
