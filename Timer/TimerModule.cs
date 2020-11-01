@@ -21,11 +21,12 @@ namespace Timer {
         public void OnInitialized(IContainerProvider containerProvider) {
             Dictionary<Guid, TimerConfig> settingsDict = Settings.LoadSettingsDict<TimerConfig>(TIMER);
             var timersService = containerProvider.Resolve<ITimersService>();
-            foreach(KeyValuePair<Guid, TimerConfig> configPair in settingsDict) {
-                ITimer timer = new TimerModel(configPair.Value);
-                timersService.Timers.Add(timer);
-                timer.ShowTimer();
-            }
+            if(settingsDict != null)
+                foreach(KeyValuePair<Guid, TimerConfig> configPair in settingsDict) {
+                    ITimer timer = new TimerModel(configPair.Value);
+                    timersService.Timers.Add(timer);
+                    timer.ShowTimer();
+                }
         }
     }
 }

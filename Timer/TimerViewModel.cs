@@ -1,14 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using MainConfig;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Timer.Annotations;
 

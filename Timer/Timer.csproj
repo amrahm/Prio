@@ -120,6 +120,7 @@
     <Compile Include="ITimer.cs" />
     <Compile Include="ITimersService.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Shortcut.cs" />
     <Compile Include="ShortcutSetter.xaml.cs">
       <DependentUpon>ShortcutSetter.xaml</DependentUpon>
     </Compile>

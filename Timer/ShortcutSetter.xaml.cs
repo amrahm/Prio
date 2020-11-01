@@ -12,10 +12,6 @@ namespace Timer {
     /// Interaction logic for ShortcutSetter.xaml
     /// </summary>
     public partial class ShortcutSetter {
-        private const string Alt = "Alt";
-        private const string Ctrl = "Ctrl";
-        private const string Shift = "Shift";
-        private const string Win = "Win";
 
         #region Label DP
 
@@ -58,21 +54,20 @@ namespace Timer {
         /// <summary>
         /// Gets or sets the Shortcut which is displayed over the label
         /// </summary>
-        public string Shortcut {
-            get => (string) GetValue(ShortcutProperty);
-            set => SetValue(ShortcutProperty, value);
+        public string ShortcutString {
+            get => (string) GetValue(ShortcutStringProperty);
+            set => SetValue(ShortcutStringProperty, value);
         }
 
         /// <summary>
         /// Identified the Shortcut dependency property
         /// </summary>
-        public static readonly DependencyProperty ShortcutProperty =
-            DependencyProperty.Register(nameof(Shortcut), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
+        public static readonly DependencyProperty ShortcutStringProperty =
+            DependencyProperty.Register(nameof(ShortcutString), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
 
         #endregion
 
-        private ISet<string> _modifiers = new SortedSet<string>();
-        private string _key;
+        private readonly Shortcut _shortcut = new Shortcut();
         private bool _newFocus;
 
         public ShortcutSetter() {
@@ -81,8 +76,8 @@ namespace Timer {
             DataContext = this;
 
             void ResetShortcut() {
-                _modifiers = new SortedSet<string>();
-                _key = "";
+                _shortcut.modifiers = new SortedSet<Key>();
+                _shortcut.key = Key.None;
                 AltToggle.IsChecked = false;
                 CtrlToggle.IsChecked = false;
                 ShiftToggle.IsChecked = false;
@@ -90,27 +85,27 @@ namespace Timer {
                 _newFocus = false;
             }
 
-            void UpdateShortcut() => Shortcut = $"{string.Join("+", _modifiers)}{(_modifiers.Count == 0 ? "" : "+")}{_key}";
+            void UpdateShortcut() => ShortcutString = _shortcut.ToString();
 
             GotKeyboardFocus += (o,  e) => _newFocus = true;
             LostKeyboardFocus += (o,  e) => {
-                if(string.IsNullOrEmpty(_key)) ResetShortcut();
+                if(_shortcut.key == Key.None) ResetShortcut();
             };
 
-            var modMap = new Dictionary<string, ToggleButton> {
-                {Alt, AltToggle},
-                {Ctrl, CtrlToggle},
-                {Shift, ShiftToggle},
-                {Win, WinToggle}
+            var modMap = new Dictionary<Key, ToggleButton> {
+                {Key.LeftAlt, AltToggle},
+                {Key.LeftCtrl, CtrlToggle},
+                {Key.LeftShift, ShiftToggle},
+                {Key.LWin, WinToggle}
             };
-            foreach(KeyValuePair<string, ToggleButton> pair in modMap) {
+            foreach(KeyValuePair<Key, ToggleButton> pair in modMap) {
                 pair.Value.Checked += (o,  e) => {
                     _newFocus = false;
-                    _modifiers.Add(pair.Key);
+                    _shortcut.modifiers.Add(pair.Key);
                     UpdateShortcut();
                 };
                 pair.Value.Unchecked += (o,  e) => {
-                    _modifiers.Remove(pair.Key);
+                    _shortcut.modifiers.Remove(pair.Key);
                     UpdateShortcut();
                 };
             }
@@ -128,10 +123,10 @@ namespace Timer {
                 string keyString = keyConverter.ConvertToString(key) ?? string.Empty;
                 keyString = removeDirections.Replace(keyString, "");
                 if(modifierMatcher.IsMatch(keyString)) {
-                    _modifiers.Add(keyString);
-                    modMap[keyString].IsChecked = true;
+                    _shortcut.modifiers.Add(key);
+                    modMap[key].IsChecked = true;
                 } else {
-                    _key = keyString.Contains("Oem") ? GetCharFromKey(key).ToString().ToUpper() : keyString;
+                    _shortcut.key = key; //keyString.Contains("Oem") ? GetCharFromKey(key).ToString().ToUpper() : keyString;
                     DependencyObject scope = FocusManager.GetFocusScope(Parent);
                     FocusManager.SetFocusedElement(scope, Window.GetWindow(this));
                 }
