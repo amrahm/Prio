@@ -10,8 +10,7 @@ namespace Prio {
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    internal partial class App {
-
+    public partial class App {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) { }
 
         protected override Window CreateShell() {

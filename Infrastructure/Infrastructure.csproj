@@ -1,29 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="SharedResources\ResourceDictionary.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="SharedResources\images\settings.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="SharedResources\images\prio.ico" />
+    <Resource Include="**\*.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="**\*.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CalcBinding">
@@ -67,8 +56,5 @@
     <PackageReference Include="System.Text.Json">
       <Version>5.0.0-rc.2.20475.5</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="SharedResources\ResourceDictionary.xaml" />
   </ItemGroup>
 </Project>

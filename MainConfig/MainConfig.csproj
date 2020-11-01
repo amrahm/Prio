@@ -1,24 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>NavigationMenu</RootNamespace>
-    <AssemblyName>NavigationMenu</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="MainConfigView.xaml" />
-    <None Remove="NavigationMenuView.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="MainConfigView.xaml" />
-    <Page Include="NavigationMenuView.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Windows" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GeneralConfig\GeneralConfig.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
