@@ -7,15 +7,13 @@ using Prism.Modularity;
 using Prism.Regions;
 
 namespace Prio {
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
+    /// <summary> Interaction logic for App.xaml </summary>
     public partial class App {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) { }
 
         protected override Window CreateShell() {
             Current.Resources.Add(Infrastructure.SharedResources.UnityInstance.CONTAINER_NAME, Container);
-            FindResource("MyNotifyIcon");
+            FindResource("PrioTrayIcon");
             return null;
         }
 

@@ -7,7 +7,6 @@ namespace Timer {
     public class Shortcut {
         public enum KeyType { General, Alt, Ctrl, Shift, Win }
 
-
         private static readonly Dictionary<Key, KeyType> ModMap = new Dictionary<Key, KeyType> {
             {Key.LeftAlt, KeyType.Alt}, {Key.RightAlt, KeyType.Alt},
             {Key.LeftCtrl, KeyType.Ctrl}, {Key.RightCtrl, KeyType.Ctrl},
@@ -60,24 +59,14 @@ namespace Timer {
         [DllImport("user32.dll")] private static extern uint MapVirtualKey(uint uCode, MapType uMapType);
 
         private static char GetCharFromKey(Key key) {
-            char ch = ' ';
-
             int virtualKey = KeyInterop.VirtualKeyFromKey(key);
 
             uint scanCode = MapVirtualKey((uint) virtualKey, MapType.MapvkVkToVsc);
             StringBuilder stringBuilder = new StringBuilder(2);
 
             int result = ToUnicode((uint) virtualKey, scanCode, new byte[256], stringBuilder, stringBuilder.Capacity, 0);
-            switch(result) {
-                case -1:
-                case 0:
-                    break;
-                default: {
-                    ch = stringBuilder[0];
-                    break;
-                }
-            }
-            return ch;
+            if(result == -1 || result == 0) return ' ';
+            return stringBuilder[0];
         }
     }
 }
