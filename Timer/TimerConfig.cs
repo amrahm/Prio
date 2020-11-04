@@ -13,9 +13,8 @@ namespace Timer {
         public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
         public IList<int> DesktopsVisible { get; set; }
         public IList<int> DesktopsActive { get; set; }
+        public Shortcut ResetShortcut { get; set; }
         public Shortcut StartShortcut { get; set; }
-
-        public Shortcut StopShortcut { get; set; } = new Shortcut
-            {key = Key.A, Modifiers = {Shortcut.KeyType.Ctrl, Shortcut.KeyType.Alt}};
+        public Shortcut StopShortcut { get; set; }
     }
 }

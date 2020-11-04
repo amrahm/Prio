@@ -89,11 +89,11 @@
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
 						<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
-						<local:ShortcutSetter Label="Reset:" Hint="Reset the timer back to its max duration" />
+						<local:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 							<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
-								<local:ShortcutSetter Label="Start:" Hint="Start the timer" />
-								<local:ShortcutSetter Label="Stop:" Hint="Stop the timer" />
+								<local:ShortcutSetter x:Name="StartShortcut" Label="Start:" Hint="Start the timer" />
+								<local:ShortcutSetter x:Name="StopShortcut" Label="Stop:" Hint="Stop the timer" />
 							</hc:FlexPanel>
 						</Border>
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">

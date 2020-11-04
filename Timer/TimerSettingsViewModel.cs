@@ -1,4 +1,5 @@
 ﻿using System;
+using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
 using JetBrains.Annotations;
@@ -6,27 +7,25 @@ using Prism.Mvvm;
 
 namespace Timer {
     public class TimerSettingsViewModel : BindableBase, IDialogAware {
-        private ITimer Model { get;  set; }
+        private ITimer Model { get; set; }
         private int _hours = 1;
         private int _minutes;
         private int _seconds;
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
-        [CanBeNull] public TimerConfig Config { get; set; }
+        public TimerConfig Config { get; set; }
 
-        public int? Hours {
-            get => Config != null ? (int?) (int) Config.Duration.TotalHours : null;
+        public int Hours {
+            get => _hours;
             set {
-                if(Config != null && value != null) {
-                    Config.Duration = new TimeSpan((int) value, _minutes, _seconds);
+                    Config.Duration = new TimeSpan(value, _minutes, _seconds);
                     Config.TimeLeft = Config.Duration;
                     double totalHours = Config.Duration.TotalHours;
                     if(Math.Abs(totalHours) < 0.0001) {
                         Minutes = 1;
                     }
                     _hours =  (int) totalHours; //To allow values greater than 24
-                }
             }
         }
 
@@ -58,11 +57,11 @@ namespace Timer {
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
             ApplyCommand = new DelegateCommand(() => {
                 Model.Config = Config;
-                Model?.SaveSettings();
+                Model.SaveSettings();
             });
             OkCommand = new DelegateCommand(() => {
                 Model.Config = Config;
-                Model?.SaveSettings();
+                Model.SaveSettings();
                 RequestClose?.Invoke(null);
             });
         }
@@ -72,7 +71,7 @@ namespace Timer {
 
         public void OnDialogOpened(IDialogParameters parameters) {
             Model = parameters.GetValue<ITimer>(nameof(ITimer));
-            Config = Model.Config;
+            Config = Model.Config.DeepCopy();
         }
     }
 }

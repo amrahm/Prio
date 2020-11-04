@@ -21,7 +21,6 @@ namespace Timer {
         }
 
         //TODO enable/disable for hours, minutes, seconds
-
         [DependsOnProperty(nameof(Timer))]
         [UsedImplicitly] public string TimeLeftVm => Timer.Config.TimeLeft.ToString(@"hh\:mm\:ss");
 

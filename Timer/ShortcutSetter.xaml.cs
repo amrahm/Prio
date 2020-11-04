@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Infrastructure.SharedResources;
+using PropertyChanged;
 using static Timer.Shortcut;
 
 namespace Timer {
     /// <summary> Interaction logic for ShortcutSetter.xaml </summary>
-    public partial class ShortcutSetter {
+    public partial class ShortcutSetter : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Label DP
 
@@ -36,23 +40,36 @@ namespace Timer {
 
         #endregion
 
-        #region BoundShortcut DP
+        /// <summary> Gets or sets the Shortcut which is displayed over the label </summary>
+        public Shortcut BoundShortcut {
+            get => _boundShortcut;
+            set {
+                _boundShortcut = value;
+                UpdateShortcut();
+                if(value != null)
+                    foreach(KeyType modifier in _boundShortcut.Modifiers.DeepCopy())
+                        _modToToggle[modifier].IsChecked = true; //deepcopy is needed because checking re-adds it
+            }
+        }
 
         /// <summary> Gets or sets the Shortcut which is displayed over the label </summary>
-        public Shortcut BoundShortcut { get; set; }
-
-        #endregion
-
-
-        /// <summary> Gets or sets the Shortcut which is displayed over the label </summary>
-        public string ShortcutString { get; set; }
+        [DependsOn(nameof(BoundShortcut))]
+        public string ShortcutString { get; private set; }
 
         private bool _newFocus;
+        private Shortcut _boundShortcut = new Shortcut();
+        private readonly Dictionary<KeyType, ToggleButton> _modToToggle;
 
         public ShortcutSetter() {
-            //TODO how to load shortcut
             InitializeComponent();
             DataContext = this;
+
+            _modToToggle = new Dictionary<KeyType, ToggleButton> {
+                {KeyType.Alt, AltToggle},
+                {KeyType.Ctrl, CtrlToggle},
+                {KeyType.Shift, ShiftToggle},
+                {KeyType.Win, WinToggle}
+            };
 
             void ResetShortcut() {
                 BoundShortcut.Clear();
@@ -61,23 +78,21 @@ namespace Timer {
                 ShiftToggle.IsChecked = false;
                 WinToggle.IsChecked = false;
                 _newFocus = false;
+                UpdateShortcut();
             }
 
-            void UpdateShortcut() => ShortcutString = BoundShortcut.ToString();
-
-            GotKeyboardFocus += (o,  e) => _newFocus = true;
+            GotKeyboardFocus += (o,  e) => {
+                _newFocus = true;
+                BoundShortcut ??= new Shortcut();
+            };
             LostKeyboardFocus += (o,  e) => {
-                if(BoundShortcut.key == Key.None) ResetShortcut();
+                if(BoundShortcut.Key == Key.None) {
+                    ResetShortcut();
+                    BoundShortcut = null;
+                }
             };
 
-            var modToToggle = new Dictionary<KeyType, ToggleButton> {
-                {KeyType.Alt, AltToggle},
-                {KeyType.Ctrl, CtrlToggle},
-                {KeyType.Shift, ShiftToggle},
-                {KeyType.Win, WinToggle}
-            };
-
-            foreach((KeyType key, ToggleButton value) in modToToggle) {
+            foreach((KeyType key, ToggleButton value) in _modToToggle) {
                 value.Checked += (o,  e) => {
                     _newFocus = false;
                     BoundShortcut.Modifiers.Add(key);
@@ -98,7 +113,7 @@ namespace Timer {
                     DependencyObject scope = FocusManager.GetFocusScope(Parent);
                     FocusManager.SetFocusedElement(scope, Window.GetWindow(this));
                 } else {
-                    modToToggle[keyAddedType].IsChecked = true;
+                    _modToToggle[keyAddedType].IsChecked = true;
                 }
                 UpdateShortcut();
             };
@@ -107,5 +122,7 @@ namespace Timer {
                 if(e.Key == Key.Back) ResetShortcut();
             };
         }
+
+        private void UpdateShortcut() => ShortcutString = BoundShortcut?.ToString();
     }
 }

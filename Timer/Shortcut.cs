@@ -18,33 +18,33 @@ namespace Timer {
         };
 
 
-        public Key key;
+        public Key Key { get; set; }
         public ISet<KeyType> Modifiers { get; } = new SortedSet<KeyType>();
 
         public KeyType AddKey(Key newKey) {
             if(ModMap.TryGetValue(newKey, out KeyType keyType)) {
                 Modifiers.Add(keyType);
-            } else key = newKey;
+            } else Key = newKey;
             return keyType;
         }
 
         public KeyType RemoveKey(Key newKey) {
             if(ModMap.TryGetValue(newKey, out KeyType keyType)) {
                 Modifiers.Remove(keyType);
-            } else key = Key.None;
+            } else Key = Key.None;
             return keyType;
         }
 
         public void Clear() {
-            key = Key.None;
+            Key = Key.None;
             Modifiers.Clear();
         }
 
         private static readonly KeyConverter  KeyConverter = new KeyConverter();
 
         public override string ToString() {
-            string keyString = KeyConverter.ConvertToString(key) ?? string.Empty;
-            keyString = keyString.Contains("Oem") ? GetCharFromKey(key).ToString().ToUpper() : keyString;
+            string keyString = KeyConverter.ConvertToString(Key) ?? string.Empty;
+            keyString = keyString.Contains("Oem") ? GetCharFromKey(Key).ToString().ToUpper() : keyString;
             return $"{string.Join("+", Modifiers)}{(Modifiers.Count == 0 ? "" : "+")}{keyString}";
         }
 

@@ -7,14 +7,15 @@ using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
 using Prism.Services.Dialogs;
+using static Infrastructure.SharedResources.BindingHelpers;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
     /// <summary> Interaction logic for TimerSettingsView.xaml </summary>
     public partial class TimerSettingsView {
-        private const int MinCtrlWidth = 470;
-        private const int ScreenMargin = 50;
-        private const int SnappingIncrement = MinCtrlWidth + 50;
+        private const int MIN_CTRL_WIDTH = 470;
+        private const int SCREEN_MARGIN = 50;
+        private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 50;
 
         private DialogWindow _window;
 
@@ -23,7 +24,20 @@ namespace Timer {
 
         public TimerSettingsView() {
             InitializeComponent();
+
+            var vm = (TimerSettingsViewModel) DataContext;
+
+
             Loaded += (o, e) => {
+                // Manual Bindings:
+                ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut,
+                              nameof(ResetShortcut.BoundShortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut,
+                              nameof(StartShortcut.BoundShortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut,
+                              nameof(StopShortcut.BoundShortcut));
+
+
                 _window = (DialogWindow) Root.Parent;
                 WindowChrome windowChrome = new WindowChrome {
                     ResizeBorderThickness = new Thickness(9, 0, 9, 0),
@@ -42,14 +56,14 @@ namespace Timer {
                 double dpiHeightFactor = m.M22;
 
                 Rectangle screen = _window.CurrentScreen().WorkingArea;
-                while(screen.Height - ScreenMargin < Root.ActualHeight * dpiHeightFactor &&
-                      screen.Width - ScreenMargin > Root.ActualWidth * dpiWidthFactor + SnappingIncrement) {
-                    Root.Width += SnappingIncrement;
-                    _window.Width += SnappingIncrement;
+                while(screen.Height - SCREEN_MARGIN < Root.ActualHeight * dpiHeightFactor &&
+                      screen.Width - SCREEN_MARGIN > Root.ActualWidth * dpiWidthFactor + SNAPPING_INCREMENT) {
+                    Root.Width += SNAPPING_INCREMENT;
+                    _window.Width += SNAPPING_INCREMENT;
                     _window.SizeToContent = SizeToContent.WidthAndHeight;
                 }
 
-                _window.MaxHeight = (screen.Height - ScreenMargin) / dpiHeightFactor;
+                _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
 
                 _window.WindowStartupLocation = WindowStartupLocation.Manual;
                 _window.Left =  (screen.Width / dpiWidthFactor - _window.ActualWidth) / 2 +  screen.Left;
@@ -60,7 +74,7 @@ namespace Timer {
                 const double spacing = 3;
 
                 double newSizeWidth = e.NewSize.Width;
-                int maxPerRow = (int) (newSizeWidth / MinCtrlWidth);
+                int maxPerRow = (int) (newSizeWidth / MIN_CTRL_WIDTH);
                 int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
                 MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
                 double ctrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;
