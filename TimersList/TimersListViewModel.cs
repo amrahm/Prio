@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using Prism.Commands;
-using Prism.Mvvm;
 using Infrastructure.SharedResources;
 using Prism.Ioc;
+using Prism.Mvvm;
 using Timer;
 
 namespace TimersList {

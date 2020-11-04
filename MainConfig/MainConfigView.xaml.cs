@@ -4,9 +4,7 @@ using Infrastructure.Prism;
 using Prism.Regions;
 
 namespace MainConfig {
-    /// <summary>
-    ///     Interaction logic for ShellView.xaml
-    /// </summary>
+    /// <summary> Interaction logic for ShellView.xaml </summary>
     public partial class MainConfigView : IRegionManagerAware {
         public MainConfigView() {
             InitializeComponent();

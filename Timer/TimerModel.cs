@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
@@ -13,7 +11,7 @@ namespace Timer {
 
         public TimerConfig Config {
             get => _config;
-            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => OnPropertyChanged());
+            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
         }
 
 

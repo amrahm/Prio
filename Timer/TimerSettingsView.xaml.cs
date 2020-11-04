@@ -10,9 +10,7 @@ using Prism.Services.Dialogs;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
-    /// <summary>
-    /// Interaction logic for TimerSettingsView.xaml
-    /// </summary>
+    /// <summary> Interaction logic for TimerSettingsView.xaml </summary>
     public partial class TimerSettingsView {
         private const int MinCtrlWidth = 470;
         private const int ScreenMargin = 50;

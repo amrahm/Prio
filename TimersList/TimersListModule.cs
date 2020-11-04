@@ -3,9 +3,7 @@ using Prism.Modularity;
 using static Infrastructure.Constants.ModuleNames;
 
 namespace TimersList {
-    /// <summary>
-    ///     Register components of module with Unity/Prism
-    /// </summary>
+    /// <summary> Register components of module with Unity/Prism </summary>
     [Module(ModuleName = TIMERS_LIST)]
     [ModuleDependency(TIMER)]
     public class TimersListModule : IModule {

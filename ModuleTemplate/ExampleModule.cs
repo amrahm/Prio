@@ -4,9 +4,7 @@ using Prism.Modularity;
 using Prism.Regions;
 
 namespace ExampleModule {
-    /// <summary>
-    ///     Register components of module with Unity/Prism
-    /// </summary>
+    /// <summary> Register components of module with Unity/Prism </summary>
     [Module(ModuleName = ModuleNames.EXAMPLE_MODULE)]
     public class ExampleModule : IModule {
         private readonly IRegionManager _regionManager;

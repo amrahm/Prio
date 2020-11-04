@@ -4,7 +4,13 @@ using System.Windows.Forms;
 
 namespace Infrastructure.SharedResources {
     public static class NotificationBubbler {
-        /// <summary> Bubble up changes from within the object </summary>
+        /// <summary>
+        /// Bubble up changes from within the object, e.g.: <para />
+        /// public TimerConfig Config {
+        ///     get => _config;
+        ///     set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+        /// }
+        /// </summary>
         /// <param name="obj"> object to be set </param>
         /// <param name="value"> new value for object </param>
         /// <param name="thisChanged"> Lets you specify what OnPropertyChanged method should be called </param>

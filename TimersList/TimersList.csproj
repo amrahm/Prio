@@ -37,6 +37,7 @@
       <Version>8.0.0.1909</Version>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody">
+      <PrivateAssets>all</PrivateAssets>
       <Version>3.2.10</Version>
     </PackageReference>
     <PackageReference Include="SpicyTaco.AutoGrid">

@@ -6,9 +6,7 @@ using static Infrastructure.Constants.ModuleNames;
 using Infrastructure.SharedResources;
 
 namespace Timer {
-    /// <summary>
-    ///     Register components of module with Unity/Prism
-    /// </summary>
+    /// <summary> Register components of module with Unity/Prism </summary>
     [Module(ModuleName = TIMER)]
     public class TimerModule : IModule {
         public void RegisterTypes(IContainerRegistry containerRegistry) {

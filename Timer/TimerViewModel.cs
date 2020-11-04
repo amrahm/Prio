@@ -17,7 +17,7 @@ namespace Timer {
 
         public ITimer Timer {
             get => _timer;
-            set => NotificationBubbler.BubbleSetter(ref _timer, value, (o, e) => OnPropertyChanged());
+            set => NotificationBubbler.BubbleSetter(ref _timer, value, (o, e) => this.OnPropertyChanged());
         }
 
         //TODO enable/disable for hours, minutes, seconds

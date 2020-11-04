@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Input;
+using Prism.Mvvm;
 
 namespace Timer {
-    public class Shortcut {
+    [Serializable] 
+    public class Shortcut : BindableBase {
         public enum KeyType { General, Alt, Ctrl, Shift, Win }
 
         private static readonly Dictionary<Key, KeyType> ModMap = new Dictionary<Key, KeyType> {
@@ -16,28 +19,25 @@ namespace Timer {
 
 
         public Key key;
-        private readonly ISet<KeyType> _modifiers = new SortedSet<KeyType>();
+        public ISet<KeyType> Modifiers { get; } = new SortedSet<KeyType>();
 
         public KeyType AddKey(Key newKey) {
             if(ModMap.TryGetValue(newKey, out KeyType keyType)) {
-                _modifiers.Add(keyType);
+                Modifiers.Add(keyType);
             } else key = newKey;
             return keyType;
         }
 
-        public void AddModifier(KeyType newModifier) => _modifiers.Add(newModifier);
-        public void RemoveModifier(KeyType newModifier) => _modifiers.Remove(newModifier);
-
         public KeyType RemoveKey(Key newKey) {
             if(ModMap.TryGetValue(newKey, out KeyType keyType)) {
-                _modifiers.Remove(keyType);
+                Modifiers.Remove(keyType);
             } else key = Key.None;
             return keyType;
         }
 
         public void Clear() {
             key = Key.None;
-            _modifiers.Clear();
+            Modifiers.Clear();
         }
 
         private static readonly KeyConverter  KeyConverter = new KeyConverter();
@@ -45,7 +45,7 @@ namespace Timer {
         public override string ToString() {
             string keyString = KeyConverter.ConvertToString(key) ?? string.Empty;
             keyString = keyString.Contains("Oem") ? GetCharFromKey(key).ToString().ToUpper() : keyString;
-            return $"{string.Join("+", _modifiers)}{(_modifiers.Count == 0 ? "" : "+")}{keyString}";
+            return $"{string.Join("+", Modifiers)}{(Modifiers.Count == 0 ? "" : "+")}{keyString}";
         }
 
 

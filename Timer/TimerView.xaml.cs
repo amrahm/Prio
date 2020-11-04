@@ -6,9 +6,7 @@ using Prism.Services.Dialogs;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
-    /// <summary>
-    /// Interaction logic for TimerView.xaml
-    /// </summary>
+    /// <summary> Interaction logic for TimerView.xaml </summary>
     public partial class TimerView  {
         private DialogWindow _window;
 

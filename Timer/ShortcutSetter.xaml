@@ -8,7 +8,8 @@
              xmlns:ad="clr-namespace:AdornedControl;assembly=Infrastructure"
              mc:Ignorable="d"
              HorizontalAlignment="Center"
-             VerticalAlignment="Center">
+             VerticalAlignment="Center"
+             x:Name="Root">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -38,7 +39,7 @@
 			<ContentControl MinWidth="100" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch">
 				<TextBox Margin="2, 5" Style="{StaticResource NormalTextBox}"
 				         hc:InfoElement.Placeholder="No Shortcut Set" TextAlignment="Center"
-				         Text="{Binding ShortcutString, Mode=OneWay}" IsReadOnly="True" />
+				         Text="{Binding ElementName=Root, Path=ShortcutString, Mode=OneWay}" IsReadOnly="True" />
 			</ContentControl>
 		</ad:AdornedControl>
 	</StackPanel>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Windows;
 using Infrastructure.Prism;
@@ -7,9 +6,7 @@ using Prism.Regions;
 using static Infrastructure.Constants.RegionNames;
 
 namespace TimersList {
-    /// <summary>
-    /// Interaction logic for TimersListView.xaml
-    /// </summary>
+    /// <summary> Interaction logic for TimersListView.xaml </summary>
     public partial class TimersListView : IRegionManagerAware {
         private const int MinCtrlWidth = 250;
 

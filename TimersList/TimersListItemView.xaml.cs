@@ -4,9 +4,7 @@ using Timer;
 using static Infrastructure.Constants.RegionNames;
 
 namespace TimersList {
-    /// <summary>
-    /// Interaction logic for TimersListItemView.xaml
-    /// </summary>
+    /// <summary> Interaction logic for TimersListItemView.xaml </summary>
     public partial class TimersListItemView : IRegionManagerAware  {
 
         public TimersListItemView(ITimer timer) {
