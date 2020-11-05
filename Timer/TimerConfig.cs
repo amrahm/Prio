@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
+using Infrastructure.SharedResources;
 using Prism.Mvvm;
 
 namespace Timer {
@@ -13,8 +13,8 @@ namespace Timer {
         public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
         public IList<int> DesktopsVisible { get; set; }
         public IList<int> DesktopsActive { get; set; }
-        public Shortcut ResetShortcut { get; set; }
-        public Shortcut StartShortcut { get; set; }
-        public Shortcut StopShortcut { get; set; }
+        public ShortcutDefinition ResetShortcut { get; set; }
+        public ShortcutDefinition StartShortcut { get; set; }
+        public ShortcutDefinition StopShortcut { get; set; }
     }
 }

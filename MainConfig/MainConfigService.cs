@@ -1,8 +1,10 @@
 ﻿using Infrastructure.Prism;
+using JetBrains.Annotations;
 using Prism.Regions;
 using Unity;
 
 namespace MainConfig {
+    [UsedImplicitly]
     public class MainConfigService : IMainConfigService {
         private MainConfigView _configView;
         private readonly IUnityContainer _container;

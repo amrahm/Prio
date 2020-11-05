@@ -2,7 +2,6 @@
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using JetBrains.Annotations;
 using Prism.Mvvm;
 
 namespace Timer {

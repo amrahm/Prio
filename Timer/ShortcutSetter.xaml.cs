@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Infrastructure.SharedResources;
 using PropertyChanged;
-using static Timer.Shortcut;
+using static Infrastructure.SharedResources.ShortcutDefinition;
 
 namespace Timer {
     /// <summary> Interaction logic for ShortcutSetter.xaml </summary>
@@ -40,89 +40,80 @@ namespace Timer {
 
         #endregion
 
-        /// <summary> Gets or sets the Shortcut which is displayed over the label </summary>
-        public Shortcut BoundShortcut {
-            get => _boundShortcut;
+        /// <summary> Gets or sets the ShortcutDefinition which is displayed over the label </summary>
+        public ShortcutDefinition Shortcut {
+            get => _shortcut;
             set {
-                _boundShortcut = value;
+                _shortcut = value;
                 UpdateShortcut();
-                if(value != null)
-                    foreach(KeyType modifier in _boundShortcut.Modifiers.DeepCopy())
-                        _modToToggle[modifier].IsChecked = true; //deepcopy is needed because checking re-adds it
+                if(_shortcut != null)
+                    foreach((ModifierType key, ToggleButton val) in _modToToggle)
+                        val.IsChecked = _shortcut.Modifiers.Contains(key);
             }
         }
 
-        /// <summary> Gets or sets the Shortcut which is displayed over the label </summary>
-        [DependsOn(nameof(BoundShortcut))]
+        /// <summary> Gets or sets the ShortcutDefinition which is displayed over the label </summary>
+        [DependsOn(nameof(Shortcut))]
         public string ShortcutString { get; private set; }
 
         private bool _newFocus;
-        private Shortcut _boundShortcut = new Shortcut();
-        private readonly Dictionary<KeyType, ToggleButton> _modToToggle;
+        private ShortcutDefinition _shortcut = new ShortcutDefinition();
+        private readonly Dictionary<ModifierType, ToggleButton> _modToToggle;
 
         public ShortcutSetter() {
             InitializeComponent();
             DataContext = this;
 
-            _modToToggle = new Dictionary<KeyType, ToggleButton> {
-                {KeyType.Alt, AltToggle},
-                {KeyType.Ctrl, CtrlToggle},
-                {KeyType.Shift, ShiftToggle},
-                {KeyType.Win, WinToggle}
+            _modToToggle = new Dictionary<ModifierType, ToggleButton> {
+                {ModifierType.Alt, AltToggle},
+                {ModifierType.Ctrl, CtrlToggle},
+                {ModifierType.Shift, ShiftToggle},
+                {ModifierType.Win, WinToggle}
             };
-
-            void ResetShortcut() {
-                BoundShortcut.Clear();
-                AltToggle.IsChecked = false;
-                CtrlToggle.IsChecked = false;
-                ShiftToggle.IsChecked = false;
-                WinToggle.IsChecked = false;
-                _newFocus = false;
-                UpdateShortcut();
-            }
 
             GotKeyboardFocus += (o,  e) => {
                 _newFocus = true;
-                BoundShortcut ??= new Shortcut();
+                Shortcut ??= new ShortcutDefinition();
             };
             LostKeyboardFocus += (o,  e) => {
-                if(BoundShortcut.Key == Key.None) {
-                    ResetShortcut();
-                    BoundShortcut = null;
-                }
+                if(Shortcut.Key == Key.None) Shortcut = null;
             };
 
-            foreach((KeyType key, ToggleButton value) in _modToToggle) {
+            foreach((ModifierType key, ToggleButton value) in _modToToggle) {
                 value.Checked += (o,  e) => {
                     _newFocus = false;
-                    BoundShortcut.Modifiers.Add(key);
+                    Shortcut = Shortcut.WithKey(key);
                     UpdateShortcut();
                 };
                 value.Unchecked += (o,  e) => {
-                    BoundShortcut.Modifiers.Remove(key);
+                    Shortcut = Shortcut.WithoutKey(key);
                     UpdateShortcut();
                 };
             }
 
             KeyDown += (o, e) => {
-                if(_newFocus) ResetShortcut();
+                if(_newFocus) {
+                    Shortcut = new ShortcutDefinition();
+                    _newFocus = false;
+                }
                 if(e.Key == Key.System) e.Handled = true;
                 Key key = e.Key == Key.System ? e.SystemKey : e.Key;
-                KeyType keyAddedType = BoundShortcut.AddKey(key);
-                if(keyAddedType == KeyType.General) {
+                Shortcut = Shortcut.WithKey(key);
+
+                if(ModifierTypeMap.TryGetValue(key, out ModifierType keyAddedType)) {
+                    _modToToggle[keyAddedType].IsChecked = true;
+                } else {
                     DependencyObject scope = FocusManager.GetFocusScope(Parent);
                     FocusManager.SetFocusedElement(scope, Window.GetWindow(this));
-                } else {
-                    _modToToggle[keyAddedType].IsChecked = true;
                 }
                 UpdateShortcut();
             };
 
             KeyUp += (o,  e) => {
-                if(e.Key == Key.Back) ResetShortcut();
+                if(e.Key == Key.Back) Shortcut = new ShortcutDefinition();
             };
         }
 
-        private void UpdateShortcut() => ShortcutString = BoundShortcut?.ToString();
+        private void UpdateShortcut() => ShortcutString = Shortcut?.ToString();
     }
 }

@@ -30,12 +30,9 @@ namespace Timer {
 
             Loaded += (o, e) => {
                 // Manual Bindings:
-                ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut,
-                              nameof(ResetShortcut.BoundShortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut,
-                              nameof(StartShortcut.BoundShortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut,
-                              nameof(StopShortcut.BoundShortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut, nameof(StopShortcut.Shortcut));
 
 
                 _window = (DialogWindow) Root.Parent;
