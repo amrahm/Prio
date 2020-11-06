@@ -47,8 +47,8 @@ namespace Timer {
                 _shortcut = value;
                 UpdateShortcut();
                 if(_shortcut != null)
-                    foreach((ModifierType key, ToggleButton val) in _modToToggle)
-                        val.IsChecked = _shortcut.Modifiers.Contains(key);
+                    foreach((ModifierKeys key, ToggleButton val) in _modToToggle)
+                        val.IsChecked = (_shortcut.Modifiers | key) == _shortcut.Modifiers;
             }
         }
 
@@ -58,17 +58,17 @@ namespace Timer {
 
         private bool _newFocus;
         private ShortcutDefinition _shortcut = new ShortcutDefinition();
-        private readonly Dictionary<ModifierType, ToggleButton> _modToToggle;
+        private readonly Dictionary<ModifierKeys, ToggleButton> _modToToggle;
 
         public ShortcutSetter() {
             InitializeComponent();
             DataContext = this;
 
-            _modToToggle = new Dictionary<ModifierType, ToggleButton> {
-                {ModifierType.Alt, AltToggle},
-                {ModifierType.Ctrl, CtrlToggle},
-                {ModifierType.Shift, ShiftToggle},
-                {ModifierType.Win, WinToggle}
+            _modToToggle = new Dictionary<ModifierKeys, ToggleButton> {
+                {ModifierKeys.Alt, AltToggle},
+                {ModifierKeys.Control, CtrlToggle},
+                {ModifierKeys.Shift, ShiftToggle},
+                {ModifierKeys.Windows, WinToggle}
             };
 
             GotKeyboardFocus += (o,  e) => {
@@ -79,7 +79,7 @@ namespace Timer {
                 if(Shortcut.Key == Key.None) Shortcut = null;
             };
 
-            foreach((ModifierType key, ToggleButton value) in _modToToggle) {
+            foreach((ModifierKeys key, ToggleButton value) in _modToToggle) {
                 value.Checked += (o,  e) => {
                     _newFocus = false;
                     Shortcut = Shortcut.WithKey(key);
@@ -100,7 +100,7 @@ namespace Timer {
                 Key key = e.Key == Key.System ? e.SystemKey : e.Key;
                 Shortcut = Shortcut.WithKey(key);
 
-                if(ModifierTypeMap.TryGetValue(key, out ModifierType keyAddedType)) {
+                if(ModifierKeysMap.TryGetValue(key, out ModifierKeys keyAddedType)) {
                     _modToToggle[keyAddedType].IsChecked = true;
                 } else {
                     DependencyObject scope = FocusManager.GetFocusScope(Parent);

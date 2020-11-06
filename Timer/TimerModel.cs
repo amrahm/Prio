@@ -26,6 +26,7 @@ namespace Timer {
 
             _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
             _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
+            RegisterShortcuts();
         }
 
 
@@ -47,12 +48,22 @@ namespace Timer {
             RegisterShortcuts();
         }
 
-        public void RegisterShortcuts() {
+        private enum TimerState { Stopped, Started }
+
+        private enum VisibilityState { ToggleHide, OnTop, Below }
+
+        private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();
             var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer);
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer);
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StopShortcut), Config.StopShortcut, StopTimer);
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
+                                         CompatibilityType.Reset);
+
+
+            int GetTimerState() => (int) (IsRunning ? TimerState.Started : TimerState.Stopped);
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
+                                         CompatibilityType.StartStop, (int) TimerState.Stopped, GetTimerState);
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StopShortcut), Config.StopShortcut, StopTimer,
+                                         CompatibilityType.StartStop, (int) TimerState.Started, GetTimerState);
         }
     }
 }

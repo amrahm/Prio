@@ -10,46 +10,44 @@ namespace Infrastructure.SharedResources {
     /// <summary> An immutable shortcut definition </summary>
     [Serializable]
     public class ShortcutDefinition : BindableBase {
-        public enum ModifierType { Alt, Ctrl, Shift, Win }
-
-        public static readonly ImmutableDictionary<Key, ModifierType> ModifierTypeMap = new Dictionary<Key, ModifierType> {
-            {Key.LeftAlt, ModifierType.Alt}, {Key.RightAlt, ModifierType.Alt},
-            {Key.LeftCtrl, ModifierType.Ctrl}, {Key.RightCtrl, ModifierType.Ctrl},
-            {Key.LeftShift, ModifierType.Shift}, {Key.RightShift, ModifierType.Shift},
-            {Key.LWin, ModifierType.Win},  {Key.RWin, ModifierType.Win}
+        public static readonly ImmutableDictionary<Key, ModifierKeys> ModifierKeysMap = new Dictionary<Key, ModifierKeys> {
+            {Key.LeftAlt, ModifierKeys.Alt}, {Key.RightAlt, ModifierKeys.Alt},
+            {Key.LeftCtrl, ModifierKeys.Control}, {Key.RightCtrl, ModifierKeys.Control},
+            {Key.LeftShift, ModifierKeys.Shift}, {Key.RightShift, ModifierKeys.Shift},
+            {Key.LWin, ModifierKeys.Windows},  {Key.RWin, ModifierKeys.Windows}
         }.ToImmutableDictionary();
 
 
         public Key Key { get; }
-        public ImmutableHashSet<ModifierType> Modifiers { get; } = ImmutableHashSet<ModifierType>.Empty;
+        public ModifierKeys Modifiers { get; }
 
-        public ShortcutDefinition(Key key = Key.None, IEnumerable<ModifierType> modifiers = null) {
+        public ShortcutDefinition(Key key = Key.None, ModifierKeys modifiers = ModifierKeys.None) {
             Key = key;
-            Modifiers = Modifiers.Union(modifiers ?? Array.Empty<ModifierType>());
+            Modifiers = modifiers;
         }
 
         public ShortcutDefinition WithKey(Key newKey) {
-            return ModifierTypeMap.TryGetValue(newKey, out ModifierType keyType) ?
-                       new ShortcutDefinition(Key, Modifiers.Add(keyType)) :
+            return ModifierKeysMap.TryGetValue(newKey, out ModifierKeys mod) ?
+                       new ShortcutDefinition(Key, Modifiers | mod) :
                        new ShortcutDefinition(newKey, Modifiers);
         }
 
-        public ShortcutDefinition WithKey(ModifierType mod) => new ShortcutDefinition(Key, Modifiers.Add(mod));
+        public ShortcutDefinition WithKey(ModifierKeys mod) => new ShortcutDefinition(Key, Modifiers | mod);
 
 
         public ShortcutDefinition WithoutKey(Key newKey) {
-            return ModifierTypeMap.TryGetValue(newKey, out ModifierType keyType) ?
-                       new ShortcutDefinition(Key, Modifiers.Remove(keyType)) :
+            return ModifierKeysMap.TryGetValue(newKey, out ModifierKeys mod) ?
+                       new ShortcutDefinition(Key, Modifiers & ~mod) :
                        new ShortcutDefinition(Key.None, Modifiers);
         }
 
-        public ShortcutDefinition WithoutKey(ModifierType mod) => new ShortcutDefinition(Key, Modifiers.Remove(mod));
+        public ShortcutDefinition WithoutKey(ModifierKeys mod) => new ShortcutDefinition(Key, Modifiers & ~mod);
 
 
         public override bool Equals(object obj) =>
             obj is ShortcutDefinition other && Key == other.Key && Modifiers == other.Modifiers;
 
-        public override int GetHashCode() => Key.GetHashCode() + Modifiers.GetHashCode();
+        public override int GetHashCode() => HashCode.Combine(Key, Modifiers);
 
 
         private static readonly KeyConverter  KeyConverter = new KeyConverter();
@@ -57,7 +55,9 @@ namespace Infrastructure.SharedResources {
         public override string ToString() {
             string keyString = KeyConverter.ConvertToString(Key) ?? string.Empty;
             keyString = keyString.Contains("Oem") ? GetCharFromKey(Key).ToString().ToUpper() : keyString;
-            return $"{string.Join("+", Modifiers)}{(Modifiers.Count == 0 ? "" : "+")}{keyString}";
+            return
+                $"{Modifiers.ToString().Replace(", ", "+").Replace("Control", "Ctrl").Replace("Windows", "Win").Replace("None", "")}" +
+                $"{(Modifiers == ModifierKeys.None ? "" : "+")}{keyString}";
         }
 
 

@@ -66,10 +66,12 @@
 			<Separator />
 			<MenuItem Header="Start/Stop Timer" Command="{Binding StartStopTimer}" />
 			<MenuItem Header="Reset Timer" />
-			<MenuItem Header="Add 5 Minutes" />
 			<MenuItem Header="Add 10 Minutes" />
 			<MenuItem Header="Add 30 Minutes" />
 			<MenuItem Header="Set Current Time" />
+			<Separator />
+			<MenuItem Header="Keep On Top" />
+			<MenuItem Header="Keep Behind" />
 			<Separator />
 			<MenuItem Header="Hide Timer" />
 			<MenuItem Header="Exit (Disable) Timer" />
