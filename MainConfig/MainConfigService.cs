@@ -16,7 +16,10 @@ namespace MainConfig {
         }
 
         public void ShowConfigWindow() {
-            if(_configView != null) return;
+            if(_configView != null) {
+                _configView.Activate();
+                return;
+            }
 
             _configView = _container.Resolve<MainConfigView>();
             _configView.Closed += (o,  e) => {

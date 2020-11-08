@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Timer.TimersGeneralConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Timer"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="500">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<StackPanel Background="{StaticResource LightBrush}">
+		<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
+		<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlDark}"
+		           Margin="10, -5, 0, 2" />
+		<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
+			<hc:FlexPanel JustifyContent="SpaceAround" FlexWrap="Wrap" AlignContent="SpaceAround">
+				<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
+				<local:ShortcutSetter Label="Keep On Top:" x:Name="KeepOnTopShortcut"
+				                      Hint="Show the timer and keep it above all other windows" />
+				<local:ShortcutSetter Label="Move Behind:" x:Name="MoveBehindShortcut"
+				                      Hint="Show the timer but move it below all other windows" />
+			</hc:FlexPanel>
+		</Border>
+	</StackPanel>
+</UserControl>

@@ -4,5 +4,6 @@
         public const string SHELL_CONFIG_REGION = nameof(SHELL_CONFIG_REGION);
         public const string TIMER_IN_LIST_REGION = nameof(TIMER_IN_LIST_REGION);
         public const string TIMERS_LIST_REGION = nameof(TIMERS_LIST_REGION);
+        public const string GENERAL_CONFIG_TIMERS_REGION = nameof(GENERAL_CONFIG_TIMERS_REGION);
     }
 }

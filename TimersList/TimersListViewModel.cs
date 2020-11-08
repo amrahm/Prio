@@ -26,7 +26,7 @@ namespace TimersList {
             // Add new timer on button press
             AddTimerCommand = new DelegateCommand(() => {
                 ITimer timer = container.Resolve<ITimer>();
-                Timers.Add(new TimersListItemView(timer));
+                Timers.Add(new TimersListItemView(timer)); //TODO put indicator for timer being hidden, but not disabled
                 timer.OpenSettings(); //TODO they can cancel and leave a null timer name
             });
         }

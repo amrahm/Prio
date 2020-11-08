@@ -13,10 +13,10 @@ namespace Prio.GlobalServices {
         /// <param name="compatibilityType"> The type of hotkey to ensure only compatible types are registered to the same shortcut </param>
         /// <param name="instanceState"> What should the current instance state be for this to be called if multiple
         ///                              actions have the same shortcut for this instance</param>
-        /// <param name="getInstanceState"> Function to get the current instance state </param>
+        /// <param name="nextInstanceState"> Function to get the instance state action that should be called </param>
         /// <returns> true if the hotkey was able to be registered </returns>
         bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
-            CompatibilityType compatibilityType, int instanceState, Func<int> getInstanceState);
+            CompatibilityType compatibilityType, int instanceState, Func<int> nextInstanceState);
 
 
         /// <summary> Registers an action to be called when a hotkey is pressed </summary>

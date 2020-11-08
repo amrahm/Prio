@@ -6,25 +6,23 @@ using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.SharedResources {
     public static class Settings {
-        private const string Path = "./prioConfig.json";
+        private const string PATH = "./prioConfig.json";
 
-        /// <summary>
-        /// Save settings for a module, or a specific instance of a module if an instanceID is supplied
-        /// </summary>
+        /// <summary> Save settings for a module, or a specific instance of a module if an instanceID is supplied </summary>
         /// <typeparam name="T"> Settings class for the module </typeparam>
         /// <param name="moduleConfig"> Settings object </param>
         /// <param name="moduleName"> Name of the module to load </param>
         /// <param name="instanceID"> Must be supplied if saved with instanceID </param>
         public static void SaveSettings<T>(T moduleConfig, string moduleName, Guid? instanceID = null) where T : class {
-            if(!File.Exists(Path)) {
-                File.WriteAllText(Path, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
+            if(!File.Exists(PATH)) {
+                File.WriteAllText(PATH, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
             } else {
-                if(File.Exists($"{Path}.bak1")) File.Copy($"{Path}.bak1", $"{Path}.bak2", true);
-                if(File.Exists($"{Path}.bak0")) File.Copy($"{Path}.bak0", $"{Path}.bak1", true);
-                File.Copy(Path, $"{Path}.bak0", true);
+                if(File.Exists($"{PATH}.bak1")) File.Copy($"{PATH}.bak1", $"{PATH}.bak2", true);
+                if(File.Exists($"{PATH}.bak0")) File.Copy($"{PATH}.bak0", $"{PATH}.bak1", true);
+                File.Copy(PATH, $"{PATH}.bak0", true);
             }
 
-            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(Path));
+            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(PATH));
 
             if(instanceID.HasValue) {
                 Dictionary<Guid, object> moduleDict;
@@ -36,19 +34,17 @@ namespace Infrastructure.SharedResources {
             } else
                 fullConfig[moduleName] = moduleConfig;
 
-            File.WriteAllText(Path, JsonConvert.SerializeObject(fullConfig, Formatting.Indented));
+            File.WriteAllText(PATH, JsonConvert.SerializeObject(fullConfig, Formatting.Indented));
         }
 
-        /// <summary>
-        /// Loads settings for a module, or a specific instance of a module that was saved with an instanceID
-        /// </summary>
+        /// <summary> Loads settings for a module, or a specific instance of a module that was saved with an instanceID </summary>
         /// <typeparam name="T"> Settings class for the module </typeparam>
         /// <param name="moduleName"> Name of the module to load </param>
         /// <param name="instanceID"> Must be supplied if saved with instanceID </param>
         public static T LoadSettings<T>(string moduleName, Guid? instanceID = null) where T : class {
-            if(!File.Exists(Path)) return null; //TODO write code to check for .bak files first
+            if(!File.Exists(PATH)) return null; //TODO write code to check for .bak files first
 
-            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(Path));
+            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(PATH));
 
             if(instanceID.HasValue) {
                 var moduleDict = GetFromJObjDict<string, Dictionary<Guid, object>>(moduleName, fullConfig);
@@ -58,16 +54,14 @@ namespace Infrastructure.SharedResources {
             return GetFromJObjDict<string, T>(moduleName, fullConfig);
         }
 
-        /// <summary>
-        /// For modules that save instances, this loads the whole dict of instances
-        /// </summary>
+        /// <summary> For modules that save instances, this loads the whole dict of instances </summary>
         /// <typeparam name="T"> Settings class for the module </typeparam>
         /// <param name="moduleName"> Name of the module to load </param>
         /// <returns></returns>
         public static Dictionary<Guid, T> LoadSettingsDict<T>(string moduleName) where T : class {
-            if(!File.Exists(Path)) return null; //TODO write code to check for .bak files first
+            if(!File.Exists(PATH)) return null; //TODO write code to check for .bak files first
 
-            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(Path));
+            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(PATH));
             return GetFromJObjDict<string, Dictionary<Guid, T>>(moduleName, fullConfig);
         }
 

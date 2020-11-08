@@ -26,6 +26,20 @@ namespace Timer {
 
             _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
             _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
+
+            RequestHide = () => {
+                Config.VisibilityState = VisibilityState.Hidden;
+                SaveSettings();
+            };
+            RequestKeepOnTop = () => {
+                Config.VisibilityState = VisibilityState.KeepOnTop;
+                SaveSettings();
+            };
+            RequestKeepBehind = () => {
+                Config.VisibilityState = VisibilityState.MoveBehind;
+                SaveSettings();
+            };
+
             RegisterShortcuts();
         }
 
@@ -36,6 +50,46 @@ namespace Timer {
         public void ResetTimer() => Config.TimeLeft = Config.Duration;
         public void StartTimer() => _timer.Start();
         public void StopTimer() => _timer.Stop();
+        private event Action RequestHide;
+        private event Action RequestKeepOnTop;
+        private event Action RequestKeepBehind;
+
+        #region VisibilityEvents
+
+        event Action ITimer.RequestHide {
+            add {
+                RequestHide += value;
+                RegisterShortcuts();
+            }
+            remove {
+                RequestHide -= value;
+                RegisterShortcuts();
+            }
+        }
+
+        event Action ITimer.RequestKeepOnTop {
+            add {
+                RequestKeepOnTop += value;
+                RegisterShortcuts();
+            }
+            remove {
+                RequestKeepOnTop -= value;
+                RegisterShortcuts();
+            }
+        }
+
+        event Action ITimer.RequestMoveBelow {
+            add {
+                RequestKeepBehind += value;
+                RegisterShortcuts();
+            }
+            remove {
+                RequestKeepBehind -= value;
+                RegisterShortcuts();
+            }
+        }
+
+        #endregion
 
         public void OpenSettings() {
             StopTimer();
@@ -48,9 +102,9 @@ namespace Timer {
             RegisterShortcuts();
         }
 
-        private enum TimerState { Stopped, Started }
+        private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
-        private enum VisibilityState { ToggleHide, OnTop, Below }
+        private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
         private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();
@@ -58,11 +112,46 @@ namespace Timer {
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
                                          CompatibilityType.Reset);
 
-            int GetTimerState() => (int) (IsRunning ? TimerState.Started : TimerState.Stopped);
+            int NextTimerState() => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
-                                         CompatibilityType.StartStop, (int) TimerState.Stopped, GetTimerState);
+                                         CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StopShortcut), Config.StopShortcut, StopTimer,
-                                         CompatibilityType.StartStop, (int) TimerState.Started, GetTimerState);
+                                         CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
+
+
+            int NextVisibilityState() {
+                switch(Config.VisibilityState) {
+                    case VisibilityState.Hidden:
+                        if(Equals(Config.ShowHideShortcut, Config.KeepOnTopShortcut))
+                            return (int) VisibilityHotkeyState.ShouldTop;
+                        else if(Equals(Config.ShowHideShortcut, Config.MoveBehindShortcut))
+                            return (int) VisibilityHotkeyState.ShouldBehind;
+                        return (int) VisibilityHotkeyState.ShouldHide;
+                    case VisibilityState.KeepOnTop:
+                        if(Equals(Config.KeepOnTopShortcut, Config.MoveBehindShortcut))
+                            return (int) VisibilityHotkeyState.ShouldBehind;
+                        else if(Equals(Config.KeepOnTopShortcut, Config.ShowHideShortcut))
+                            return (int) VisibilityHotkeyState.ShouldHide;
+                        return (int) VisibilityHotkeyState.ShouldTop;
+                    case VisibilityState.MoveBehind:
+                        if(Equals(Config.MoveBehindShortcut, Config.ShowHideShortcut))
+                            return (int) VisibilityHotkeyState.ShouldHide;
+                        else if(Equals(Config.MoveBehindShortcut, Config.KeepOnTopShortcut))
+                            return (int) VisibilityHotkeyState.ShouldTop;
+                        return (int) VisibilityHotkeyState.ShouldBehind;
+                }
+                return (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
+            }
+
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ShowHideShortcut), Config.ShowHideShortcut,
+                                         RequestHide, CompatibilityType.Visibility,
+                                         (int) VisibilityHotkeyState.ShouldHide, NextVisibilityState);
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.KeepOnTopShortcut), Config.KeepOnTopShortcut,
+                                         RequestKeepOnTop, CompatibilityType.Visibility,
+                                         (int) VisibilityHotkeyState.ShouldTop, NextVisibilityState);
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.MoveBehindShortcut), Config.MoveBehindShortcut,
+                                         RequestKeepBehind, CompatibilityType.Visibility,
+                                         (int) VisibilityHotkeyState.ShouldBehind, NextVisibilityState);
         }
     }
 }

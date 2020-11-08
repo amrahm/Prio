@@ -9,7 +9,6 @@ namespace MainConfig {
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterDialog<MainConfigView, MainConfigViewModel>();
             containerRegistry.RegisterSingleton<IMainConfigService, MainConfigService>();
-            containerRegistry.RegisterForNavigation<NavigationMenuView, NavigationMenuViewModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) { }

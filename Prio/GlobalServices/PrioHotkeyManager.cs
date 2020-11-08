@@ -109,9 +109,9 @@ namespace Prio.GlobalServices {
         }
 
         public bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
-            CompatibilityType compatibilityType, int instanceState, Func<int> getInstanceState) {
+            CompatibilityType compatibilityType, int instanceState, Func<int> nextInstanceState) {
             HotkeyRegistration registration = new HotkeyRegistration(instanceId, hotkeyName, shortcut,
-                                                                     compatibilityType, instanceState, getInstanceState);
+                                                                     compatibilityType, instanceState, nextInstanceState);
 
             UnregisterHotkey(registration);
 

@@ -17,7 +17,7 @@ namespace Timer {
         private const int SCREEN_MARGIN = 50;
         private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 50;
 
-        private DialogWindow _window;
+        private Window _window;
 
 
         private double _startHeight;
@@ -33,9 +33,11 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut, nameof(StopShortcut.Shortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.ShowHideShortcut), ShowHideShortcut, nameof(ShowHideShortcut.Shortcut));
 
+                _window = Window.GetWindow(this);
+                Debug.Assert(_window != null, nameof(_window) + " != null");
 
-                _window = (DialogWindow) Root.Parent;
                 WindowChrome windowChrome = new WindowChrome {
                     ResizeBorderThickness = new Thickness(9, 0, 9, 0),
                     CaptionHeight = 0

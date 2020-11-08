@@ -6,11 +6,23 @@
              xmlns:local="clr-namespace:GeneralConfig"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-	<Grid>
-		<Label Content="General" FontSize="90"/>
-	</Grid>
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<st:AutoGrid Rows="auto, *" ColumnWidth="*" Background="{StaticResource LightBrush}" >
+		<Label Content="General Config" Style="{StaticResource BigControlStyle}" />
+
+		<ContentControl Margin="0" Background="{StaticResource LightBrush}"
+		                prism:RegionManager.RegionName="{x:Static constants:RegionNames.GENERAL_CONFIG_TIMERS_REGION}" />
+	</st:AutoGrid>
 </UserControl>

@@ -70,8 +70,8 @@
 			<MenuItem Header="Add 30 Minutes" />
 			<MenuItem Header="Set Current Time" />
 			<Separator />
-			<MenuItem Header="Keep On Top" />
-			<MenuItem Header="Keep Behind" />
+			<MenuItem Header="Keep On Top" IsChecked="True" />
+			<MenuItem Header="Keep Behind" IsChecked="False" />
 			<Separator />
 			<MenuItem Header="Hide Timer" />
 			<MenuItem Header="Exit (Disable) Timer" />
