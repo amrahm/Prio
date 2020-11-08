@@ -6,6 +6,7 @@
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:local="clr-namespace:Timer"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:System="clr-namespace:System;assembly=System.Runtime"
              x:Name="Root">
 
 	<prism:Dialog.WindowStyle>

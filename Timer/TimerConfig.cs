@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using Infrastructure.SharedResources;
 using Prism.Mvvm;
 
@@ -16,5 +17,6 @@ namespace Timer {
         public ShortcutDefinition ResetShortcut { get; set; }
         public ShortcutDefinition StartShortcut { get; set; }
         public ShortcutDefinition StopShortcut { get; set; }
+        public Dictionary<int, Point> WindowPositions { get; set; } = new Dictionary<int, Point>();
     }
 }

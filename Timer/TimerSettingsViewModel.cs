@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -18,13 +19,13 @@ namespace Timer {
         public int Hours {
             get => _hours;
             set {
-                    Config.Duration = new TimeSpan(value, _minutes, _seconds);
-                    Config.TimeLeft = Config.Duration;
-                    double totalHours = Config.Duration.TotalHours;
-                    if(Math.Abs(totalHours) < 0.0001) {
-                        Minutes = 1;
-                    }
-                    _hours =  (int) totalHours; //To allow values greater than 24
+                Config.Duration = new TimeSpan(value, _minutes, _seconds);
+                Config.TimeLeft = Config.Duration;
+                double totalHours = Config.Duration.TotalHours;
+                if(Math.Abs(totalHours) < 0.0001) {
+                    Minutes = 1;
+                }
+                _hours =  (int) totalHours; //To allow values greater than 24
             }
         }
 
@@ -32,6 +33,7 @@ namespace Timer {
             get => _minutes;
             set {
                 Config.Duration = new TimeSpan(_hours, value, _seconds);
+                Config.TimeLeft = Config.Duration;
                 _minutes = Config.Duration.Minutes;
                 Hours = (int) Config.Duration.TotalHours;
             }
@@ -41,6 +43,7 @@ namespace Timer {
             get => _seconds;
             set {
                 Config.Duration = new TimeSpan(_hours, _minutes, value);
+                Config.TimeLeft = Config.Duration;
                 _seconds = Config.Duration.Seconds;
                 int durationHours = (int) Config.Duration.TotalHours; //cache this before minutes calls OnPropertyChanged
                 Minutes = Config.Duration.Minutes;

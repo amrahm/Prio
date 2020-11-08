@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using Infrastructure.SharedResources;
 using JetBrains.Annotations;
@@ -29,27 +28,22 @@ namespace Timer {
         public DelegateCommand StartStopTimer { [UsedImplicitly] get; }
         public DelegateCommand ExitProgram { [UsedImplicitly] get; }
 
-        public TimerViewModel(ITimer timerTimer) {
-            Timer = timerTimer;
+
+        private TimerViewModel() {
             IContainerProvider container = UnityInstance.GetContainer();
             OpenTimerSettings = new DelegateCommand(() => Timer?.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {
-                Debug.Assert(Timer != null, nameof(Timer) + " != null");
                 if(Timer.IsRunning) Timer.StopTimer();
                 else Timer.StartTimer();
             });
-            ExitProgram = new DelegateCommand(() => {
-                Timer.SaveSettings();
-                Application.Current.Shutdown();
-            });
+            ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
 
-        public void OnDialogOpened(IDialogParameters parameters) {
-            Timer = parameters.GetValue<ITimer>(nameof(ITimer));
-        }
+        public TimerViewModel(ITimer timerTimer) : this() => Timer = timerTimer;
 
+        public void OnDialogOpened(IDialogParameters parameters) => Timer = parameters.GetValue<ITimer>(nameof(ITimer));
         public bool CanCloseDialog() => true;
-        public void OnDialogClosed() { }
+        public void OnDialogClosed() => Timer.SaveSettings();
     }
 }

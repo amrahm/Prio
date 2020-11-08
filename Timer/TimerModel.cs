@@ -58,7 +58,6 @@ namespace Timer {
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
                                          CompatibilityType.Reset);
 
-
             int GetTimerState() => (int) (IsRunning ? TimerState.Started : TimerState.Stopped);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
                                          CompatibilityType.StartStop, (int) TimerState.Stopped, GetTimerState);
