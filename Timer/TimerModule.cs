@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Prism.Ioc;
+﻿using Prism.Ioc;
 using Prism.Modularity;
 using Infrastructure.Constants;
-using Infrastructure.SharedResources;
 using Prism.Regions;
 
 namespace Timer {
@@ -16,22 +13,14 @@ namespace Timer {
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterSingleton<ITimersService, TimersService>();
             containerRegistry.RegisterDialog<TimerSettingsView, TimerSettingsViewModel>();
             containerRegistry.RegisterDialog<TimerView, TimerViewModel>();
             containerRegistry.Register<ITimer, TimerModel>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider) {
-            Dictionary<Guid, TimerConfig> settingsDict = Settings.LoadSettingsDict<TimerConfig>(ModuleNames.TIMER);
-            var timersService = containerProvider.Resolve<ITimersService>();
-            if(settingsDict != null) {
-                foreach(KeyValuePair<Guid, TimerConfig> configPair in settingsDict) {
-                    ITimer timer = new TimerModel(configPair.Value);
-                    timersService.Timers.Add(timer);
-                    timer.ShowTimer();
-                }
-            }
+            var timersService = TimersService.Singleton;
+            foreach(ITimer timer in timersService.Timers) timer.ShowTimer();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Timer {
     public interface ITimer : INotifyPropertyChanged {
@@ -7,7 +8,7 @@ namespace Timer {
         void ShowTimer();
         void StartTimer();
         void StopTimer();
-        bool IsRunning { get; }
+        [JsonIgnore] bool IsRunning { get; }
         void OpenSettings();
         void SaveSettings();
         public event Action RequestHide;

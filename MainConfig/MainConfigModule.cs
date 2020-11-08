@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Constants;
+using Infrastructure.SharedResources;
 using Prism.Ioc;
 using Prism.Modularity;
 
@@ -11,6 +12,9 @@ namespace MainConfig {
             containerRegistry.RegisterSingleton<IMainConfigService, MainConfigService>();
         }
 
-        public void OnInitialized(IContainerProvider containerProvider) { }
+        public void OnInitialized(IContainerProvider containerProvider) {
+            if(!Settings.DoSettingsExists())
+                containerProvider.Resolve<IMainConfigService>().ShowConfigWindow();
+        }
     }
 }

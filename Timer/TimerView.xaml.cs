@@ -18,7 +18,7 @@ using Application = System.Windows.Application;
 namespace Timer {
     /// <summary> Interaction logic for TimerView.xaml </summary>
     public partial class TimerView  {
-        private DialogWindow _window;
+        private Window _window;
         private readonly TimerViewModel _vm;
 
         public TimerView() {
@@ -28,7 +28,7 @@ namespace Timer {
             _vm = (TimerViewModel) DataContext;
 
             Loaded += (o, e) => {
-                _window = (DialogWindow) Window.GetWindow(this);
+                _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
                 Debug.WriteLine(Application.Current.Windows);
 
@@ -135,10 +135,7 @@ namespace Timer {
             _window.Top += Math.Max(wA.Top / dpiHeightFactor - _window.Top, 0);
             _window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (_window.Top + _window.ActualHeight), 0);
 
-
-            IContainerProvider container = UnityInstance.GetContainer();
-            var timersService = container.Resolve<ITimersService>();
-            foreach(ITimer timer in timersService.Timers) {
+            foreach(ITimer timer in TimersService.Singleton.Timers) {
                 //TODO move this out of the way if there's an overlap
             }
         }

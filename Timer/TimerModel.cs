@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Threading;
-using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Ioc;
@@ -22,7 +21,8 @@ namespace Timer {
 
         public TimerModel(TimerConfig config) {
             Config = config;
-            _dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
+            IContainerProvider container = UnityInstance.GetContainer();
+            _dialogService = container.Resolve<IDialogService>();
 
             _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
             _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
@@ -98,7 +98,7 @@ namespace Timer {
         }
 
         public void SaveSettings() {
-            Settings.SaveSettings(Config, ModuleNames.TIMER, Config.InstanceID);
+            TimersService.Singleton.SaveSettings();
             RegisterShortcuts();
         }
 
@@ -107,7 +107,7 @@ namespace Timer {
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
         private void RegisterShortcuts() {
-            IContainerProvider container = UnityInstance.GetContainer();
+            IContainerProvider container = Infrastructure.SharedResources.UnityInstance.GetContainer();
             var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
                                          CompatibilityType.Reset);
