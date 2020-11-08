@@ -1,11 +1,13 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using Infrastructure.Constants;
+using JetBrains.Annotations;
 using Prism.Regions;
 
 namespace Timer {
     /// <summary> Register components of module with Unity/Prism </summary>
     [Module(ModuleName = ModuleNames.TIMER)]
+    [UsedImplicitly]
     public class TimerModule : IModule {
         public TimerModule(RegionManager regionManager) {
             // Don't need to worry about RegionManagerAware since we don't intend to do navigation within

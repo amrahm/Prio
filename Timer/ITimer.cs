@@ -12,7 +12,5 @@ namespace Timer {
         void OpenSettings();
         void SaveSettings();
         public event Action RequestHide;
-        public event Action RequestKeepOnTop;
-        public event Action RequestMoveBelow;
     }
 }

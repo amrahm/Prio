@@ -3,8 +3,21 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace Infrastructure.SharedResources {
+
+
+    public abstract class NotifyPropertyChanged : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class DependsOnPropertyAttribute : Attribute {
         public readonly string dependence;

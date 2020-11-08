@@ -1,53 +1,45 @@
 ﻿using System;
-using System.Windows.Forms;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using Prism.Mvvm;
 
 namespace Timer {
-    public class TimerSettingsViewModel : BindableBase, IDialogAware {
+    public class TimerSettingsViewModel : NotifyPropertyWithDependencies, IDialogAware {
         private ITimer Model { get; set; }
-        private int _hours = 1;
-        private int _minutes;
-        private int _seconds;
+        private TimerConfig _config;
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
-        public TimerConfig Config { get; set; }
+        public TimerConfig Config {
+            get => _config;
+            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+        }
 
+        [DependsOnProperty(nameof(Config))]
         public int Hours {
-            get => _hours;
+            get => (int) (Config?.Duration.TotalHours ?? 0);
             set {
-                Config.Duration = new TimeSpan(value, _minutes, _seconds);
+                Config.Duration = new TimeSpan(value, Minutes, Seconds);
                 Config.TimeLeft = Config.Duration;
-                double totalHours = Config.Duration.TotalHours;
-                if(Math.Abs(totalHours) < 0.0001) {
-                    Minutes = 1;
-                }
-                _hours =  (int) totalHours; //To allow values greater than 24
+                if(Math.Abs(Config.Duration.TotalHours) < 0.0001) Minutes = 1;
             }
         }
 
+        [DependsOnProperty(nameof(Config))]
         public int Minutes {
-            get => _minutes;
+            get => Config?.Duration.Minutes ?? 0;
             set {
-                Config.Duration = new TimeSpan(_hours, value, _seconds);
+                Config.Duration = new TimeSpan(Hours, value, Seconds);
                 Config.TimeLeft = Config.Duration;
-                _minutes = Config.Duration.Minutes;
-                Hours = (int) Config.Duration.TotalHours;
             }
         }
 
+        [DependsOnProperty(nameof(Config))]
         public int Seconds {
-            get => _seconds;
+            get => Config?.Duration.Seconds ?? 0;
             set {
-                Config.Duration = new TimeSpan(_hours, _minutes, value);
+                Config.Duration = new TimeSpan(Hours, Minutes, value);
                 Config.TimeLeft = Config.Duration;
-                _seconds = Config.Duration.Seconds;
-                int durationHours = (int) Config.Duration.TotalHours; //cache this before minutes calls OnPropertyChanged
-                Minutes = Config.Duration.Minutes;
-                Hours = durationHours;
             }
         }
 

@@ -7,18 +7,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
-using Prism.Ioc;
 using Prism.Services.Dialogs;
 using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
-using Application = System.Windows.Application;
 
 namespace Timer {
     /// <summary> Interaction logic for TimerView.xaml </summary>
     public partial class TimerView  {
-        private Window _window;
+        private DialogWindow _window;
         private readonly TimerViewModel _vm;
 
         public TimerView() {
@@ -28,9 +24,8 @@ namespace Timer {
             _vm = (TimerViewModel) DataContext;
 
             Loaded += (o, e) => {
-                _window = Window.GetWindow(this);
-                Debug.Assert(_window != null, nameof(_window) + " != null");
-                Debug.WriteLine(Application.Current.Windows);
+                _window = Window.GetWindow(this) as DialogWindow;
+                if(_window == null) return; //This isn't a dialog window
 
                 WindowChrome windowChrome = new WindowChrome {CaptionHeight = 0};
                 WindowChrome.SetWindowChrome(_window, windowChrome);
@@ -38,58 +33,16 @@ namespace Timer {
 
                 LoadWindowPosition();
 
-                void UnHide() {
-                    _window.Visibility = Visibility.Visible;
-                    _window.Activate();
-                }
-
-                void HideToggle() {
-                    Debug.WriteLine("HIDE_TOGGLE");
-                    if(_window.Visibility != Visibility.Visible) UnHide();
-                    else _window.Visibility = Visibility.Hidden;
-                }
-
-                _vm.Timer.RequestHide += HideToggle;
-
-                void KeepOnTop() {
-                    Debug.WriteLine("TOP");
-                    UnHide();
-                    _window.Topmost = true;
-                }
-
-                _vm.Timer.RequestKeepOnTop += KeepOnTop;
-
-                void MoveToBottom() {
-                    Debug.WriteLine("BOTTOM");
-                    UnHide();
-                    _window.Topmost = false;
-                    IntPtr hWnd = new WindowInteropHelper(_window).Handle;
-                    SetWindowPos(hWnd, HwndBottom, 0, 0, 0, 0, 19U);
-                }
-
-                _vm.Timer.RequestMoveBelow += MoveToBottom;
-
-                switch(_vm.Timer.Config.VisibilityState) {
-                    case VisibilityState.Hidden:
-                        HideToggle();
-                        break;
-                    case VisibilityState.KeepOnTop:
-                        KeepOnTop();
-                        break;
-                    case VisibilityState.MoveBehind:
-                        MoveToBottom();
-                        break;
-                }
+                _vm.Timer.RequestHide += () => {
+                    if(_window.Visibility != Visibility.Visible) {
+                        _window.Visibility = Visibility.Visible;
+                        _window.Activate();
+                    } else _window.Visibility = Visibility.Hidden;
+                };
             };
 
             MouseDown += DragMoveWindow;
         }
-
-        [DllImport("user32.dll")]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X,
-            int Y, int cx, int cy, uint uFlags);
-
-        private static readonly IntPtr HwndBottom = new IntPtr(1);
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
             if(_window == null) return;

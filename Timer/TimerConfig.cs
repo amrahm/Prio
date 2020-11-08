@@ -12,18 +12,12 @@ namespace Timer {
         public bool ShowName { get; set; } = true;
         public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
         public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
-        public VisibilityState VisibilityState { get; set; } = VisibilityState.KeepOnTop;
         public IList<int> DesktopsVisible { get; set; }
         public IList<int> DesktopsActive { get; set; }
         public ShortcutDefinition ResetShortcut { get; set; }
         public ShortcutDefinition StartShortcut { get; set; }
         public ShortcutDefinition StopShortcut { get; set; }
         public ShortcutDefinition ShowHideShortcut { get; set; }
-        public ShortcutDefinition KeepOnTopShortcut { get; set; }
-        public ShortcutDefinition MoveBehindShortcut { get; set; }
         public Dictionary<int, Point> WindowPositions { get; set; } = new Dictionary<int, Point>();
     }
-
-    public enum VisibilityState { Hidden, KeepOnTop, MoveBehind }
-
 }
