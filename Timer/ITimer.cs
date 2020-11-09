@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using System.Windows;
+using JetBrains.Annotations;
 
 namespace Timer {
     public interface ITimer : INotifyPropertyChanged {
@@ -12,5 +14,6 @@ namespace Timer {
         void OpenSettings();
         void SaveSettings();
         public event Action RequestHide;
+        [CanBeNull] public Window OpenWindow { get; set; }
     }
 }

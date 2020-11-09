@@ -207,9 +207,9 @@
 					</DockPanel.Resources>
 					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource WithValidation}"
 					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" Command="{Binding OkCommand}" />
-					<Button DockPanel.Dock="Right" Content="Apply" Width="70" Style="{StaticResource WithValidation}"
+					<Button DockPanel.Dock="Right" Content="APPLY" Width="70" Style="{StaticResource WithValidation}"
 					        Command="{Binding ApplyCommand}" />
-					<Button DockPanel.Dock="Right" Content="Cancel" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
+					<Button DockPanel.Dock="Right" Content="CANCEL" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
 					        Command="{Binding CancelCommand}" />
 
 				</DockPanel>

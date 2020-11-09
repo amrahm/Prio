@@ -39,7 +39,11 @@ namespace Timer {
                         _window.Activate();
                     } else _window.Visibility = Visibility.Hidden;
                 };
+
+                _vm.Timer.OpenWindow = _window;
             };
+
+            Unloaded += (o, e) => _vm.Timer.OpenWindow = null;
 
             MouseDown += DragMoveWindow;
         }

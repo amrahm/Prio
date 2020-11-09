@@ -6,7 +6,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
-using Prism.Services.Dialogs;
 using static Infrastructure.SharedResources.BindingHelpers;
 using Color = System.Windows.Media.Color;
 

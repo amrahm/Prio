@@ -5,8 +5,8 @@ using Prism.Mvvm;
 namespace Timer {
     [Serializable]
     public class TimersGeneralConfig : BindableBase {
-        public ShortcutDefinition ShowHideShortcut { get; set; }
-        public ShortcutDefinition KeepOnTopShortcut { get; set; }
-        public ShortcutDefinition MoveBehindShortcut { get; set; }
+        public ShortcutDefinition ShowHideTimersShortcut { get; set; }
+        public ShortcutDefinition KeepTimersOnTopShortcut { get; set; }
+        public ShortcutDefinition MoveTimersBehindShortcut { get; set; }
     }
 }

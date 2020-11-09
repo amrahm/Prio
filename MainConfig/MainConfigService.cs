@@ -1,4 +1,5 @@
-﻿using Infrastructure.Prism;
+﻿using System;
+using Infrastructure.Prism;
 using JetBrains.Annotations;
 using Prism.Regions;
 using Unity;
@@ -30,5 +31,11 @@ namespace MainConfig {
 
             _configView.Show();
         }
+
+        public void CloseConfigWindow() => _configView?.Close();
+
+        public event Action ApplySettingsPress;
+
+        public void InvokeApplySettings() => ApplySettingsPress?.Invoke();
     }
 }

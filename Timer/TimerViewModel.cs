@@ -30,8 +30,8 @@ namespace Timer {
 
 
         private TimerViewModel() {
-            IContainerProvider container = Infrastructure.SharedResources.UnityInstance.GetContainer();
-            OpenTimerSettings = new DelegateCommand(() => Timer?.OpenSettings());
+            IContainerProvider container = UnityInstance.GetContainer();
+            OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {
                 if(Timer.IsRunning) Timer.StopTimer();
@@ -42,7 +42,11 @@ namespace Timer {
 
         public TimerViewModel(ITimer timerTimer) : this() => Timer = timerTimer;
 
-        public void OnDialogOpened(IDialogParameters parameters) => Timer = parameters.GetValue<ITimer>(nameof(ITimer));
+        public void OnDialogOpened(IDialogParameters parameters) {
+            Timer = parameters.GetValue<ITimer>(nameof(ITimer));
+            Title = Timer.Config.Name;
+        }
+
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() => Timer.SaveSettings();
     }

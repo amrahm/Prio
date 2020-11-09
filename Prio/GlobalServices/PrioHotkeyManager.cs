@@ -54,7 +54,7 @@ namespace Prio.GlobalServices {
                     handler = (sender, args) => _actionQueue.Enqueue(action);
                 else {
                     handler = (sender, args) => {
-                        if(registration.GetInstanceState() == registration.InstanceState)
+                        if(registration.GetInstanceState(registration.InstanceState) == registration.InstanceState)
                             _actionQueue.Enqueue(action);
                     };
                 }
@@ -89,11 +89,11 @@ namespace Prio.GlobalServices {
             public ShortcutDefinition Shortcut { get; }
             public CompatibilityType CompatibilityType { get; }
             public int InstanceState { get; }
-            public Func<int> GetInstanceState { get; }
+            public Func<int, int> GetInstanceState { get; }
 
             public HotkeyRegistration(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut = null,
                 CompatibilityType compatibilityType = CompatibilityType.General, int instanceState = 0,
-                Func<int> getInstanceState = null) {
+                Func<int, int> getInstanceState = null) {
                 InstanceId = instanceId;
                 HotkeyName = hotkeyName;
                 Shortcut = shortcut;
@@ -109,7 +109,7 @@ namespace Prio.GlobalServices {
         }
 
         public bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
-            CompatibilityType compatibilityType, int instanceState, Func<int> nextInstanceState) {
+            CompatibilityType compatibilityType, int instanceState, Func<int, int> nextInstanceState) {
             HotkeyRegistration registration = new HotkeyRegistration(instanceId, hotkeyName, shortcut,
                                                                      compatibilityType, instanceState, nextInstanceState);
 

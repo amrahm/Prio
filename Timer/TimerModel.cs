@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
@@ -14,6 +15,7 @@ namespace Timer {
             set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
         }
 
+        public Window OpenWindow { get; set; }
 
         private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer;
@@ -69,7 +71,7 @@ namespace Timer {
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
                                          CompatibilityType.Reset);
 
-            int NextTimerState() => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
+            int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StopShortcut), Config.StopShortcut, StopTimer,
