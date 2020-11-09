@@ -50,39 +50,34 @@
 							<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowName, Mode=TwoWay}" />
 						</StackPanel>
 						<TextBlock Text="Duration" Style="{StaticResource SubHeaderLabelStyle}" />
-						<Label Style="{StaticResource BigControlStyle}" Content="{Binding Config.InstanceID}" />
-						<st:AutoGrid Columns="*, auto, *, auto, *" Rows="auto, *"
-						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
-							<StackPanel Orientation="Horizontal">
-								<CheckBox VerticalAlignment="Center" IsChecked="True" />
-								<TextBlock Text="Hours" Style="{StaticResource BaseControlStyle}" />
+						<st:AutoGrid Columns="*, *, *">
+							<StackPanel Orientation="Horizontal" Margin="5, 0">
+								<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowHours, Mode=TwoWay}" />
+								<TextBlock Text="Show Hours" Style="{StaticResource BaseControlStyle}" />
 							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="10, 0">
+								<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowMinutes, Mode=TwoWay}" />
+								<TextBlock Text="Show Minutes" Style="{StaticResource BaseControlStyle}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="15, 0">
+								<CheckBox VerticalAlignment="Center" IsChecked="{Binding Config.ShowSeconds, Mode=TwoWay}" />
+								<TextBlock Text="Show Seconds" Style="{StaticResource BaseControlStyle}" />
+							</StackPanel>
+						</st:AutoGrid>
+						<st:AutoGrid Columns="*, auto, *, auto, *" RowHeight="*"
+						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Hours, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="HoursBox"
-							         Style="{StaticResource BiggishBox}" />
-							<Rectangle />
+							         TextAlignment="Center" Name="HoursBox" Style="{StaticResource BiggishBox}" />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-							<StackPanel Orientation="Horizontal">
-								<CheckBox VerticalAlignment="Center" IsChecked="True" />
-								<TextBlock Text="Minutes" Style="{StaticResource BaseControlStyle}" />
-							</StackPanel>
-
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Minutes, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="MinutesBox"
-							         Style="{StaticResource BiggishBox}" />
-							<Rectangle />
+							         TextAlignment="Center" Name="MinutesBox" Style="{StaticResource BiggishBox}" />
 							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-							<StackPanel Orientation="Horizontal">
-								<CheckBox VerticalAlignment="Center" IsChecked="True" />
-								<TextBlock Text="Seconds" Style="{StaticResource BaseControlStyle}" />
-							</StackPanel>
 
 							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
 							         hc:InfoElement.Placeholder="##" Text="{Binding Seconds, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="SecondsBox"
-							         Style="{StaticResource BiggishBox}" />
+							         TextAlignment="Center" Name="SecondsBox" Style="{StaticResource BiggishBox}" />
 						</st:AutoGrid>
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">

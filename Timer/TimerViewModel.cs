@@ -19,9 +19,27 @@ namespace Timer {
             set => NotificationBubbler.BubbleSetter(ref _timer, value, (o, e) => this.OnPropertyChanged());
         }
 
-        //TODO enable/disable for hours, minutes, seconds
         [DependsOnProperty(nameof(Timer))]
-        [UsedImplicitly] public string TimeLeftVm => Timer.Config.TimeLeft.ToString(@"hh\:mm\:ss");
+        [UsedImplicitly] public string TimeLeftVm {
+            get {
+                TimeSpan timeLeft = Timer.Config.TimeLeft;
+                if(Timer.Config.ShowHours) {
+                    string tl = $"{(int) timeLeft.TotalHours:00}";
+                    if(Timer.Config.ShowMinutes) tl += $":{timeLeft.Minutes:00}";
+                    if(Timer.Config.ShowSeconds) tl += $":{timeLeft.Seconds:00}";
+                    return  tl;
+                }
+                if(Timer.Config.ShowMinutes) {
+                    string tl = $"{(int) timeLeft.TotalMinutes:00}";
+                    if(Timer.Config.ShowSeconds) tl += $":{timeLeft.Seconds:00}";
+                    return  tl;
+                }
+                return Timer.Config.ShowSeconds ? $"{(int) timeLeft.TotalSeconds:00}" : timeLeft.ToString();
+            }
+        }
+
+        [DependsOnProperty(nameof(Timer))]
+        [UsedImplicitly] public Visibility ShowName => Timer.Config.ShowName ? Visibility.Visible : Visibility.Collapsed;
 
         public DelegateCommand OpenTimerSettings { [UsedImplicitly] get; }
         public DelegateCommand OpenMainSettings { [UsedImplicitly] get; }

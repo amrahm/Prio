@@ -50,11 +50,11 @@ namespace Timer {
         public TimerSettingsViewModel() {
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
             ApplyCommand = new DelegateCommand(() => {
-                Model.Config = Config;
+                Model.Config = Config.DeepCopy();
                 Model.SaveSettings();
             });
             OkCommand = new DelegateCommand(() => {
-                Model.Config = Config;
+                Model.Config = Config.DeepCopy();
                 Model.SaveSettings();
                 RequestClose?.Invoke(null);
             });

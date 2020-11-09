@@ -10,6 +10,9 @@ namespace Timer {
         public Guid InstanceID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public bool ShowName { get; set; } = true;
+        public bool ShowHours { get; set; } = true;
+        public bool ShowMinutes { get; set; } = true;
+        public bool ShowSeconds { get; set; } = true;
         public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
         public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
         public IList<int> DesktopsVisible { get; set; }
