@@ -8,10 +8,7 @@ using Prism.Ioc;
 using Prism.Services.Dialogs;
 
 namespace Timer {
-    public class TimerViewModel : NotifyPropertyWithDependencies, IDialogAware {
-        public string Title { get; set; } = "Timer";
-        public event Action<IDialogResult> RequestClose;
-
+    public class TimerViewModel : NotifyPropertyWithDependencies {
         private ITimer _timer;
 
         public ITimer Timer {
@@ -47,7 +44,8 @@ namespace Timer {
         public DelegateCommand ExitProgram { [UsedImplicitly] get; }
 
 
-        private TimerViewModel() {
+        public TimerViewModel(ITimer timerTimer) {
+            Timer = timerTimer;
             IContainerProvider container = UnityInstance.GetContainer();
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => container.Resolve<IMainConfigService>().ShowConfigWindow());
@@ -57,15 +55,5 @@ namespace Timer {
             });
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
-
-        public TimerViewModel(ITimer timerTimer) : this() => Timer = timerTimer;
-
-        public void OnDialogOpened(IDialogParameters parameters) {
-            Timer = parameters.GetValue<ITimer>(nameof(ITimer));
-            Title = Timer.Config.Name;
-        }
-
-        public bool CanCloseDialog() => true;
-        public void OnDialogClosed() => Timer.SaveSettings();
     }
 }

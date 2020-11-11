@@ -12,6 +12,7 @@ namespace Prio {
     public partial class App {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterSingleton<IPrioHotkeyManager, PrioHotkeyManager>();
+            containerRegistry.RegisterSingleton<IVirtualDesktopManager, VirtualDesktopManager>();
         }
 
         protected override Window CreateShell() {

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Threading;
+using WindowsDesktop;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Ioc;
@@ -16,10 +17,13 @@ namespace Timer {
             set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
         }
 
-        public Window OpenWindow { get; set; }
+        public Window TimerWindow { get; set; }
 
         private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer;
+        private bool _hidden = false;
+        private IVirtualDesktopManager _vdm;
+
         public bool IsRunning => _timer.IsEnabled;
 
         public TimerModel(TimerConfig config) {
@@ -32,50 +36,52 @@ namespace Timer {
 
             RegisterShortcuts();
 
-            //VirtualDesktop[] desktops = VirtualDesktop.GetDesktops();
-            //var desktopMap = new Dictionary<Guid, int>();
-            //for (int i = 0; i < desktops.Length; i++) desktopMap.Add(desktops[i].Id, i);
-            //VirtualDesktop.CurrentChanged += (o, e) => {
-            //    OpenWindow?.Dispatcher.Invoke(() => {
-            //        //Debug.WriteLine($"Desktop changed: {e.NewDesktop.Id}");
-            //        if (Config.DesktopsVisible.Contains(desktopMap[e.NewDesktop.Id])) OpenWindow.MoveToDesktop(e.NewDesktop);
-            //        //OpenWindow.MoveToDesktop(VirtualDesktop.Current);
-            //    });
-            //};
+            _vdm = container.Resolve<IVirtualDesktopManager>();
 
-            //var vdm = new VirtualDesktopManager();
-            //var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(0.1)};
-            //timer.Tick += (o,  e) => {
-            //    if(OpenWindow != null) {
-            //        var hWnd = new WindowInteropHelper(OpenWindow).Handle;
-            //        if(!vdm.IsWindowOnCurrentVirtualDesktop(hWnd)) {
-            //            vdm.MoveWindowToDesktop(hWnd, vdm.GetWindowDesktopId(hWnd));
-            //        }
-            //    }
-            //};
-            //timer.Start();
+            _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
+        }
+
+        void HandleDesktopChanged(int newDesktop) {
+            TimerWindow?.Dispatcher.Invoke(() => {
+                if((Config.DesktopsVisible.Contains(0) || Config.DesktopsVisible.Contains(newDesktop + 1)) &&
+                   !_hidden && TimersService.Singleton.currVisState != VisibilityState.Hidden) {
+                    TimerWindow.Visibility = Visibility.Visible;
+                    _vdm.MoveToDesktop(TimerWindow, newDesktop);
+                } else {
+                    TimerWindow.Visibility = Visibility.Hidden;
+                }
+            });
         }
 
 
         public void ShowTimer() {
-            _dialogService.Show(nameof(TimerView), new DialogParameters {{nameof(ITimer), this}}, result => { });
+            if(TimerWindow != null) {
+                TimerWindow.Activate();
+                return;
+            }
+
+            TimerWindow = new TimerWindow {Content = new TimerView(new TimerViewModel(this)), Title = Config.Name};
+            TimerWindow.Show();
+            TimerWindow.Closed += (o,  e) => {
+                SaveSettings();
+                TimerWindow = null;
+            };
+
             TimersService.Singleton.ApplyVisState();
+            HandleDesktopChanged(_vdm.CurrentDesktop());
         }
 
         public void ResetTimer() => Config.TimeLeft = Config.Duration;
         public void StartTimer() => _timer.Start();
         public void StopTimer() => _timer.Stop();
-        private event Action RequestHide;
 
-        event Action ITimer.RequestHide {
-            add {
-                RequestHide += value;
-                RegisterShortcuts();
-            }
-            remove {
-                RequestHide -= value;
-                RegisterShortcuts();
-            }
+        public void ShowHideTimer() {
+            if(TimerWindow == null) return;
+            if(_hidden) {
+                TimerWindow.Visibility = Visibility.Visible;
+                TimerWindow.Activate();
+            } else TimerWindow.Visibility = Visibility.Hidden;
+            _hidden = !_hidden;
         }
 
         public void OpenSettings() {
@@ -104,7 +110,7 @@ namespace Timer {
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
 
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ShowHideShortcut), Config.ShowHideShortcut,
-                                         RequestHide, CompatibilityType.Visibility);
+                                         ShowHideTimer, CompatibilityType.Visibility);
         }
     }
 }

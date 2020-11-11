@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text.Json.Serialization;
 using System.Windows;
 using JetBrains.Annotations;
@@ -10,10 +9,10 @@ namespace Timer {
         void ShowTimer();
         void StartTimer();
         void StopTimer();
+        void ShowHideTimer();
         [JsonIgnore] bool IsRunning { get; }
         void OpenSettings();
         void SaveSettings();
-        public event Action RequestHide;
-        [CanBeNull] public Window OpenWindow { get; set; }
+        [CanBeNull] public Window TimerWindow { get; set; }
     }
 }

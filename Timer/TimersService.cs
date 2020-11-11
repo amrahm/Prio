@@ -39,17 +39,17 @@ namespace Timer {
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
 
-        private VisibilityState _currVisState = VisibilityState.KeepOnTop;
+        public VisibilityState currVisState = VisibilityState.KeepOnTop;
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context) {
             RegisterShortcuts();
-            _currVisState = GeneralConfig.DefaultVisibilityState;
+            currVisState = GeneralConfig.DefaultVisibilityState;
         }
 
         public void ApplyVisState() {
-            switch(_currVisState) {
+            switch(currVisState) {
                 case VisibilityState.KeepOnTop:
                     TopAll();
                     break;
@@ -71,9 +71,9 @@ namespace Timer {
             bool topIsBottom = Equals(GeneralConfig.MoveTimersBehindShortcut, GeneralConfig.KeepTimersOnTopShortcut);
 
             int NextVisibilityState(int r) {
-                bool isHidden = _currVisState == VisibilityState.Hidden;
-                bool isTop = _currVisState == VisibilityState.KeepOnTop;
-                bool isBottom = _currVisState == VisibilityState.MoveBehind;
+                bool isHidden = currVisState == VisibilityState.Hidden;
+                bool isTop = currVisState == VisibilityState.KeepOnTop;
+                bool isBottom = currVisState == VisibilityState.MoveBehind;
                 switch((VisibilityHotkeyState) r) { //Find all cases where we shouldn't do the requested action
                     // These set precedence so that we move in a triangle if needed
                     // They also check if we are requesting to do what we already are
@@ -106,40 +106,40 @@ namespace Timer {
 
         private void ShowHideAll() {
             Visibility target;
-            if(_currVisState != VisibilityState.Hidden) {
+            if(currVisState != VisibilityState.Hidden) {
                 target = Visibility.Hidden;
-                _currVisState = VisibilityState.Hidden;
+                currVisState = VisibilityState.Hidden;
             } else {
                 target = Visibility.Visible;
-                _currVisState = _lastNonHiddenVisState;
+                currVisState = _lastNonHiddenVisState;
             }
             foreach(ITimer timer in Timers)
-                if(timer.OpenWindow != null) {
-                    timer.OpenWindow.Visibility = target;
-                    if(target == Visibility.Visible) timer.OpenWindow.Activate();
+                if(timer.TimerWindow != null) {
+                    timer.TimerWindow.Visibility = target;
+                    if(target == Visibility.Visible) timer.TimerWindow.Activate();
                 }
         }
 
         private void TopAll() {
-            _currVisState = VisibilityState.KeepOnTop;
+            currVisState = VisibilityState.KeepOnTop;
             _lastNonHiddenVisState = VisibilityState.KeepOnTop;
             foreach(ITimer timer in Timers) {
-                if(timer.OpenWindow != null) {
-                    timer.OpenWindow.Visibility = Visibility.Visible;
-                    timer.OpenWindow.Topmost = true;
+                if(timer.TimerWindow != null) {
+                    timer.TimerWindow.Visibility = Visibility.Visible;
+                    timer.TimerWindow.Topmost = true;
                 }
             }
         }
 
         private void BottomAll() {
-            _currVisState = VisibilityState.MoveBehind;
+            currVisState = VisibilityState.MoveBehind;
             _lastNonHiddenVisState = VisibilityState.MoveBehind;
             foreach(ITimer timer in Timers) {
-                if(timer.OpenWindow != null) {
-                    timer.OpenWindow.Visibility = Visibility.Visible;
-                    timer.OpenWindow.Topmost = false;
+                if(timer.TimerWindow != null) {
+                    timer.TimerWindow.Visibility = Visibility.Visible;
+                    timer.TimerWindow.Topmost = false;
 
-                    var hWnd = new WindowInteropHelper(timer.OpenWindow).Handle;
+                    var hWnd = new WindowInteropHelper(timer.TimerWindow).Handle;
                     SetWindowPos(hWnd, new IntPtr(1), 0, 0, 0, 0, 19U);
                 }
             }

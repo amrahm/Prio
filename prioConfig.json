@@ -1,5 +1,6 @@
 {
   "TIMER": {
+    "currVisState": 0,
     "GeneralConfig": {
       "ShowHideTimersShortcut": null,
       "KeepTimersOnTopShortcut": {
@@ -43,8 +44,8 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "1": {
-            "X": 501.6,
-            "Y": 278.40000000000003,
+            "X": 1336.0,
+            "Y": 733.6,
             "Width": 200.0,
             "Height": 100.0
           }
@@ -75,8 +76,8 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "1": {
-            "X": 566.4,
-            "Y": 178.4,
+            "X": 1401.6000000000001,
+            "Y": 633.6,
             "Width": 134.4,
             "Height": 100.0
           }

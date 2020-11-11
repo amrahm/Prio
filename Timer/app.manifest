@@ -4,17 +4,17 @@
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
-        <!-- UAC マニフェスト オプション
-             Windows のユーザー アカウント制御のレベルを変更するには、
-             requestedExecutionLevel ノードを以下のいずれかで置換します。
+        <!-- UAC Manifest Options
+             If you want to change the Windows User Account Control level replace the 
+             requestedExecutionLevel node with one of the following.
 
         <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
         <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
         <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
 
-            requestedExecutionLevel 要素を指定すると、ファイルおよびレジストリの仮想化が無効にされます。
-            アプリケーションが下位互換性を保つためにこの仮想化を要求する場合、この要素を
-            削除します。
+            Specifying requestedExecutionLevel element will disable file and registry virtualization. 
+            Remove this element if your application requires this virtualization for backwards
+            compatibility.
         -->
         <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
@@ -23,9 +23,9 @@
 
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
     <application>
-      <!-- このアプリケーションがテストされ、協働するようテストされた Windows バージョンの
-           一覧。適切な要素をコメント解除すると、最も互換性のある環境を Windows が
-           自動的に選択します。-->
+      <!-- A list of the Windows versions that this application has been tested on
+           and is designed to work with. Uncomment the appropriate elements
+           and Windows will automatically select the most compatible environment. -->
 
       <!-- Windows Vista -->
       <!--<supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}" />-->
@@ -45,10 +45,10 @@
     </application>
   </compatibility>
 
-  <!-- アプリケーションが DPI 対応であり、それ以上の DPI で Windows によって自動的にスケーリングされないことを
-       示します。Windows Presentation Foundation (WPF) アプリケーションは自動的に DPI に対応し、オプトインする必要は
-       ありません。さらに、この設定にオプトインする .NET Framework 4.6 を対象とする Windows Forms アプリケーションは、
-       app.config ファイルで 'EnableWindowsFormsHighDpiAutoResizing' 設定を 'true' に設定する必要があります。-->
+  <!-- Indicates that the application is DPI-aware and will not be automatically scaled by Windows at higher
+       DPIs. Windows Presentation Foundation (WPF) applications are automatically DPI-aware and do not need 
+       to opt in. Windows Forms applications targeting .NET Framework 4.6 that opt into this setting, should 
+       also set the 'EnableWindowsFormsHighDpiAutoResizing' setting to 'true' in their app.config. -->
   <!--
   <application xmlns="urn:schemas-microsoft-com:asm.v3">
     <windowsSettings>
@@ -57,7 +57,7 @@
   </application>
   -->
 
-  <!-- Windows のコモン コントロールとダイアログのテーマを有効にします (Windows XP 以降) -->
+  <!-- Enable themes for Windows common controls and dialogs (Windows XP and later) -->
   <!--
   <dependency>
     <dependentAssembly>

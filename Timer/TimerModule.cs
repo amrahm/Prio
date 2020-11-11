@@ -16,7 +16,6 @@ namespace Timer {
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterDialog<TimerSettingsView, TimerSettingsViewModel>();
-            containerRegistry.RegisterDialog<TimerView, TimerViewModel>();
             containerRegistry.Register<ITimer, TimerModel>();
         }
 

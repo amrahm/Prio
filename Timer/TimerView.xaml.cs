@@ -14,36 +14,28 @@ using Point = System.Windows.Point;
 namespace Timer {
     /// <summary> Interaction logic for TimerView.xaml </summary>
     public partial class TimerView  {
-        private DialogWindow _window;
+        private Window _window;
         private readonly TimerViewModel _vm;
 
-        public TimerView() {
+        public TimerView(TimerViewModel vm = null) {
             InitializeComponent();
             SizeChanged += TimerAspectRatioLimits;
 
+            if(vm != null) DataContext = vm;
             _vm = (TimerViewModel) DataContext;
 
             Loaded += (o, e) => {
-                _window = Window.GetWindow(this) as DialogWindow;
-                if(_window == null) return; //This isn't a dialog window
+                _window = Window.GetWindow(this);
+                if(!(_window is TimerWindow)) return; //This isn't a floating timer
 
                 WindowChrome windowChrome = new WindowChrome {CaptionHeight = 0};
                 WindowChrome.SetWindowChrome(_window, windowChrome);
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
                 LoadWindowPosition();
-
-                _vm.Timer.RequestHide += () => {
-                    if(_window.Visibility != Visibility.Visible) {
-                        _window.Visibility = Visibility.Visible;
-                        _window.Activate();
-                    } else _window.Visibility = Visibility.Hidden;
-                };
-
-                _vm.Timer.OpenWindow = _window;
             };
 
-            Unloaded += (o, e) => _vm.Timer.OpenWindow = null;
+            Unloaded += (o, e) => _vm.Timer.TimerWindow = null;
 
             MouseDown += DragMoveWindow;
 
