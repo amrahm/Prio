@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Infrastructure.SharedResources;
 using Prism.Commands;
@@ -44,8 +46,17 @@ namespace Timer {
             }
         }
 
-        public void SetShowDesktops(string listString) {
-            Config.DesktopsVisible = Array.ConvertAll(listString.Replace(" ", "").Split(','), int.Parse).ToHashSet();
+        private static HashSet<int> StringToSet(string listString) =>
+            Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), int.Parse).ToHashSet();
+
+        public string ShowDesktopsConverter {
+            get => string.Join(", ", Config?.DesktopsVisible ?? new HashSet<int>());
+            set => Config.DesktopsVisible = StringToSet(value);
+        }
+
+        public string ActiveDesktopsConverter {
+            get => string.Join(", ", Config?.DesktopsActive ?? new HashSet<int>());
+            set => Config.DesktopsActive = StringToSet(value);
         }
 
         public DelegateCommand CancelCommand { get; }

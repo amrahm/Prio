@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
@@ -103,18 +104,20 @@ namespace Timer {
 
             Regex rx = new Regex(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
                                  RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            ShowDesktops.TextChanged += (o,  e) => {
-                int oldIndex = ShowDesktops.CaretIndex;
-                string oldValue = ShowDesktops.Text;
-                string validInput = rx.Replace(ShowDesktops.Text, "");
-                ShowDesktops.Text = validInput;
 
-                if(!oldValue.Equals(validInput)) ShowDesktops.CaretIndex = oldIndex - 1;
-            };
-            ShowDesktops.LostFocus += (o,  e) => {
-                ShowDesktops.Text = ShowDesktops.Text.Trim().Trim(',');
-                vm.SetShowDesktops(ShowDesktops.Text);
-            };
+            void EnforceIntList(TextBox textBox) {
+                int oldIndex = textBox.CaretIndex;
+                string oldValue = textBox.Text;
+                string validInput = rx.Replace(textBox.Text, "");
+                textBox.Text = validInput;
+
+                if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
+            }
+
+            ShowDesktops.TextChanged += (o,  e) => EnforceIntList(ShowDesktops);
+            ShowDesktops.LostFocus += (o,  e) => ShowDesktops.Text = ShowDesktops.Text.Trim().Trim(',');
+            ActiveDesktops.TextChanged += (o,  e) => EnforceIntList(ActiveDesktops);
+            ActiveDesktops.LostFocus += (o,  e) => ActiveDesktops.Text = ActiveDesktops.Text.Trim().Trim(',');
         }
     }
 }

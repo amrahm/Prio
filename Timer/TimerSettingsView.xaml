@@ -142,13 +142,13 @@
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 
 						<ContentControl MinWidth="220" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
-							<TextBox Margin="5, 2" Name="ShowDesktops"
+							<TextBox Margin="5, 2" Name="ShowDesktops" Text="{Binding ShowDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
 							         Style="{StaticResource NormalTextBox}" />
 						</ContentControl>
 						<ContentControl MinWidth="270" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
-							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops"
+							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops" Text="{Binding ActiveDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
 							         Style="{StaticResource NormalTextBox}" />
