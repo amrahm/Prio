@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
@@ -30,6 +31,29 @@ namespace Timer {
             _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
 
             RegisterShortcuts();
+
+            //VirtualDesktop[] desktops = VirtualDesktop.GetDesktops();
+            //var desktopMap = new Dictionary<Guid, int>();
+            //for (int i = 0; i < desktops.Length; i++) desktopMap.Add(desktops[i].Id, i);
+            //VirtualDesktop.CurrentChanged += (o, e) => {
+            //    OpenWindow?.Dispatcher.Invoke(() => {
+            //        //Debug.WriteLine($"Desktop changed: {e.NewDesktop.Id}");
+            //        if (Config.DesktopsVisible.Contains(desktopMap[e.NewDesktop.Id])) OpenWindow.MoveToDesktop(e.NewDesktop);
+            //        //OpenWindow.MoveToDesktop(VirtualDesktop.Current);
+            //    });
+            //};
+
+            //var vdm = new VirtualDesktopManager();
+            //var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(0.1)};
+            //timer.Tick += (o,  e) => {
+            //    if(OpenWindow != null) {
+            //        var hWnd = new WindowInteropHelper(OpenWindow).Handle;
+            //        if(!vdm.IsWindowOnCurrentVirtualDesktop(hWnd)) {
+            //            vdm.MoveWindowToDesktop(hWnd, vdm.GetWindowDesktopId(hWnd));
+            //        }
+            //    }
+            //};
+            //timer.Start();
         }
 
 

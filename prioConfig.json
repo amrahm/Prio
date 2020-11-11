@@ -1,0 +1,87 @@
+{
+  "TIMER": {
+    "GeneralConfig": {
+      "ShowHideTimersShortcut": null,
+      "KeepTimersOnTopShortcut": {
+        "Key": 146,
+        "Modifiers": 6
+      },
+      "MoveTimersBehindShortcut": {
+        "Key": 146,
+        "Modifiers": 6
+      },
+      "DefaultVisibilityState": 0
+    },
+    "Timers": [
+      {
+        "InstanceID": "12866e1e-d5fe-4ed7-ba62-9f116ca15ca2",
+        "Name": "Bluple",
+        "ShowName": true,
+        "ShowHours": true,
+        "ShowMinutes": true,
+        "ShowSeconds": true,
+        "Duration": "02:30:00",
+        "TimeLeft": "02:30:00",
+        "DesktopsVisible": [
+          0
+        ],
+        "DesktopsActive": [
+          0
+        ],
+        "ResetShortcut": {
+          "Key": 91,
+          "Modifiers": 6
+        },
+        "StartShortcut": {
+          "Key": 90,
+          "Modifiers": 6
+        },
+        "StopShortcut": {
+          "Key": 90,
+          "Modifiers": 6
+        },
+        "ShowHideShortcut": null,
+        "WindowPositions": {
+          "1": {
+            "X": 501.6,
+            "Y": 278.40000000000003,
+            "Width": 200.0,
+            "Height": 100.0
+          }
+        }
+      },
+      {
+        "InstanceID": "ebe64c8b-6141-403c-ba69-367fd614ccdf",
+        "Name": "Warple",
+        "ShowName": true,
+        "ShowHours": true,
+        "ShowMinutes": true,
+        "ShowSeconds": false,
+        "Duration": "1.05:01:40",
+        "TimeLeft": "1.05:00:16",
+        "DesktopsVisible": [
+          2,
+          3,
+          9
+        ],
+        "DesktopsActive": [
+          2,
+          3,
+          9
+        ],
+        "ResetShortcut": null,
+        "StartShortcut": null,
+        "StopShortcut": null,
+        "ShowHideShortcut": null,
+        "WindowPositions": {
+          "1": {
+            "X": 566.4,
+            "Y": 178.4,
+            "Width": 134.4,
+            "Height": 100.0
+          }
+        }
+      }
+    ]
+  }
+}
