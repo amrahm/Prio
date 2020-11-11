@@ -18,7 +18,7 @@ namespace Timer {
             Enum.GetValues(typeof(VisibilityState)).Cast<VisibilityState>();
 
         public TimersGeneralConfigViewModel() {
-            GeneralConfig = TimersService.Singleton.GeneralConfig.DeepCopy(); //TODO have to apply it at some point
+            GeneralConfig = TimersService.Singleton.GeneralConfig.DeepCopy();
             IContainerProvider container = UnityInstance.GetContainer();
             var mainConfigService = container.Resolve<IMainConfigService>();
             mainConfigService.ApplySettingsPress += SaveSettings;

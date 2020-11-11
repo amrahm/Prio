@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
-using WindowsDesktop;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Ioc;
@@ -21,8 +19,8 @@ namespace Timer {
 
         private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer;
-        private bool _hidden = false;
-        private IVirtualDesktopManager _vdm;
+        private bool _hidden;
+        private readonly IVirtualDesktopManager _vdm;
 
         public bool IsRunning => _timer.IsEnabled;
 
@@ -37,13 +35,12 @@ namespace Timer {
             RegisterShortcuts();
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
-
             _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
         }
 
-        void HandleDesktopChanged(int newDesktop) {
+        private void HandleDesktopChanged(int newDesktop) {
             TimerWindow?.Dispatcher.Invoke(() => {
-                if((Config.DesktopsVisible.Contains(0) || Config.DesktopsVisible.Contains(newDesktop + 1)) &&
+                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) &&
                    !_hidden && TimersService.Singleton.currVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     _vdm.MoveToDesktop(TimerWindow, newDesktop);
@@ -51,6 +48,9 @@ namespace Timer {
                     TimerWindow.Visibility = Visibility.Hidden;
                 }
             });
+
+            if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(newDesktop)) StartTimer();
+            else StopTimer();
         }
 
 

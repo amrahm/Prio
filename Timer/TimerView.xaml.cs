@@ -7,14 +7,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
-using Prism.Services.Dialogs;
 using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
 
 namespace Timer {
     /// <summary> Interaction logic for TimerView.xaml </summary>
     public partial class TimerView  {
-        private Window _window;
+        private TimerWindow _window;
         private readonly TimerViewModel _vm;
 
         public TimerView(TimerViewModel vm = null) {
@@ -25,21 +23,21 @@ namespace Timer {
             _vm = (TimerViewModel) DataContext;
 
             Loaded += (o, e) => {
-                _window = Window.GetWindow(this);
-                if(!(_window is TimerWindow)) return; //This isn't a floating timer
-
-                WindowChrome windowChrome = new WindowChrome {CaptionHeight = 0};
-                WindowChrome.SetWindowChrome(_window, windowChrome);
-                _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                LoadWindowPosition();
+                _window = Window.GetWindow(this) as TimerWindow;
+                if(_window == null) return; //This timer is in the settings window
+                InitializeFloatingWindow();
             };
+        }
 
-            Unloaded += (o, e) => _vm.Timer.TimerWindow = null;
+        private void InitializeFloatingWindow() {
+            WindowChrome windowChrome = new WindowChrome {CaptionHeight = 0};
+            WindowChrome.SetWindowChrome(_window, windowChrome);
+            _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+
+            LoadWindowPosition();
 
             MouseDown += DragMoveWindow;
-
-            SizeChanged += (o,  e) => SaveWindowPosition();
+            SizeChanged += (o, e) => SaveWindowPosition();
         }
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
@@ -56,8 +54,8 @@ namespace Timer {
 
         private void SaveWindowPosition() {
             if(_window == null) return;
-            WindowPosition newPos =
-                new WindowPosition(_window.Left, _window.Top, _window.ActualWidth, _window.ActualHeight);
+            WindowPosition newPos = new WindowPosition(_window.Left, _window.Top,
+                                                       _window.ActualWidth, _window.ActualHeight);
             if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition configPos) ||
                !configPos.Equals(newPos)) {
                 _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
@@ -66,18 +64,11 @@ namespace Timer {
         }
 
         private void LoadWindowPosition() {
-            if(_vm.Timer.Config.WindowPositions.Count > 0) {
-                WindowPosition? configWindowPosition = null;
-                for(int i = Screen.AllScreens.Length; i > 0; i--)
-                    if(_vm.Timer.Config.WindowPositions.ContainsKey(i))
-                        configWindowPosition = _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length];
-
-                if(configWindowPosition != null) {
-                    _window.Left = configWindowPosition.Value.X;
-                    _window.Top = configWindowPosition.Value.Y;
-                    _window.Width = configWindowPosition.Value.Width;
-                    _window.Height = configWindowPosition.Value.Height;
-                }
+            if(_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition position)) {
+                _window.Left = position.X;
+                _window.Top = position.Y;
+                _window.Width = position.Width;
+                _window.Height = position.Height;
             }
 
             PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);

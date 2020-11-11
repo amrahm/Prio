@@ -46,8 +46,9 @@ namespace Timer {
             }
         }
 
+        /// <summary> Turns the 1-indexed string of numbers into a 0-indexed Set </summary>
         private static HashSet<int> StringToSet(string listString) =>
-            Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), int.Parse).ToHashSet();
+            Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1).ToHashSet();
 
         public string ShowDesktopsConverter {
             get => string.Join(", ", Config?.DesktopsVisible ?? new HashSet<int>());

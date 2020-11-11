@@ -1,52 +1,37 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Interop;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
-using Newtonsoft.Json;
 using Prio.GlobalServices;
 using Prism.Ioc;
 
 namespace Timer {
-    [Serializable]
     public class TimersService : NotifyPropertyChanged {
-        [NonSerialized]
-        public static readonly TimersService Singleton =
-            Settings.LoadSettings<TimersService>(ModuleNames.TIMER) ?? new TimersService();
+        public static readonly TimersService Singleton = new TimersService();
 
-        public TimersGeneralConfig GeneralConfig { get; set; } = new TimersGeneralConfig();
+        public TimersGeneralConfig GeneralConfig { get; set; }
 
-        private class TimerConverter : JsonConverter<ITimer> {
-            public override ITimer ReadJson(JsonReader reader, Type objectType, ITimer existingValue, bool hasExistingValue,
-                JsonSerializer serializer) =>
-                new TimerModel(serializer.Deserialize<TimerConfig>(reader));
+        public ObservableCollection<ITimer> Timers => GeneralConfig.Timers;
 
-            public override void WriteJson(JsonWriter writer, ITimer value, JsonSerializer serializer) =>
-                serializer.Serialize(writer, value.Config);
+        private TimersService() {
+            GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
+            RegisterShortcuts();
+            currVisState = GeneralConfig.DefaultVisibilityState;
         }
 
-        [JsonProperty(ItemConverterType = typeof(TimerConverter))]
-        public ObservableCollection<ITimer> Timers { get; } = new ObservableCollection<ITimer>();
-
         public void SaveSettings() {
-            Settings.SaveSettings(this, ModuleNames.TIMER);
+            Settings.SaveSettings(GeneralConfig, ModuleNames.TIMER);
             RegisterShortcuts();
         }
 
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
 
-        public VisibilityState currVisState = VisibilityState.KeepOnTop;
+        public VisibilityState currVisState;
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
-
-        [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context) {
-            RegisterShortcuts();
-            currVisState = GeneralConfig.DefaultVisibilityState;
-        }
 
         public void ApplyVisState() {
             switch(currVisState) {

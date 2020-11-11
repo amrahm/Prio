@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using MainConfig;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
 
 namespace Timer {
     public class TimerViewModel : NotifyPropertyWithDependencies {

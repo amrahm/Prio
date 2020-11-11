@@ -9,7 +9,6 @@ namespace Timer {
         void ShowTimer();
         void StartTimer();
         void StopTimer();
-        void ShowHideTimer();
         [JsonIgnore] bool IsRunning { get; }
         void OpenSettings();
         void SaveSettings();
