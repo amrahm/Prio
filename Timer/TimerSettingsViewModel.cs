@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -41,6 +42,10 @@ namespace Timer {
                 Config.Duration = new TimeSpan(Hours, Minutes, value);
                 Config.TimeLeft = Config.Duration;
             }
+        }
+
+        public void SetShowDesktops(string listString) {
+            Config.DesktopsVisible = Array.ConvertAll(listString.Replace(" ", "").Split(','), int.Parse).ToHashSet();
         }
 
         public DelegateCommand CancelCommand { get; }

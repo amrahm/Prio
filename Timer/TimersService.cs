@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -12,7 +14,7 @@ using Prism.Ioc;
 
 namespace Timer {
     [Serializable]
-    public class TimersService {
+    public class TimersService : NotifyPropertyChanged {
         [NonSerialized]
         public static readonly TimersService Singleton =
             Settings.LoadSettings<TimersService>(ModuleNames.TIMER) ?? new TimersService();
@@ -38,13 +40,29 @@ namespace Timer {
 
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
-        private enum VisibilityState { Hidden, KeepOnTop, MoveBehind }
 
-        private VisibilityState _currVisState = VisibilityState.KeepOnTop; //TODO allow a default to be set
+        private VisibilityState _currVisState = VisibilityState.KeepOnTop;
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
         [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context) => RegisterShortcuts();
+        internal void OnDeserializedMethod(StreamingContext context) {
+            RegisterShortcuts();
+            _currVisState = GeneralConfig.DefaultVisibilityState;
+        }
+
+        public void ApplyVisState() {
+            switch(_currVisState) {
+                case VisibilityState.KeepOnTop:
+                    TopAll();
+                    break;
+                case VisibilityState.MoveBehind:
+                    BottomAll();
+                    break;
+                case VisibilityState.Hidden:
+                    ShowHideAll();
+                    break;
+            }
+        }
 
         private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();

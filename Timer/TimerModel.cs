@@ -33,8 +33,10 @@ namespace Timer {
         }
 
 
-        public void ShowTimer() =>
+        public void ShowTimer() {
             _dialogService.Show(nameof(TimerView), new DialogParameters {{nameof(ITimer), this}}, result => { });
+            TimersService.Singleton.ApplyVisState();
+        }
 
         public void ResetTimer() => Config.TimeLeft = Config.Duration;
         public void StartTimer() => _timer.Start();

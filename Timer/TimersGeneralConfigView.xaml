@@ -33,5 +33,10 @@
 				                      Hint="Show all timers but move them below all other windows" />
 			</hc:FlexPanel>
 		</Border>
+		<StackPanel Orientation="Horizontal">
+			<TextBlock Text="Default Visibility: " Style="{StaticResource BaseControlStyle}" />
+			<ComboBox SelectedItem="{Binding GeneralConfig.DefaultVisibilityState}"
+			          ItemsSource="{Binding VisibilityStateTypeValues}" />
+		</StackPanel>
 	</StackPanel>
 </UserControl>

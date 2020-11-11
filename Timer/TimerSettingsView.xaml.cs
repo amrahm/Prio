@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -32,7 +34,8 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut, nameof(StopShortcut.Shortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.ShowHideShortcut), ShowHideShortcut, nameof(ShowHideShortcut.Shortcut));
+                ManualBinding(vm.Config, nameof(vm.Config.ShowHideShortcut), ShowHideShortcut,
+                              nameof(ShowHideShortcut.Shortcut));
 
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
@@ -96,6 +99,21 @@ namespace Timer {
 
                     _window.DragMove();
                 }
+            };
+
+            Regex rx = new Regex(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
+                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            ShowDesktops.TextChanged += (o,  e) => {
+                int oldIndex = ShowDesktops.CaretIndex;
+                string oldValue = ShowDesktops.Text;
+                string validInput = rx.Replace(ShowDesktops.Text, "");
+                ShowDesktops.Text = validInput;
+
+                if(!oldValue.Equals(validInput)) ShowDesktops.CaretIndex = oldIndex - 1;
+            };
+            ShowDesktops.LostFocus += (o,  e) => {
+                ShowDesktops.Text = ShowDesktops.Text.Trim().Trim(',');
+                vm.SetShowDesktops(ShowDesktops.Text);
             };
         }
     }

@@ -1,4 +1,7 @@
-﻿using Infrastructure.SharedResources;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Infrastructure.SharedResources;
 using MainConfig;
 using Prism.Ioc;
 
@@ -10,6 +13,9 @@ namespace Timer {
             get => _config;
             private set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => OnPropertyChanged());
         }
+
+        public IEnumerable<VisibilityState> VisibilityStateTypeValues =>
+            Enum.GetValues(typeof(VisibilityState)).Cast<VisibilityState>();
 
         public TimersGeneralConfigViewModel() {
             GeneralConfig = TimersService.Singleton.GeneralConfig.DeepCopy(); //TODO have to apply it at some point

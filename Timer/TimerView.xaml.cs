@@ -46,6 +46,8 @@ namespace Timer {
             Unloaded += (o, e) => _vm.Timer.OpenWindow = null;
 
             MouseDown += DragMoveWindow;
+
+            SizeChanged += (o,  e) => SaveWindowPosition();
         }
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
@@ -56,18 +58,24 @@ namespace Timer {
 
                 _window.DragMove();
 
-                Point newPos = new Point(_window.Left, _window.Top);
-                if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out Point configPos) ||
-                   !configPos.Equals(newPos)) {
-                    _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
-                    _vm.Timer.SaveSettings();
-                }
+                SaveWindowPosition();
+            }
+        }
+
+        private void SaveWindowPosition() {
+            if(_window == null) return;
+            WindowPosition newPos =
+                new WindowPosition(_window.Left, _window.Top, _window.ActualWidth, _window.ActualHeight);
+            if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition configPos) ||
+               !configPos.Equals(newPos)) {
+                _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
+                _vm.Timer.SaveSettings();
             }
         }
 
         private void LoadWindowPosition() {
             if(_vm.Timer.Config.WindowPositions.Count > 0) {
-                Point? configWindowPosition = null;
+                WindowPosition? configWindowPosition = null;
                 for(int i = Screen.AllScreens.Length; i > 0; i--)
                     if(_vm.Timer.Config.WindowPositions.ContainsKey(i))
                         configWindowPosition = _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length];
@@ -75,6 +83,8 @@ namespace Timer {
                 if(configWindowPosition != null) {
                     _window.Left = configWindowPosition.Value.X;
                     _window.Top = configWindowPosition.Value.Y;
+                    _window.Width = configWindowPosition.Value.Width;
+                    _window.Height = configWindowPosition.Value.Height;
                 }
             }
 
