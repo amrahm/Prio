@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using HandyControl.Tools.Extension;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
@@ -14,21 +16,23 @@ namespace Timer {
 
         public TimersGeneralConfig GeneralConfig { get; set; }
 
-        public ObservableCollection<ITimer> Timers => GeneralConfig.Timers;
+        public ObservableCollection<ITimer> Timers { get; } = new ObservableCollection<ITimer>();
 
         private TimersService() {
             GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
+            foreach(TimerConfig config in GeneralConfig.TimerConfigs) Timers.Add(new TimerModel(config));
+
             RegisterShortcuts();
             currVisState = GeneralConfig.DefaultVisibilityState;
         }
 
+        public void ShowTimers() => Timers.Do(t => t.ShowTimer());
+
         public void SaveSettings() {
+            GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();
             Settings.SaveSettings(GeneralConfig, ModuleNames.TIMER);
             RegisterShortcuts();
         }
-
-        private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
-
 
         public VisibilityState currVisState;
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
@@ -46,6 +50,8 @@ namespace Timer {
                     break;
             }
         }
+
+        private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
         private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();
@@ -131,6 +137,6 @@ namespace Timer {
         }
 
         [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y,
-            int cx, int cy, uint uFlags);
+                                                                          int cx, int cy, uint uFlags);
     }
 }

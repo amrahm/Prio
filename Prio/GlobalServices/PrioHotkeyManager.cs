@@ -13,16 +13,16 @@ namespace Prio.GlobalServices {
     [UsedImplicitly]
     public class PrioHotkeyManager : IPrioHotkeyManager {
         private static readonly Dictionary<ShortcutDefinition, HotkeyHolder> HotKeyRegistry =
-            new Dictionary<ShortcutDefinition, HotkeyHolder>();
+                new Dictionary<ShortcutDefinition, HotkeyHolder>();
 
         private static readonly Dictionary<HotkeyRegistration, ShortcutDefinition> RegistrationToShortcut =
-            new Dictionary<HotkeyRegistration, ShortcutDefinition>();
+                new Dictionary<HotkeyRegistration, ShortcutDefinition>();
 
         private class HotkeyHolder {
             private EventHandler<HotkeyEventArgs> _handler;
 
             private readonly Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>> _registrations =
-                new Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>>();
+                    new Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>>();
 
             private readonly ShortcutDefinition _shortcut;
             private readonly Queue<Action> _actionQueue = new Queue<Action>();
@@ -92,8 +92,8 @@ namespace Prio.GlobalServices {
             public Func<int, int> GetInstanceState { get; }
 
             public HotkeyRegistration(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut = null,
-                CompatibilityType compatibilityType = CompatibilityType.General, int instanceState = 0,
-                Func<int, int> getInstanceState = null) {
+                                      CompatibilityType compatibilityType = CompatibilityType.General, int instanceState = 0,
+                                      Func<int, int> getInstanceState = null) {
                 InstanceId = instanceId;
                 HotkeyName = hotkeyName;
                 Shortcut = shortcut;
@@ -103,13 +103,14 @@ namespace Prio.GlobalServices {
             }
 
             public override bool Equals(object obj) =>
-                obj is HotkeyRegistration other && InstanceId.Equals(other.InstanceId) && HotkeyName == other.HotkeyName;
+                    obj is HotkeyRegistration other && InstanceId.Equals(other.InstanceId) && HotkeyName == other.HotkeyName;
 
             public override int GetHashCode() => HashCode.Combine(InstanceId, HotkeyName);
         }
 
         public bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
-            CompatibilityType compatibilityType, int instanceState, Func<int, int> nextInstanceState) {
+                                   CompatibilityType compatibilityType, int instanceState,
+                                   Func<int, int> nextInstanceState) {
             HotkeyRegistration registration = new HotkeyRegistration(instanceId, hotkeyName, shortcut,
                                                                      compatibilityType, instanceState, nextInstanceState);
 
@@ -130,7 +131,7 @@ namespace Prio.GlobalServices {
 
 
         public void UnregisterHotkey(Guid instanceId, string hotkeyName) =>
-            UnregisterHotkey(new HotkeyRegistration(instanceId, hotkeyName));
+                UnregisterHotkey(new HotkeyRegistration(instanceId, hotkeyName));
 
         /// <summary> Remove the current registration if it exists </summary>
         private static void UnregisterHotkey(HotkeyRegistration registration) {

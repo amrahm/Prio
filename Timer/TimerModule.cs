@@ -19,9 +19,6 @@ namespace Timer {
             containerRegistry.Register<ITimer, TimerModel>();
         }
 
-        public void OnInitialized(IContainerProvider containerProvider) {
-            var timersService = TimersService.Singleton;
-            foreach(ITimer timer in timersService.Timers) timer.ShowTimer();
-        }
+        public void OnInitialized(IContainerProvider containerProvider) => TimersService.Singleton.ShowTimers();
     }
 }
