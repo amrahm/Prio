@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Prism.Services.Dialogs;
 
 namespace Infrastructure.SharedResources {
     public static class NotificationBubbler {
@@ -16,7 +19,7 @@ namespace Infrastructure.SharedResources {
         /// <param name="value"> new value for object </param>
         /// <param name="thisChanged"> Lets you specify what OnPropertyChanged method should be called </param>
         public static void BubbleSetter<T>(ref T obj, T value, PropertyChangedEventHandler thisChanged)
-            where T : class, INotifyPropertyChanged {
+                where T : class, INotifyPropertyChanged {
             if(obj != value) {
                 // Clean-up old event handler:
                 if(obj != null) obj.PropertyChanged -= thisChanged;
@@ -30,7 +33,7 @@ namespace Infrastructure.SharedResources {
 
     public static class BindingHelpers {
         public static void ManualBinding(object source, string sourcePropName, object target, string targetPropName,
-            object defaultValue = null) {
+                                         object defaultValue = null) {
             var sProp = source.GetType().GetProperty(sourcePropName);
             var tProp = target.GetType().GetProperty(targetPropName);
             if(tProp != null && sProp != null) {
@@ -70,6 +73,20 @@ namespace Infrastructure.SharedResources {
 
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
-            Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
+                Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
+    }
+
+    public static class PrismExtensions {
+        public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
+                                                          IDialogParameters parameters) {
+            var tcs = new TaskCompletionSource<IDialogResult>();
+
+            try {
+                dialogService.ShowDialog(name, parameters, result => tcs.SetResult(result));
+            } catch(Exception ex) {
+                tcs.SetException(ex);
+            }
+            return tcs.Task;
+        }
     }
 }

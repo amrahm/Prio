@@ -6,12 +6,11 @@ using static Infrastructure.Constants.RegionNames;
 namespace TimersList {
     /// <summary> Interaction logic for TimersListItemView.xaml </summary>
     public partial class TimersListItemView : IRegionManagerAware  {
-        public TimersListItemView(ITimer timer) {
+        public TimersListItemView(TimersListItemViewModel vm) {
             InitializeComponent();
-            var vm = (TimersListItemViewModel) DataContext;
-            vm.Timer = timer;
-            Loaded += (o,  e) =>
-                RegionManagerA.AddToRegionRMAware(TIMER_IN_LIST_REGION, new TimerView(new TimerViewModel(timer)));
+            DataContext = vm;
+            Loaded += (o,  e) => RegionManagerA.AddToRegionRMAware(TIMER_IN_LIST_REGION,
+                                                                   new TimerView(new TimerViewModel(vm.Timer)));
         }
 
         public IRegionManager RegionManagerA { get; set; }

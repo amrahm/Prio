@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using System.Windows;
 using JetBrains.Annotations;
+using Prism.Services.Dialogs;
 
 namespace Timer {
     public interface ITimer : INotifyPropertyChanged {
@@ -10,7 +12,7 @@ namespace Timer {
         void StartTimer();
         void StopTimer();
         [JsonIgnore] bool IsRunning { get; }
-        void OpenSettings();
+        Task<ButtonResult> OpenSettings();
         void SaveSettings();
         [CanBeNull] public Window TimerWindow { get; set; }
     }

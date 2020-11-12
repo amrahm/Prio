@@ -48,16 +48,20 @@ namespace Timer {
 
         /// <summary> Turns the 1-indexed string of numbers into a 0-indexed Set </summary>
         private static HashSet<int> StringToSet(string listString) =>
-            Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1).ToHashSet();
+                Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1).ToHashSet();
 
         public string ShowDesktopsConverter {
-            get => string.Join(", ", Config?.DesktopsVisible ?? new HashSet<int>());
-            set => Config.DesktopsVisible = StringToSet(value);
+            get => string.Join(", ", Config?.DesktopsVisible?.Select(x => x + 1) ?? new HashSet<int>());
+            set {
+                if(!string.IsNullOrEmpty(value)) Config.DesktopsVisible = StringToSet(value);
+            }
         }
 
         public string ActiveDesktopsConverter {
-            get => string.Join(", ", Config?.DesktopsActive ?? new HashSet<int>());
-            set => Config.DesktopsActive = StringToSet(value);
+            get => string.Join(", ", Config?.DesktopsActive?.Select(x => x + 1) ?? new HashSet<int>());
+            set {
+                if(!string.IsNullOrEmpty(value)) Config.DesktopsActive = StringToSet(value);
+            }
         }
 
         public DelegateCommand CancelCommand { get; }
@@ -65,7 +69,7 @@ namespace Timer {
         public DelegateCommand OkCommand { get; }
 
         public TimerSettingsViewModel() {
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(null));
+            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
                 Model.Config = Config.DeepCopy();
                 Model.SaveSettings();
@@ -73,7 +77,7 @@ namespace Timer {
             OkCommand = new DelegateCommand(() => {
                 Model.Config = Config.DeepCopy();
                 Model.SaveSettings();
-                RequestClose?.Invoke(null);
+                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             });
         }
 

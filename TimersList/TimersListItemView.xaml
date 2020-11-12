@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:prism="http://www.codeplex.com/prism"
-             prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
              mc:Ignorable="d" Height="100" Width="200" Margin="5">
 

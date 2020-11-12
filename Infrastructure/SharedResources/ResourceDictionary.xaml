@@ -72,14 +72,14 @@
 
 	<ControlTemplate x:Key="RoundedWithShadowTemplate" TargetType="ContentControl">
 		<Border BorderBrush="Transparent" BorderThickness="6"
-		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
+		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=15, FallbackValue=15}"
 		        Background="Transparent">
 			<Border>
 				<Border.Effect>
 					<DropShadowEffect ShadowDepth="0" Opacity="0.8" BlurRadius="10" Color="Black" />
 				</Border.Effect>
 				<Border Style="{StaticResource BorderClip}"
-				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}"
+				        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=15, FallbackValue=15}"
 				        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 					<Grid Background="{TemplateBinding Background}">
 						<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
@@ -95,9 +95,9 @@
 	<ControlTemplate x:Key="RoundedTemplate" TargetType="ContentControl">
 		<Border BorderBrush="{TemplateBinding BorderBrush}"
 		        BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=1}"
-		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
+		        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=15, FallbackValue=15}">
 			<Border Style="{StaticResource BorderClip}" Margin="-1"
-			        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=15}">
+			        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=15, FallbackValue=15}">
 				<Grid Background="{TemplateBinding Background}">
 					<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
 					                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -153,9 +153,9 @@
 				<ControlTemplate TargetType="Button">
 					<Border BorderBrush="{TemplateBinding BorderBrush}"
 					        BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=1}"
-					        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
+					        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=0, FallbackValue=0}">
 						<Border Style="{StaticResource BorderClip}" Margin="-1"
-						        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=0}">
+						        CornerRadius="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue=0, FallbackValue=0}">
 							<Grid Background="{TemplateBinding Background}">
 								<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
 								                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -311,11 +311,11 @@
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
 	</Style>
 
-	
+
 	<!--Adorners-->
 	<ControlTemplate x:Key="HintAdorner" TargetType="ContentControl">
 		<adornedControl:AdornedControl VerticalAdornerPlacement="Outside" IsMouseOverShowEnabled="True"
-		                   OpenAdornerTimeOut="0.4" AdornerOffsetY="2">
+		                               OpenAdornerTimeOut="0.4" AdornerOffsetY="2">
 			<adornedControl:AdornedControl.AdornerContent>
 				<ContentControl Template="{StaticResource RoundedTemplate}" Tag="10"
 				                HorizontalAlignment="Center" VerticalAlignment="Top"

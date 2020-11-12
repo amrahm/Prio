@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
@@ -40,8 +42,9 @@ namespace Timer {
 
         private void HandleDesktopChanged(int newDesktop) {
             TimerWindow?.Dispatcher.Invoke(() => {
-                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) &&
-                   !_hidden && TimersService.Singleton.currVisState != VisibilityState.Hidden) {
+                Config.DesktopsVisible ??= new HashSet<int> {-1};
+                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !_hidden &&
+                   TimersService.Singleton.currVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     _vdm.MoveToDesktop(TimerWindow, newDesktop);
                 } else {
@@ -49,6 +52,7 @@ namespace Timer {
                 }
             });
 
+            Config.DesktopsActive ??= new HashSet<int> {-1};
             if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(newDesktop)) StartTimer();
             else StopTimer();
         }
@@ -84,10 +88,11 @@ namespace Timer {
             _hidden = !_hidden;
         }
 
-        public void OpenSettings() {
+        public async Task<ButtonResult> OpenSettings() {
             StopTimer();
-            _dialogService.ShowDialog(nameof(TimerSettingsView), new DialogParameters {{nameof(ITimer), this}},
-                                      result => { });
+            IDialogResult r = await _dialogService.ShowDialogAsync(nameof(TimerSettingsView),
+                                                                   new DialogParameters {{nameof(ITimer), this}});
+            return r.Result;
         }
 
         public void SaveSettings() {

@@ -38,7 +38,7 @@ namespace Timer {
         public override bool Equals(object obj) => obj is WindowPosition other && Equals(other);
 
         public bool Equals(WindowPosition other) =>
-            X.Equals(other.X) && Y.Equals(other.Y) && Width.Equals(other.Width) && Height.Equals(other.Height);
+                X.Equals(other.X) && Y.Equals(other.Y) && Width.Equals(other.Width) && Height.Equals(other.Height);
 
         public override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
     }

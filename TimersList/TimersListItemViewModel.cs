@@ -1,14 +1,15 @@
-﻿using JetBrains.Annotations;
+﻿using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 using Prism.Commands;
-using Prism.Mvvm;
 using Timer;
 
 namespace TimersList {
-    public class TimersListItemViewModel : BindableBase{
-        public ITimer Timer { get; set; }
+    public class TimersListItemViewModel : NotifyPropertyChanged {
+        public ITimer Timer { get; }
         public DelegateCommand OpenTimerSettings { [UsedImplicitly] get; }
 
-        public TimersListItemViewModel() {
+        public TimersListItemViewModel(ITimer timer) {
+            Timer = timer;
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
         }
     }

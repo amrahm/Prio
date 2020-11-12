@@ -151,7 +151,7 @@
 							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops" Text="{Binding ActiveDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
-							         Style="{StaticResource NormalTextBox}" />
+							         Style="{StaticResource NormalTextBox}"/>
 						</ContentControl>
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />
@@ -184,18 +184,13 @@
 											<Condition Binding="{Binding ElementName=HoursBox, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=MinutesBox, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=SecondsBox, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=ShowDesktops, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=ActiveDesktops, Path=(Validation.HasError)}" Value="false" />
 											<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
 										</MultiDataTrigger.Conditions>
 										<Setter Property="IsEnabled" Value="true" />
 									</MultiDataTrigger>
-									<MultiDataTrigger>
-										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding Text, ElementName=TimerName}" Value="{x:Static s:String.Empty}" />
-										</MultiDataTrigger.Conditions>
+									<DataTrigger Binding="{Binding Text, ElementName=TimerName}" Value="{x:Static s:String.Empty}">
 										<Setter Property="IsEnabled" Value="False" />
-									</MultiDataTrigger>
+									</DataTrigger>
 								</Style.Triggers>
 							</Style>
 						</ResourceDictionary>
