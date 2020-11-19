@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Prism.Commands;
@@ -23,8 +22,12 @@ namespace TimersList {
 
             // Update if a timer is added/removed
             TimersService.Singleton.Timers.CollectionChanged += (sender, e) => {
-                foreach(ITimer timer in e.NewItems) Timers.Add(new TimersListItemView(new TimersListItemViewModel(timer)));
-                foreach(ITimer timer in e.OldItems) Timers.Remove(Timers.Single(tl => tl.ViewModel.Timer.Config.InstanceID == timer.Config.InstanceID));
+                if(e.NewItems != null)
+                    foreach(ITimer timer in e.NewItems)
+                        Timers.Add(new TimersListItemView(new TimersListItemViewModel(timer)));
+                if(e.OldItems != null)
+                    foreach(ITimer timer in e.OldItems)
+                        Timers.Remove(Timers.Single(tl => tl.ViewModel.Timer.Config.InstanceID == timer.Config.InstanceID));
             };
 
             // Add new timer on button press

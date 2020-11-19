@@ -107,6 +107,7 @@
 								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
 							</Viewbox>
 						</Button>
+						<local:ResetConditionView />
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -151,7 +152,7 @@
 							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops" Text="{Binding ActiveDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
-							         Style="{StaticResource NormalTextBox}"/>
+							         Style="{StaticResource NormalTextBox}" />
 						</ContentControl>
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />

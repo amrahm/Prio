@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "02:28:51",
+        "TimeLeft": "02:24:28",
         "DesktopsVisible": [
           -1
         ],
@@ -64,7 +64,7 @@
         "ShowName": true,
         "ShowHours": true,
         "ShowMinutes": true,
-        "ShowSeconds": true,
+        "ShowSeconds": false,
         "Duration": "1.05:01:40",
         "TimeLeft": "1.04:53:55",
         "DesktopsVisible": [
@@ -84,7 +84,7 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "1": {
-            "X": 1401.6000000000001,
+            "X": 1401.6,
             "Y": 633.6,
             "Width": 134.4,
             "Height": 100.0
@@ -93,6 +93,30 @@
             "X": -582.0,
             "Y": 745.0,
             "Width": 197.0,
+            "Height": 100.0
+          }
+        }
+      },
+      {
+        "InstanceID": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
+        "Name": "desk1test",
+        "ShowName": true,
+        "ShowHours": true,
+        "ShowMinutes": true,
+        "ShowSeconds": true,
+        "Duration": "01:10:00",
+        "TimeLeft": "01:10:00",
+        "DesktopsVisible": [],
+        "DesktopsActive": [],
+        "ResetShortcut": null,
+        "StartShortcut": null,
+        "StopShortcut": null,
+        "ShowHideShortcut": null,
+        "WindowPositions": {
+          "2": {
+            "X": 182.0,
+            "Y": 182.0,
+            "Width": 200.0,
             "Height": 100.0
           }
         }

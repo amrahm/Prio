@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -7,6 +6,7 @@ using System.Windows.Interop;
 using HandyControl.Tools.Extension;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prio.GlobalServices;
 using Prism.Ioc;
 
@@ -16,7 +16,7 @@ namespace Timer {
 
         public TimersGeneralConfig GeneralConfig { get; set; }
 
-        public ObservableCollection<ITimer> Timers { get; } = new ObservableCollection<ITimer>();
+        public ObservableHashSet<ITimer> Timers { get; } = new ObservableHashSet<ITimer>();
 
         private TimersService() {
             GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();

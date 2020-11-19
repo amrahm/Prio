@@ -42,19 +42,19 @@ namespace Timer {
 
         private void HandleDesktopChanged(int newDesktop) {
             TimerWindow?.Dispatcher.Invoke(() => {
-                Config.DesktopsVisible ??= new HashSet<int> {-1};
+                Config.DesktopsVisible ??= new HashSet<int>();
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !_hidden &&
                    TimersService.Singleton.currVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     _vdm.MoveToDesktop(TimerWindow, newDesktop);
-                } else {
+                } else if(Config.DesktopsVisible.Count > 0)  {
                     TimerWindow.Visibility = Visibility.Hidden;
                 }
             });
 
-            Config.DesktopsActive ??= new HashSet<int> {-1};
+            Config.DesktopsActive ??= new HashSet<int>();
             if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(newDesktop)) StartTimer();
-            else StopTimer();
+            else if(Config.DesktopsVisible.Count > 0) StopTimer();
         }
 
 
@@ -117,5 +117,8 @@ namespace Timer {
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ShowHideShortcut), Config.ShowHideShortcut,
                                          ShowHideTimer, CompatibilityType.Visibility);
         }
+
+        public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
+        public override int GetHashCode() => Config.InstanceID.GetHashCode();
     }
 }

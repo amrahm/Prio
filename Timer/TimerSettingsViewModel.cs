@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
     public class TimerSettingsViewModel : NotifyPropertyWithDependencies, IDialogAware {
@@ -46,22 +44,14 @@ namespace Timer {
             }
         }
 
-        /// <summary> Turns the 1-indexed string of numbers into a 0-indexed Set </summary>
-        private static HashSet<int> StringToSet(string listString) =>
-                Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1).ToHashSet();
-
         public string ShowDesktopsConverter {
-            get => string.Join(", ", Config?.DesktopsVisible?.Select(x => x + 1) ?? new HashSet<int>());
-            set {
-                if(!string.IsNullOrEmpty(value)) Config.DesktopsVisible = StringToSet(value);
-            }
+            get => DesktopSetToString(Config?.DesktopsVisible);
+            set => Config.DesktopsVisible = DesktopStringToSet(value);
         }
 
         public string ActiveDesktopsConverter {
-            get => string.Join(", ", Config?.DesktopsActive?.Select(x => x + 1) ?? new HashSet<int>());
-            set {
-                if(!string.IsNullOrEmpty(value)) Config.DesktopsActive = StringToSet(value);
-            }
+            get => DesktopSetToString(Config?.DesktopsActive);
+            set => Config.DesktopsActive = DesktopStringToSet(value);
         }
 
         public DelegateCommand CancelCommand { get; }
@@ -73,6 +63,9 @@ namespace Timer {
             ApplyCommand = new DelegateCommand(() => {
                 Model.Config = Config.DeepCopy();
                 Model.SaveSettings();
+                TimersService.Singleton.Timers.Add(Model);
+                TimersService.Singleton.SaveSettings();
+                Model.ShowTimer();
             });
             OkCommand = new DelegateCommand(() => {
                 Model.Config = Config.DeepCopy();

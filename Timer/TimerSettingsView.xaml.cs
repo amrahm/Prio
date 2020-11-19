@@ -28,6 +28,8 @@ namespace Timer {
 
             var vm = (TimerSettingsViewModel) DataContext;
 
+            VirtualDesktopExtensions.EnforceIntList(ShowDesktops);
+            VirtualDesktopExtensions.EnforceIntList(ActiveDesktops);
 
             Loaded += (o, e) => {
                 // Manual Bindings:
@@ -100,23 +102,6 @@ namespace Timer {
                     _window.DragMove();
                 }
             };
-
-            Regex rx = new Regex(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
-                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-            void EnforceIntList(TextBox textBox) {
-                int oldIndex = textBox.CaretIndex;
-                string oldValue = textBox.Text;
-                string validInput = rx.Replace(textBox.Text, "");
-                textBox.Text = validInput;
-
-                if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
-            }
-
-            ShowDesktops.TextChanged += (o,  e) => EnforceIntList(ShowDesktops);
-            ShowDesktops.LostFocus += (o,  e) => ShowDesktops.Text = ShowDesktops.Text.Trim().Trim(',');
-            ActiveDesktops.TextChanged += (o,  e) => EnforceIntList(ActiveDesktops);
-            ActiveDesktops.LostFocus += (o,  e) => ActiveDesktops.Text = ActiveDesktops.Text.Trim().Trim(',');
         }
     }
 }

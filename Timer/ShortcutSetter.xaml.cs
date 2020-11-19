@@ -45,7 +45,7 @@ namespace Timer {
             get => _shortcut;
             set {
                 _shortcut = value;
-                UpdateShortcut();
+                UpdateShortcutString();
                 if(_shortcut != null)
                     foreach((ModifierKeys key, ToggleButton val) in _modToToggle)
                         val.IsChecked = (_shortcut.Modifiers | key) == _shortcut.Modifiers;
@@ -83,11 +83,11 @@ namespace Timer {
                 value.Checked += (o,  e) => {
                     _newFocus = false;
                     Shortcut = Shortcut.WithKey(key);
-                    UpdateShortcut();
+                    UpdateShortcutString();
                 };
                 value.Unchecked += (o,  e) => {
                     Shortcut = Shortcut.WithoutKey(key);
-                    UpdateShortcut();
+                    UpdateShortcutString();
                 };
             }
 
@@ -106,7 +106,7 @@ namespace Timer {
                     DependencyObject scope = FocusManager.GetFocusScope(Parent);
                     FocusManager.SetFocusedElement(scope, Window.GetWindow(this));
                 }
-                UpdateShortcut();
+                UpdateShortcutString();
             };
 
             KeyUp += (o,  e) => {
@@ -114,6 +114,6 @@ namespace Timer {
             };
         }
 
-        private void UpdateShortcut() => ShortcutString = Shortcut?.ToString();
+        private void UpdateShortcutString() => ShortcutString = Shortcut?.ToString();
     }
 }

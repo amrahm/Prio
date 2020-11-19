@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
         mc:Ignorable="d"
-        x:Name="Root">
+        x:Name="Root" d:DesignWidth="200">
 
 	<UserControl.Resources>
 		<ResourceDictionary>

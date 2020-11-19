@@ -24,8 +24,8 @@ namespace Timer {
 
             Loaded += (o, e) => {
                 _window = Window.GetWindow(this) as TimerWindow;
-                if(_window == null) return; //This timer is in the settings window
-                InitializeFloatingWindow();
+                if(_window != null) // This ensures the timer is a floating window
+                    InitializeFloatingWindow();
             };
         }
 

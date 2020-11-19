@@ -27,7 +27,7 @@
 	<Color x:Key="Medium">#184A8C</Color>
 	<Color x:Key="Light">#BEF2DC</Color>
 	<Color x:Key="SemiLight">#87BAC1</Color>
-	<Color x:Key="Light2">#F1EEC1</Color>
+	<Color x:Key="Light2">#f8f2d7</Color>
 	<Color x:Key="LightHint">#F8E1DF</Color>
 	<Color x:Key="LightHintBg">#C0184A8C</Color>
 	<Color x:Key="LightAccent">#F26F63</Color>
@@ -309,6 +309,15 @@
 		<Setter Property="FontFamily" Value="{StaticResource BigFont}" />
 		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
 		<Setter Property="FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+
+	<!--ComboBoxes-->
+	<Style x:Key="NormalComboBox" TargetType="ComboBox" BasedOn="{StaticResource ComboBoxExtend}">
+		<Setter Property="FontFamily" Value="{StaticResource NormalFont}" />
+		<Setter Property="Foreground" Value="{StaticResource DarkBrush}" />
+		<Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="Margin" Value="5" />
 	</Style>
 
 

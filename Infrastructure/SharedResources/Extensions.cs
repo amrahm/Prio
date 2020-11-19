@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Markup;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Prism.Services.Dialogs;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Infrastructure.SharedResources {
     public static class NotificationBubbler {
@@ -49,6 +55,35 @@ namespace Infrastructure.SharedResources {
         }
     }
 
+    public static class VirtualDesktopExtensions {
+        /// <summary> Turns the 1-indexed string of numbers into a 0-indexed Set </summary>
+        public static HashSet<int> DesktopStringToSet(string listString) {
+            if(string.IsNullOrEmpty(listString)) return new HashSet<int>();
+            return Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1)
+                        .ToHashSet();
+        }
+
+        /// <summary> Turns the 0-indexed Set of numbers into a 1-indexed string </summary>
+        public static string DesktopSetToString(IEnumerable<int> set) =>
+                string.Join(", ", set?.Select(x => x + 1) ?? new HashSet<int>());
+
+
+        private static readonly Regex Rx = new Regex(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
+                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public static void EnforceIntList(TextBox textBox) {
+            textBox.TextChanged += (o,  e) => {
+                int oldIndex = textBox.CaretIndex;
+                string oldValue = textBox.Text;
+                string validInput = Rx.Replace(textBox.Text, "");
+                textBox.Text = validInput;
+
+                if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
+            };
+            textBox.LostFocus += (o,  e) => textBox.Text = textBox.Text.Trim().Trim(',');
+        }
+    }
+
     public static class ObjectExtensions {
         /// <summary>
         /// Perform a deep Copy of the object, using Json as a serialization method. NOTE: Private members are not cloned using this method.
@@ -87,6 +122,50 @@ namespace Infrastructure.SharedResources {
                 tcs.SetException(ex);
             }
             return tcs.Task;
+        }
+    }
+
+    public class EnumerationExtension : MarkupExtension {
+        private Type _enumType;
+
+
+        public EnumerationExtension(Type enumType) =>
+                EnumType = enumType ?? throw new ArgumentNullException(nameof(enumType));
+
+        public Type EnumType {
+            get => _enumType;
+            private set {
+                if(_enumType == value) return;
+
+                var enumType = Nullable.GetUnderlyingType(value) ?? value;
+
+                if(enumType.IsEnum == false) throw new ArgumentException("Type must be an Enum.");
+
+                _enumType = value;
+            }
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider) {
+            var enumValues = Enum.GetValues(EnumType);
+
+            return (from object enumValue in enumValues
+                    select new EnumerationMember {
+                        Value = enumValue,
+                        Description = GetDescription(enumValue)
+                    }).ToArray();
+        }
+
+        private string GetDescription(object enumValue) {
+            return EnumType.GetField(enumValue.ToString()!)
+                           ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
+                           .FirstOrDefault() is DescriptionAttribute descriptionAttribute ?
+                           descriptionAttribute.Description :
+                           enumValue.ToString();
+        }
+
+        public class EnumerationMember {
+            public string Description { [UsedImplicitly] get; set; }
+            public object Value { [UsedImplicitly] get; set; }
         }
     }
 }
