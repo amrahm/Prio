@@ -92,22 +92,22 @@
 							</hc:FlexPanel>
 						</Border>
 						<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
-
-
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
+						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
+						           Margin="10, -5, 0, 2" />
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
 						</StackPanel>
+						<ContentControl x:Name="RootResetCondition" Visibility="Collapsed" />
 						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
-						        Style="{StaticResource IconButtonBordered}">
+						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
 							<Viewbox>
 								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
 							</Viewbox>
 						</Button>
-						<local:ResetConditionView />
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -150,7 +150,7 @@
 						</ContentControl>
 						<ContentControl MinWidth="270" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
 							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops" Text="{Binding ActiveDesktopsConverter}"
-							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
+							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' for all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
 							         Style="{StaticResource NormalTextBox}" />
 						</ContentControl>

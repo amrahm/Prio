@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -54,11 +55,16 @@ namespace Timer {
             set => Config.DesktopsActive = DesktopStringToSet(value);
         }
 
+        public DelegateCommand AddResetConditionCommand { get; }
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand ApplyCommand { get; }
         public DelegateCommand OkCommand { get; }
 
         public TimerSettingsViewModel() {
+            AddResetConditionCommand = new DelegateCommand(() => {
+                Config.ResetConditions = Config.ResetConditions.AddCondition(new ResetCondition());
+            });
+
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
                 Model.Config = Config.DeepCopy();

@@ -25,6 +25,7 @@
     <PackageReference Include="DynamicExpresso.Core">
       <Version>2.3.3</Version>
     </PackageReference>
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
     <PackageReference Include="HandyControl">
       <Version>3.0.0-rc.2</Version>
     </PackageReference>

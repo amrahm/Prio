@@ -5,9 +5,14 @@ using Infrastructure.SharedResources;
 namespace Timer {
     /// <summary> Interaction logic for ResetConditionView.xaml </summary>
     public partial class ResetConditionView  {
-        public ResetConditionView() {
-            void ToggleOptions(ResetConditionViewModel resetConditionViewModel) {
-                switch(resetConditionViewModel.Type) {
+        public ResetConditionView(ResetConditionViewModel vm) {
+            DataContext = vm;
+            InitializeComponent();
+
+            VirtualDesktopExtensions.EnforceIntList(OffDesktops);
+
+            void ToggleOptions(ResetCondition resetConditionModel) {
+                switch(resetConditionModel.Type) {
                     case ResetConditionType.Cooldown:
                         CooldownOptions.Visibility = Visibility.Visible;
                         DependencyOptions.Visibility = Visibility.Collapsed;
@@ -21,13 +26,9 @@ namespace Timer {
                 }
             }
 
-            InitializeComponent();
-            VirtualDesktopExtensions.EnforceIntList(OffDesktops);
-
-            ResetConditionViewModel vm = (ResetConditionViewModel) DataContext;
-            ToggleOptions(vm);
+            ToggleOptions(vm.Model);
             vm.PropertyChanged += (o,  e) => {
-                if(e.PropertyName == nameof(vm.Type)) ToggleOptions(vm);
+                if(e.PropertyName == nameof(vm.Model.Type)) ToggleOptions(vm.Model);
             };
         }
     }

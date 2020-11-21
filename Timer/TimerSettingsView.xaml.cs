@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
@@ -39,6 +37,16 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ShowHideShortcut), ShowHideShortcut,
                               nameof(ShowHideShortcut.Shortcut));
 
+                var conditionsVm = new ResetConditionTreeViewModel(vm.Config.ResetConditions);
+                ManualBinding(vm.Config, nameof(vm.Config.ResetConditions), conditionsVm, nameof(conditionsVm.Tree));
+                RootResetCondition.Content = new ResetConditionTreeView(conditionsVm);
+
+                //TODO have to account for removal too
+                conditionsVm.PropertyChanged += (sender,  args) => RootResetCondition.Visibility = Visibility.Visible;
+                if(vm.Config.ResetConditions.Condition != null || vm.Config.ResetConditions.Left != null)
+                    RootResetCondition.Visibility = Visibility.Visible;
+
+                // Window Setup
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
 
@@ -67,6 +75,7 @@ namespace Timer {
                 }
 
                 _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
+                _window.MaxWidth = (screen.Width - SCREEN_MARGIN) / dpiWidthFactor;
 
                 _window.WindowStartupLocation = WindowStartupLocation.Manual;
                 _window.Left =  (screen.Width / dpiWidthFactor - _window.ActualWidth) / 2 +  screen.Left;

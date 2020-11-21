@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "02:24:28",
+        "TimeLeft": "02:12:40",
         "DesktopsVisible": [
           -1
         ],
@@ -56,6 +56,12 @@
             "Width": 200.0,
             "Height": 100.0
           }
+        },
+        "ResetConditions": {
+          "Condition": null,
+          "Left": null,
+          "Right": null,
+          "IsAnd": false
         }
       },
       {
@@ -95,6 +101,12 @@
             "Width": 197.0,
             "Height": 100.0
           }
+        },
+        "ResetConditions": {
+          "Condition": null,
+          "Left": null,
+          "Right": null,
+          "IsAnd": false
         }
       },
       {
@@ -105,7 +117,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "01:10:00",
-        "TimeLeft": "01:10:00",
+        "TimeLeft": "01:09:32",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": null,
@@ -118,7 +130,57 @@
             "Y": 182.0,
             "Width": 200.0,
             "Height": 100.0
+          },
+          "1": {
+            "X": 1336.0,
+            "Y": 533.6,
+            "Width": 200.0,
+            "Height": 100.0
           }
+        },
+        "ResetConditions": {
+          "Condition": null,
+          "Left": {
+            "Condition": null,
+            "Left": {
+              "Condition": {
+                "Type": 0,
+                "AllowOverride": false,
+                "WaitForMinutes": 0,
+                "OffDesktopsEnabled": false,
+                "OffDesktopsSet": null
+              },
+              "Left": null,
+              "Right": null,
+              "IsAnd": false
+            },
+            "Right": {
+              "Condition": {
+                "Type": 0,
+                "AllowOverride": false,
+                "WaitForMinutes": 0,
+                "OffDesktopsEnabled": false,
+                "OffDesktopsSet": null
+              },
+              "Left": null,
+              "Right": null,
+              "IsAnd": false
+            },
+            "IsAnd": true
+          },
+          "Right": {
+            "Condition": {
+              "Type": 0,
+              "AllowOverride": false,
+              "WaitForMinutes": 0,
+              "OffDesktopsEnabled": false,
+              "OffDesktopsSet": null
+            },
+            "Left": null,
+            "Right": null,
+            "IsAnd": false
+          },
+          "IsAnd": false
         }
       }
     ]

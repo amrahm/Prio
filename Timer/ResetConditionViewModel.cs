@@ -1,22 +1,20 @@
-﻿using System.Collections.Generic;
-using Infrastructure.SharedResources;
+﻿using Infrastructure.SharedResources;
 using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
-    public enum ResetConditionType { Cooldown, Dependency }
-
     public class ResetConditionViewModel : NotifyPropertyChanged {
-        public ResetConditionType Type { get; set; }
-        public int WaitForMinutes { get; set; }
-        public bool OffDesktopsEnabled { get; set; }
+        private ResetCondition _model;
 
-        public string OffDesktopsConverter {
-            get => DesktopSetToString(OffDesktopsSet);
-            set => OffDesktopsSet = DesktopStringToSet(value);
+        public ResetCondition Model {
+            get => _model;
+            private set => NotificationBubbler.BubbleSetter(ref _model, value, (o, e) => OnPropertyChanged());
         }
 
-        public HashSet<int> OffDesktopsSet { get; set; }
+        public ResetConditionViewModel(ResetCondition model) => Model = model;
 
-        public bool AllowOverride { get; set; }
+        public string OffDesktopsConverter {
+            get => DesktopSetToString(Model.OffDesktopsSet);
+            set => Model.OffDesktopsSet = DesktopStringToSet(value);
+        }
     }
 }
