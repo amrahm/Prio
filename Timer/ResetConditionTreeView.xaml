@@ -17,12 +17,12 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<StackPanel Margin="5">
-		<ContentControl x:Name="LeftTree" />
+	<StackPanel Margin="5, 0">
+		<ContentControl x:Name="LeftTree" Effect="{StaticResource DefaultDropShadow}" />
 		<ComboBox x:Name="AndOr" Style="{StaticResource NormalComboBox}" Visibility="Collapsed"
 		          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:BooleanType}}}"
 		          DisplayMemberPath="Description" SelectedValuePath="Value"
-		          SelectedValue="{Binding IsAnd, FallbackValue=0}" HorizontalAlignment="Center" />
-		<ContentControl x:Name="RightTree" />
+		          SelectedValue="{Binding IsAnd, FallbackValue=0}" HorizontalAlignment="Center" Margin="2" />
+		<ContentControl x:Name="RightTree" Effect="{StaticResource DefaultDropShadow}" />
 	</StackPanel>
 </UserControl>

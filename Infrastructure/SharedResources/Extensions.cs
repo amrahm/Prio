@@ -15,6 +15,10 @@ using Prism.Services.Dialogs;
 using Panel = System.Windows.Controls.Panel;
 using Point = System.Drawing.Point;
 using TextBox = System.Windows.Controls.TextBox;
+using Color = System.Drawing.Color;
+using MColor = System.Windows.Media.Color;
+
+// ReSharper disable UnusedMember.Global
 
 namespace Infrastructure.SharedResources {
     public static class NotificationBubbler {
@@ -286,6 +290,109 @@ namespace Infrastructure.SharedResources {
         public class EnumerationMember {
             public string Description { [UsedImplicitly] get; set; }
             public object Value { [UsedImplicitly] get; set; }
+        }
+    }
+
+    public static class ColorUtil {
+        /// <summary>
+        /// Convert HSV to RGB
+        /// h is from 0-360
+        /// s,v values are 0-1
+        /// r,g,b values are 0-255
+        /// Based upon http://ilab.usc.edu/wiki/index.php/HSV_And_H2SV_Color_Space#HSV_Transformation_C_.2F_C.2B.2B_Code_2
+        /// </summary>
+        public static Color HsvToRgb(double h, double s, double v, int a = 255) {
+            // ######################################################################
+            // T. Nathan Mundhenk
+            // mundhenk@usc.edu
+            // C/C++ Macro HSV to RGB
+
+            h = (h % 360 + 360) % 360;
+            double r, g, b;
+            if(v <= 0) r = g = b = 0;
+            else if(s <= 0) r = g = b = v;
+            else {
+                double hf = h / 60.0;
+                int i = (int) Math.Floor(hf);
+                double f = hf - i;
+                double pv = v * (1 - s);
+                double qv = v * (1 - s * f);
+                double tv = v * (1 - s * (1 - f));
+                switch(i) {
+                    case 0: // Red is the dominant color
+                        r = v;
+                        g = tv;
+                        b = pv;
+                        break;
+                    case 1: // Green is the dominant color
+                        r = qv;
+                        g = v;
+                        b = pv;
+                        break;
+                    case 2:
+                        r = pv;
+                        g = v;
+                        b = tv;
+                        break;
+                    case 3: // Blue is the dominant color
+                        r = pv;
+                        g = qv;
+                        b = v;
+                        break;
+                    case 4:
+                        r = tv;
+                        g = pv;
+                        b = v;
+                        break;
+                    case 5: // Red is the dominant color
+                        r = v;
+                        g = pv;
+                        b = qv;
+                        break;
+
+                    // Just in case we overshoot on our math by a little, we put these here. Since its a switch it won't slow us down at all to put these here.
+                    case 6:
+                        r = v;
+                        g = tv;
+                        b = pv;
+                        break;
+                    case -1:
+                        r = v;
+                        g = pv;
+                        b = qv;
+                        break;
+
+                    default:
+                        r = g = b = v; // Just pretend its black/white
+                        break;
+                }
+            }
+            return Color.FromArgb(a, Clamp(r * 255.0), Clamp(g * 255.0), Clamp(b * 255.0));
+        }
+
+        public static void ToHsv(this Color color, out double h, out double s, out double v) {
+            int max = Math.Max(color.R, Math.Max(color.G, color.B));
+            int min = Math.Min(color.R, Math.Min(color.G, color.B));
+
+            h = color.GetHue();
+            s = max == 0 ? 0 : 1.0 - 1.0 * min / max;
+            v = max / 255.0;
+        }
+
+        /// <summary> Clamp a value to 0-255 </summary>
+        private static int Clamp(double i) => (int) (i < 0 ? 0 : i > 255 ? 255 : i);
+
+        public static MColor ToMediaColor(this Color color) {
+            return MColor.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static Color ToDrawingColor(this MColor color) {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static Color Rotate(this Color color, int degrees) {
+            color.ToHsv(out double h, out double s, out double v);
+            return HsvToRgb(h + degrees, s, v);
         }
     }
 }

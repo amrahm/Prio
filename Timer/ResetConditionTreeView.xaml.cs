@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using HandyControl.Tools.Extension;
 using Infrastructure.SharedResources;
+using Color = System.Drawing.Color;
 
 namespace Timer {
     /// <summary> Interaction logic for ResetConditionTreeView.xaml </summary>
     public partial class ResetConditionTreeView : IDraggable {
+        private const int ROTATION = 100;
         public List<UIElement> ChildDraggables { get; } = new List<UIElement>();
         private readonly ResetConditionTreeViewModel _vm;
 
-        public ResetConditionTreeView(ResetConditionTreeViewModel vm, bool isGrey = false) {
+        public ResetConditionTreeView(ResetConditionTreeViewModel vm) : this(vm, Color.Lavender) { }
+
+        private ResetConditionTreeView(ResetConditionTreeViewModel vm, Color bgColor) {
             _vm = vm;
             DataContext = _vm;
             InitializeComponent();
 
-            _isGrey = isGrey;
-            Background = _isGrey ? Brushes.DarkGray : Brushes.Azure;
+
+            _bgColor = bgColor;
+            Background = new SolidColorBrush(_bgColor.ToMediaColor());
             Loaded += (sender,  args) => {
                 this.InitializeDraggable();
 
@@ -46,7 +47,8 @@ namespace Timer {
                 LeftTree.Content = new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition));
                 Background = Brushes.Transparent;
             } else if(_vm.Tree.Left != null) {
-                var item = new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Left), !_isGrey);
+                var item = new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Left),
+                                                      _bgColor.Rotate(ROTATION));
                 LeftTree.Content = item;
             }
 
@@ -54,7 +56,8 @@ namespace Timer {
                 AndOr.Visibility = Visibility.Visible;
                 RightTree.Visibility = Visibility.Visible;
                 ResetConditionTreeView item =
-                        new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Right), !_isGrey);
+                        new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Right),
+                                                   _bgColor.Rotate(ROTATION));
                 RightTree.Content = item;
             } else {
                 AndOr.Visibility = Visibility.Collapsed;
@@ -64,7 +67,7 @@ namespace Timer {
 
         private bool _isDragging;
         private Point _initPosition;
-        private readonly bool _isGrey;
+        private readonly Color _bgColor;
 
         private void Control_MouseLeftButtonUp(object sender, MouseEventArgs mouseEventArgs) {
             if(_isDragging && sender is ResetConditionTreeView draggable) {

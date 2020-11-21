@@ -10,6 +10,10 @@
 		<hc:Theme Name="HandyTheme" />
 	</ResourceDictionary.MergedDictionaries>
 
+	<DropShadowEffect x:Key="DefaultDropShadow" ShadowDepth="2" Direction="330" Color="Black" Opacity="0.4" BlurRadius="3" />
+	<DropShadowEffect x:Key="RaisedDropShadow" ShadowDepth="3" Direction="330" Color="Black" Opacity="0.3" BlurRadius="5" />
+	<DropShadowEffect x:Key="LoweredDropShadow" ShadowDepth="1" Direction="330" Color="Black" Opacity="0.5" BlurRadius="2" />
+
 	<!--Fonts-->
 	<system:Double x:Key="NormalFontSize">14</system:Double>
 	<FontFamily x:Key="NormalFont">Nirmala UI</FontFamily>
@@ -137,11 +141,7 @@
 	<!--Labels/TextBlocks-->
 	<Style x:Key="SubHeaderLabelStyle" TargetType="{x:Type FrameworkElement}"
 	       BasedOn="{StaticResource MediumControlStyle}">
-		<Setter Property="Effect">
-			<Setter.Value>
-				<DropShadowEffect ShadowDepth="3" Direction="250" Color="Black" Opacity="0.36" BlurRadius="3" />
-			</Setter.Value>
-		</Setter>
+		<Setter Property="Effect" Value="{StaticResource DefaultDropShadow}" />
 	</Style>
 
 	<!--Buttons-->
@@ -215,11 +215,7 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="Tag" Value="15" />
-		<Setter Property="Effect">
-			<Setter.Value>
-				<DropShadowEffect ShadowDepth="2" Direction="330" Color="Black" Opacity="0.36" BlurRadius="3" />
-			</Setter.Value>
-		</Setter>
+		<Setter Property="Effect" Value="{StaticResource DefaultDropShadow}" />
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
 				<Setter Property="Foreground" Value="{StaticResource LightAccentBrush}" />
@@ -257,26 +253,14 @@
 		<Setter Property="Padding" Value="2" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
 		<Setter Property="Width" Value="{Binding Height, RelativeSource={RelativeSource Self}}" />
-		<Setter Property="Effect">
-			<Setter.Value>
-				<DropShadowEffect ShadowDepth="2" Direction="330" Color="Black" Opacity="0.4" BlurRadius="3" />
-			</Setter.Value>
-		</Setter>
+		<Setter Property="Effect" Value="{StaticResource DefaultDropShadow}" />
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Effect">
-					<Setter.Value>
-						<DropShadowEffect ShadowDepth="3" Direction="330" Color="Black" Opacity="0.3" BlurRadius="5" />
-					</Setter.Value>
-				</Setter>
+				<Setter Property="Effect" Value="{StaticResource RaisedDropShadow}" />
 				<Setter Property="Padding" Value="0" />
 			</Trigger>
 			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Effect">
-					<Setter.Value>
-						<DropShadowEffect ShadowDepth="1" Direction="330" Color="Black" Opacity="0.5" BlurRadius="2" />
-					</Setter.Value>
-				</Setter>
+				<Setter Property="Effect" Value="{StaticResource LoweredDropShadow}" />
 				<Setter Property="Padding" Value="4" />
 			</Trigger>
 		</Style.Triggers>
