@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Timer"
-             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -18,22 +17,12 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<StackPanel>
-		<ListView x:Name="LeftTree" Padding="0" Style="{StaticResource BaseControlStyle}"
-		          Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch"
-		          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-		          dd:DragDrop.IsDragSource="True"
-		          dd:DragDrop.IsDropTarget="True"
-		          dd:DragDrop.DropHandler="{Binding}" />
+	<StackPanel Margin="5">
+		<ContentControl x:Name="LeftTree" />
 		<ComboBox x:Name="AndOr" Style="{StaticResource NormalComboBox}" Visibility="Collapsed"
 		          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:BooleanType}}}"
 		          DisplayMemberPath="Description" SelectedValuePath="Value"
-		          SelectedValue="{Binding IsAnd, FallbackValue=0}" />
-		<ListView x:Name="RightTree" Padding="0" Style="{StaticResource BaseControlStyle}"
-		          Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch"
-		          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-		          dd:DragDrop.IsDragSource="True"
-		          dd:DragDrop.IsDropTarget="True"
-		          dd:DragDrop.DropHandler="{Binding}" />
+		          SelectedValue="{Binding IsAnd, FallbackValue=0}" HorizontalAlignment="Center" />
+		<ContentControl x:Name="RightTree" />
 	</StackPanel>
 </UserControl>

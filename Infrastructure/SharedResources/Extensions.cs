@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using System.Windows.Media;
 using JetBrains.Annotations;
 using Prism.Services.Dialogs;
+using Panel = System.Windows.Controls.Panel;
+using Point = System.Drawing.Point;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace Infrastructure.SharedResources {
@@ -201,7 +204,31 @@ namespace Infrastructure.SharedResources {
 
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
-                Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
+                Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
+    }
+
+    public static class DependencyObjectHelpers {
+        /// <summary> Finds an Ancestor of type T of a given item on the visual tree. </summary>
+        /// <typeparam name="T">The type of the queried item.</typeparam>
+        /// <param name="child">A direct or indirect child of the queried item.</param>
+        /// <returns>The first parent item that matches the submitted type parameter.
+        /// If not matching item can be found, a null reference is being returned.</returns>
+        public static T TryFindAncestor<T>(this DependencyObject child) where T : class {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+            return parentObject switch {
+                null => null, // we've reached the end of the tree
+                T parent => parent, // check if the parent matches the type we're looking for
+                _ => TryFindAncestor<T>(parentObject) //recurse
+            };
+        }
+
+        public static void SetGlobalZ(this FrameworkElement element, int value) {
+            UIElement parent = (UIElement) element.Parent;
+            while(parent != null) {
+                Panel.SetZIndex(parent, value);
+                parent = (UIElement) VisualTreeHelper.GetParent(parent);
+            }
+        }
     }
 
     public static class PrismExtensions {

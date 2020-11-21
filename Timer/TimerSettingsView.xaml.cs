@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,7 +13,8 @@ using Color = System.Windows.Media.Color;
 
 namespace Timer {
     /// <summary> Interaction logic for TimerSettingsView.xaml </summary>
-    public partial class TimerSettingsView {
+    public partial class TimerSettingsView : IDraggable {
+        public List<UIElement> ChildDraggables { get; protected internal set; } = new List<UIElement>();
         private const int MIN_CTRL_WIDTH = 470;
         private const int SCREEN_MARGIN = 50;
         private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 50;
@@ -30,6 +33,8 @@ namespace Timer {
             VirtualDesktopExtensions.EnforceIntList(ActiveDesktops);
 
             Loaded += (o, e) => {
+                this.InitializeDraggable();
+
                 // Manual Bindings:
                 ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
@@ -108,7 +113,8 @@ namespace Timer {
                     DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
                     FocusManager.SetFocusedElement(scope, _window);
 
-                    _window.DragMove();
+                    if(!ChildDraggables.Any(x => x.IsMouseOver))
+                        _window.DragMove();
                 }
             };
         }
