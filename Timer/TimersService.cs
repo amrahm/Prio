@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using HandyControl.Tools.Extension;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -26,7 +25,7 @@ namespace Timer {
             currVisState = GeneralConfig.DefaultVisibilityState;
         }
 
-        public void ShowTimers() => Timers.Do(t => t.ShowTimer());
+        public void ShowTimers() => Timers.ForEach(t => t.ShowTimer());
 
         public void SaveSettings() {
             GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();

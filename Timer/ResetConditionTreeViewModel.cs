@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
-using System.Windows;
-using GongSolutions.Wpf.DragDrop;
 using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 
 namespace Timer {
-    public enum BooleanType { [Description("AND")] And, [Description("OR")] Or }
+    public enum BooleanType { [Description("AND")] And, [Description("OR")] [UsedImplicitly] Or }
 
-    public class ResetConditionTreeViewModel : NotifyPropertyChanged, IDropTarget {
+    public class ResetConditionTreeViewModel : NotifyPropertyChanged {
         private ResetConditionTree _tree;
         private BooleanType _isAnd;
 
@@ -24,19 +23,5 @@ namespace Timer {
         }
 
         public ResetConditionTreeViewModel(ResetConditionTree tree) => Tree = tree;
-
-        public void DragOver(IDropInfo dropInfo) {
-            if(dropInfo.Data is ResetConditionTreeView source &&
-               dropInfo.TargetItem is ResetConditionTreeView target) {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        public void Drop(IDropInfo dropInfo) {
-            ResetConditionTreeViewModel sourceItem = dropInfo.Data as ResetConditionTreeViewModel;
-            ResetConditionTreeViewModel targetItem = dropInfo.TargetItem as ResetConditionTreeViewModel;
-            //targetItem.Children.Add(sourceItem);
-        }
     }
 }

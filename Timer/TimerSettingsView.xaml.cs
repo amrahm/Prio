@@ -17,7 +17,7 @@ namespace Timer {
         public List<UIElement> ChildDraggables { get; protected internal set; } = new List<UIElement>();
         private const int MIN_CTRL_WIDTH = 470;
         private const int SCREEN_MARGIN = 50;
-        private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 50;
+        private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 90;
 
         private Window _window;
 

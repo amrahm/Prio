@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using JetBrains.Annotations;
@@ -17,6 +17,7 @@ using Point = System.Drawing.Point;
 using TextBox = System.Windows.Controls.TextBox;
 using Color = System.Drawing.Color;
 using MColor = System.Windows.Media.Color;
+using Screen = System.Windows.Forms.Screen;
 
 // ReSharper disable UnusedMember.Global
 
@@ -98,6 +99,12 @@ namespace Infrastructure.SharedResources {
                 if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
             };
             textBox.LostFocus += (o,  e) => textBox.Text = textBox.Text.Trim().Trim(',');
+        }
+    }
+
+    public static class EnumerableExtensions {
+        public static void ForEach<T>(this IEnumerable<T> value, Action<T> action) {
+            foreach(T item in value) action(item);
         }
     }
 
@@ -211,7 +218,7 @@ namespace Infrastructure.SharedResources {
                 Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
     }
 
-    public static class DependencyObjectHelpers {
+    public static class UIHelpers {
         /// <summary> Finds an Ancestor of type T of a given item on the visual tree. </summary>
         /// <typeparam name="T">The type of the queried item.</typeparam>
         /// <param name="child">A direct or indirect child of the queried item.</param>
@@ -233,6 +240,14 @@ namespace Infrastructure.SharedResources {
                 parent = (UIElement) VisualTreeHelper.GetParent(parent);
             }
         }
+
+        /// <summary> Checks if a point (that is specified relative to this element) is contained within </summary>
+        public static bool ContainsRelativePoint(this FrameworkElement element, System.Windows.Point point) =>
+                point.X > 0 && point.Y > 0 && point.X < element.ActualWidth && point.Y < element.ActualHeight;
+
+        /// <summary> Checks if the mouse is contained within </summary>
+        public static bool ContainsMouse(this FrameworkElement element) =>
+                element.ContainsRelativePoint(Mouse.GetPosition(element));
     }
 
     public static class PrismExtensions {
@@ -283,8 +298,8 @@ namespace Infrastructure.SharedResources {
             return EnumType.GetField(enumValue.ToString()!)
                            ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
                            .FirstOrDefault() is DescriptionAttribute descriptionAttribute ?
-                           descriptionAttribute.Description :
-                           enumValue.ToString();
+                    descriptionAttribute.Description :
+                    enumValue.ToString();
         }
 
         public class EnumerationMember {
@@ -393,6 +408,12 @@ namespace Infrastructure.SharedResources {
         public static Color Rotate(this Color color, int degrees) {
             color.ToHsv(out double h, out double s, out double v);
             return HsvToRgb(h + degrees, s, v);
+        }
+    }
+
+    public static class Log {
+        public static void Write(object o) {
+            Debug.WriteLine(o.ToString());
         }
     }
 }

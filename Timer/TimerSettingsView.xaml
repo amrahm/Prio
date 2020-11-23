@@ -12,7 +12,7 @@
 		<Style TargetType="Window">
 			<Setter Property="WindowStyle" Value="None" />
 			<Setter Property="AllowsTransparency" Value="True" />
-			<Setter Property="Width" Value="520" />
+			<Setter Property="Width" Value="550" />
 			<Setter Property="SizeToContent" Value="Height" />
 			<Setter Property="MinHeight" Value="100" />
 			<Setter Property="MinWidth" Value="470" />

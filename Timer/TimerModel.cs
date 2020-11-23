@@ -20,7 +20,7 @@ namespace Timer {
         public Window TimerWindow { get; set; }
 
         private readonly IDialogService _dialogService;
-        private readonly DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
         private bool _hidden;
         private readonly IVirtualDesktopManager _vdm;
 
@@ -31,7 +31,6 @@ namespace Timer {
             IContainerProvider container = UnityInstance.GetContainer();
             _dialogService = container.Resolve<IDialogService>();
 
-            _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
             _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
 
             RegisterShortcuts();

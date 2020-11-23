@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "02:02:20",
+        "TimeLeft": "01:00:24",
         "DesktopsVisible": [
           -1
         ],
@@ -61,7 +61,8 @@
           "Condition": null,
           "Left": null,
           "Right": null,
-          "IsAnd": false
+          "IsAnd": false,
+          "IsLeaf": true
         }
       },
       {
@@ -72,7 +73,7 @@
         "ShowMinutes": true,
         "ShowSeconds": false,
         "Duration": "1.05:01:40",
-        "TimeLeft": "1.04:53:55",
+        "TimeLeft": "1.04:53:52",
         "DesktopsVisible": [
           1,
           2,
@@ -106,7 +107,8 @@
           "Condition": null,
           "Left": null,
           "Right": null,
-          "IsAnd": false
+          "IsAnd": false,
+          "IsLeaf": true
         }
       },
       {
@@ -117,7 +119,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "01:10:00",
-        "TimeLeft": "01:09:32",
+        "TimeLeft": "01:09:31",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": null,
@@ -126,8 +128,8 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "2": {
-            "X": 182.0,
-            "Y": 182.0,
+            "X": 195.0,
+            "Y": 450.0,
             "Width": 200.0,
             "Height": 100.0
           },
@@ -145,42 +147,65 @@
             "Left": {
               "Condition": {
                 "Type": 0,
-                "AllowOverride": false,
+                "AllowOverride": true,
                 "WaitForMinutes": 0,
-                "OffDesktopsEnabled": false,
+                "OffDesktopsEnabled": true,
                 "OffDesktopsSet": null
               },
               "Left": null,
               "Right": null,
-              "IsAnd": false
+              "IsAnd": true,
+              "IsLeaf": true
             },
             "Right": {
               "Condition": {
                 "Type": 0,
                 "AllowOverride": false,
                 "WaitForMinutes": 0,
+                "OffDesktopsEnabled": true,
+                "OffDesktopsSet": null
+              },
+              "Left": null,
+              "Right": null,
+              "IsAnd": false,
+              "IsLeaf": true
+            },
+            "IsAnd": true,
+            "IsLeaf": false
+          },
+          "Right": {
+            "Condition": null,
+            "Left": {
+              "Condition": {
+                "Type": 0,
+                "AllowOverride": true,
+                "WaitForMinutes": 0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null
               },
               "Left": null,
               "Right": null,
-              "IsAnd": false
+              "IsAnd": false,
+              "IsLeaf": true
             },
-            "IsAnd": true
-          },
-          "Right": {
-            "Condition": {
-              "Type": 0,
-              "AllowOverride": false,
-              "WaitForMinutes": 0,
-              "OffDesktopsEnabled": false,
-              "OffDesktopsSet": null
+            "Right": {
+              "Condition": {
+                "Type": 1,
+                "AllowOverride": false,
+                "WaitForMinutes": 0,
+                "OffDesktopsEnabled": false,
+                "OffDesktopsSet": null
+              },
+              "Left": null,
+              "Right": null,
+              "IsAnd": false,
+              "IsLeaf": true
             },
-            "Left": null,
-            "Right": null,
-            "IsAnd": false
+            "IsAnd": true,
+            "IsLeaf": false
           },
-          "IsAnd": false
+          "IsAnd": false,
+          "IsLeaf": false
         }
       }
     ]
