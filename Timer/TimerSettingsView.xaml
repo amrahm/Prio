@@ -35,9 +35,9 @@
 
 	<ContentControl Template="{StaticResource RoundedWithShadowTemplate}" BorderThickness="2, 0, 2, 0"
 	                BorderBrush="{StaticResource MediumAccentBrush}">
-		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-			<DockPanel Background="{StaticResource MediumBrush}">
-				<WrapPanel Width="550" x:Name="MainWrapPanel" DockPanel.Dock="Top">
+		<st:AutoGrid Rows="*, auto" ColumnWidth="*" Background="{StaticResource MediumBrush}">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" x:Name="ScrollViewer">
+				<WrapPanel Width="550" x:Name="MainWrapPanel">
 					<StackPanel Orientation="Vertical" Background="{StaticResource LightBrush}" Width="550">
 						<ContentControl MinWidth="200" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch">
 							<TextBox Margin="0, 10, 0, 0" MinWidth="60" Name="TimerName"
@@ -172,41 +172,41 @@
 						</StackPanel>
 					</StackPanel>
 				</WrapPanel>
+			</ScrollViewer>
 
-				<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0">
-					<DockPanel.Resources>
-						<ResourceDictionary>
-							<Style x:Key="WithValidation" TargetType="{x:Type Button}" BasedOn="{StaticResource NormalButtonDarkBordered}">
-								<Setter Property="IsEnabled" Value="false" />
-								<Style.Triggers>
-									<!-- Require the controls to be valid in order to press OK -->
-									<MultiDataTrigger>
-										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding ElementName=HoursBox, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=MinutesBox, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=SecondsBox, Path=(Validation.HasError)}" Value="false" />
-											<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
-										</MultiDataTrigger.Conditions>
-										<Setter Property="IsEnabled" Value="true" />
-									</MultiDataTrigger>
-									<DataTrigger Binding="{Binding Text, ElementName=TimerName}" Value="{x:Static s:String.Empty}">
-										<Setter Property="IsEnabled" Value="False" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</ResourceDictionary>
-					</DockPanel.Resources>
-					<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource WithValidation}"
-					        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" Command="{Binding OkCommand}" />
-					<Button DockPanel.Dock="Right" Content="APPLY" Width="70" Style="{StaticResource WithValidation}"
-					        Command="{Binding ApplyCommand}" />
-					<Button DockPanel.Dock="Right" Content="CANCEL" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
-					        Command="{Binding CancelCommand}" />
-
-				</DockPanel>
+			<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0" x:Name="OkBar">
+				<DockPanel.Resources>
+					<ResourceDictionary>
+						<Style x:Key="WithValidation" TargetType="{x:Type Button}" BasedOn="{StaticResource NormalButtonDarkBordered}">
+							<Setter Property="IsEnabled" Value="false" />
+							<Style.Triggers>
+								<!-- Require the controls to be valid in order to press OK -->
+								<MultiDataTrigger>
+									<MultiDataTrigger.Conditions>
+										<Condition Binding="{Binding ElementName=HoursBox, Path=(Validation.HasError)}" Value="false" />
+										<Condition Binding="{Binding ElementName=MinutesBox, Path=(Validation.HasError)}" Value="false" />
+										<Condition Binding="{Binding ElementName=SecondsBox, Path=(Validation.HasError)}" Value="false" />
+										<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
+									</MultiDataTrigger.Conditions>
+									<Setter Property="IsEnabled" Value="true" />
+								</MultiDataTrigger>
+								<DataTrigger Binding="{Binding Text, ElementName=TimerName}" Value="{x:Static s:String.Empty}">
+									<Setter Property="IsEnabled" Value="False" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</ResourceDictionary>
+				</DockPanel.Resources>
+				<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource WithValidation}"
+				        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" Command="{Binding OkCommand}" />
+				<Button DockPanel.Dock="Right" Content="APPLY" Width="70" Style="{StaticResource WithValidation}"
+				        Command="{Binding ApplyCommand}" />
+				<Button DockPanel.Dock="Right" Content="CANCEL" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
+				        Command="{Binding CancelCommand}" />
 
 			</DockPanel>
-		</ScrollViewer>
+
+		</st:AutoGrid>
 	</ContentControl>
 
 </UserControl>

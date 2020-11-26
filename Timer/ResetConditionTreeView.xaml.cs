@@ -42,9 +42,10 @@ namespace Timer {
                             UpdateTreeLayout();
                         }
                     };
+                    UpdateTreeLayout(); //needed for adding first child
                 }
             };
-            UpdateTreeLayout();
+            UpdateTreeLayout(); //needed to set height properly before settings view is fully loaded
 
             PreviewMouseLeftButtonUp += Control_MouseLeftButtonUpPreview;
             MouseLeftButtonUp += Control_MouseLeftButtonUp;
@@ -53,8 +54,10 @@ namespace Timer {
 
         private void UpdateTreeLayout() {
             if(_vm.Tree.IsLeaf) {
-                if(_vm.Tree.Condition != null)
-                    LeftTree.Content = new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition));
+                LeftTree.Content = _vm.Tree.Condition != null ?
+                        new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition)) :
+                        null;
+                RightTree.Content = null;
 
                 Background = Brushes.Transparent;
                 AndOr.Visibility = Visibility.Collapsed;
@@ -88,8 +91,8 @@ namespace Timer {
                 bool toLeft = e.GetPosition(AndOr).Y < AndOr.ActualHeight / 2;
                 FrameworkElement addingTo = toLeft ? _leftTreeContent : _rightTreeContent;
                 bool toLeftOfAdded = e.GetPosition(addingTo).Y < addingTo.ActualHeight / 2;
-                _vm.Tree.MoveNode(dropped._vm.Tree, toLeft, toLeftOfAdded);
                 dropped.Control_MouseLeftButtonUp(dropped, e);
+                _vm.Tree.MoveNode(dropped._vm.Tree, toLeft, toLeftOfAdded);
             }
         }
 
@@ -121,7 +124,7 @@ namespace Timer {
             if(!_isDragging && Mouse.Captured == null && !ChildDraggables.Any(x => x.IsMouseOver) && !_isRoot) {
                 _isDragging = true;
                 _initPosition = e.GetPosition(Parent as UIElement);
-                draggable.SetGlobalZ(int.MaxValue);
+                draggable.SetGlobalZ(999);
                 draggable.CaptureMouse();
                 AnimateOpacity(.6);
             }

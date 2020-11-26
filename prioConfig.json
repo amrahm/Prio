@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:00:24",
+        "TimeLeft": "00:51:59",
         "DesktopsVisible": [
           -1
         ],
@@ -128,8 +128,8 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "2": {
-            "X": 195.0,
-            "Y": 450.0,
+            "X": 1313.0,
+            "Y": 395.0,
             "Width": 200.0,
             "Height": 100.0
           },

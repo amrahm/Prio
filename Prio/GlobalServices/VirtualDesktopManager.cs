@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 using WindowsDesktop;
 using JetBrains.Annotations;
@@ -19,26 +19,28 @@ namespace Prio.GlobalServices {
                 for(int i = 0; i < _desktops.Length; i++) _desktopMap.Add(_desktops[i].Id, i);
             }
 
-            try {
-                InitializeComObjects();
-                RebuildDesktopsMap();
+            InitializeComObjects();
+            RebuildDesktopsMap();
 
-                VirtualDesktop.CurrentChanged += (o,  e) =>
+            VirtualDesktop.CurrentChanged += (o,  e) =>
                     DesktopChanged?.Invoke(
-                        o, new DesktopChangedEventArgs(_desktopMap[e.OldDesktop.Id], _desktopMap[e.NewDesktop.Id]));
+                            o, new DesktopChangedEventArgs(_desktopMap[e.OldDesktop.Id], _desktopMap[e.NewDesktop.Id]));
 
-                VirtualDesktop.Created += (o,  e) => RebuildDesktopsMap();
-                VirtualDesktop.Destroyed += (o,  e) => RebuildDesktopsMap();
+            VirtualDesktop.Created += (o,  e) => RebuildDesktopsMap();
+            VirtualDesktop.Destroyed += (o,  e) => RebuildDesktopsMap();
+        }
+
+        private static void InitializeComObjects() {
+            try {
+                VirtualDesktopProvider.Default.Initialize().Wait();
             } catch(Exception e) {
+                Debug.WriteLine(e.Message);
                 MessageBox.Show(e.Message, "Failed to initialize.");
             }
         }
 
-        private static async void InitializeComObjects() =>
-            await VirtualDesktopProvider.Default.Initialize(TaskScheduler.FromCurrentSynchronizationContext());
-
         public void MoveToDesktop(Window window, int desktopNum) =>
-            window?.Dispatcher.Invoke(() => window.MoveToDesktop(_desktops[desktopNum]));
+                window?.Dispatcher.Invoke(() => window.MoveToDesktop(_desktops[desktopNum]));
 
         public int CurrentDesktop() => _desktopMap[VirtualDesktop.Current.Id];
     }

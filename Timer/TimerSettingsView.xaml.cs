@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
 using static Infrastructure.SharedResources.BindingHelpers;
@@ -108,13 +109,27 @@ namespace Timer {
                 }
             };
 
+            ScrollViewer.ScrollChanged += (o,  e) => {
+                if(ScrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible  ||
+                   Math.Abs(e.VerticalOffset + e.ViewportHeight - e.ExtentHeight) < 1)
+                    OkBar.ClearValue(EffectProperty);
+                else
+                    OkBar.Effect = new DropShadowEffect {
+                        Color = Color.FromRgb(0, 0, 0),
+                        Direction = 90,
+                        ShadowDepth = 0,
+                        Opacity = .5,
+                        BlurRadius = 15
+                    };
+            };
+
+
             MouseDown += (o, e) => {
                 if(e.ChangedButton == MouseButton.Left) {
                     DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
                     FocusManager.SetFocusedElement(scope, _window);
 
-                    if(!ChildDraggables.Any(x => x.IsMouseOver))
-                        _window.DragMove();
+                    if(!ChildDraggables.Any(x => x.IsMouseOver)) _window.DragMove();
                 }
             };
         }

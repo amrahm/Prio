@@ -20,7 +20,7 @@
 	<Border Style="{StaticResource BorderClip}" Margin="5" Background="{StaticResource Light2Brush}">
 		<StackPanel>
 			<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceBetween" AlignContent="FlexStart">
-				<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="0, 0, 2, 2">
+				<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="0, 0, 2, 2" CornerRadius="0, 0, 10, 0">
 					<ComboBox Style="{StaticResource NormalComboBox}" hc:InfoElement.TitleWidth="Auto"
 					          hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Type:"
 					          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:ResetConditionType}}}"
@@ -32,7 +32,7 @@
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
 				</StackPanel>
 
-				<Button Content="DELETE" Style="{StaticResource NormalButtonLight2Bordered}"/>
+				<Button Content="DELETE" Style="{StaticResource NormalButtonLight2Bordered}" Command="{Binding DeleteCommand}" />
 			</hc:FlexPanel>
 
 			<hc:FlexPanel x:Name="CooldownOptions" FlexWrap="Wrap" JustifyContent="SpaceAround">

@@ -8,7 +8,31 @@ namespace Timer {
     [Serializable]
     public class ResetConditionTree : NotifyPropertyChanged {
         /// <summary> The condition to evaluate. This must be null if this tree is not a leaf </summary>
-        public ResetCondition Condition { get; set; }
+        public ResetCondition Condition {
+            get => _condition;
+            set {
+                //if(_condition != null) _condition.DeleteRequested -= ConditionOnDeleteRequested;
+                _condition = value;
+                if(_condition != null) _condition.DeleteRequested += ConditionOnDeleteRequested;
+            }
+        }
+
+        private void ConditionOnDeleteRequested(object sender, EventArgs eventArgs) {
+            Condition = null;
+            _parent?._DeleteChild(IsLeftChild);
+            Root().OnPropertyChanged();
+        }
+
+        private void _DeleteChild(bool fromDir) {
+            if(GetDir(!fromDir).IsLeaf) {
+                Condition = GetDir(!fromDir).Condition;
+                _left = _right = null;
+            } else {
+                GetDir(fromDir) = GetDir(!fromDir).GetDir(fromDir);
+                GetDir(!fromDir) = GetDir(!fromDir).GetDir(!fromDir);
+                SetParentOfChildren();
+            }
+        }
 
         /// <summary> The left branch. This must be null if this tree is a leaf </summary>
         public ResetConditionTree Left {
@@ -28,11 +52,14 @@ namespace Timer {
         public bool IsLeaf => Left == null;
 
         public bool IsSat() => Condition?.IsSatisfied() ??
-                               (IsAnd ? Left.IsSat() && Right.IsSat() : Left.IsSat() || Right.IsSat());
+                               (IsAnd ? _left.IsSat() && _right.IsSat() : _left.IsSat() || _right.IsSat());
 
-        internal ResetConditionTree parent;
+        private ResetConditionTree _parent;
         private ResetConditionTree _left;
         private ResetConditionTree _right;
+        private ResetCondition _condition;
+
+        private bool IsLeftChild => _parent != null && _parent._left == this;
 
         public ResetConditionTree() { }
 
@@ -41,21 +68,24 @@ namespace Timer {
         }
 
         public ResetConditionTree([NotNull] ResetConditionTree left, ResetConditionTree right, bool isAnd) {
-            Left = left;
-            Right = right;
+            _left = left;
+            _right = right;
             IsAnd = isAnd;
 
-            SetParents();
+            SetParentOfChildren();
         }
 
-        private void SetParents() {
+        private void SetParentOfChildren() {
             if(IsLeaf) return;
-            Left.parent = this;
-            Right.parent = this;
+            _left._parent = this;
+            _right._parent = this;
         }
 
         [OnDeserialized]
-        private void SetParents(StreamingContext streamingContext) => SetParents();
+        private void OnDeserialized(StreamingContext streamingContext) {
+            Condition = _condition;
+            SetParentOfChildren();
+        }
 
         public void AddCondition(ResetCondition newCondition, bool isAnd = true) =>
                 AddCondition(new ResetConditionTree(newCondition), isAnd);
@@ -74,7 +104,8 @@ namespace Timer {
                 IsAnd = isAnd;
                 Condition = null;
             }
-            SetParents();
+            SetParentOfChildren();
+            Root().OnPropertyChanged();
         }
 
         private ref ResetConditionTree GetDir(bool left) {
@@ -83,20 +114,13 @@ namespace Timer {
         }
 
         public void MoveNode(ResetConditionTree tree, bool toLeft, bool toLeftOfAdded) {
-            bool fromDir = tree.parent._left == tree;
-            if(this == tree.parent && fromDir == toLeft) return;
-            if(this == tree.parent && tree.parent.GetDir(!fromDir).IsLeaf) {
-                tree.parent.GetDir(fromDir) = tree.parent.GetDir(!fromDir);
-                tree.parent.GetDir(!fromDir) = tree;
+            bool fromDir = tree.IsLeftChild;
+            if(this == tree._parent && fromDir == toLeft) return;
+            if(this == tree._parent && tree._parent.GetDir(!fromDir).IsLeaf) {
+                tree._parent.GetDir(fromDir) = tree._parent.GetDir(!fromDir);
+                tree._parent.GetDir(!fromDir) = tree;
             } else {
-                if(tree.parent.GetDir(!fromDir).IsLeaf) {
-                    tree.parent.Condition = tree.parent.GetDir(!fromDir).Condition;
-                    tree.parent._left = tree.parent._right = null;
-                } else {
-                    tree.parent.GetDir(fromDir) = tree.parent.GetDir(!fromDir).GetDir(fromDir);
-                    tree.parent.GetDir(!fromDir) = tree.parent.GetDir(!fromDir).GetDir(!fromDir);
-                    tree.parent.SetParents();
-                }
+                tree._parent._DeleteChild(fromDir);
                 GetDir(toLeft).AddCondition(tree, true, toLeftOfAdded);
             }
 
@@ -105,7 +129,7 @@ namespace Timer {
 
         public ResetConditionTree Root() {
             ResetConditionTree root = this;
-            while(root.parent != null) root = root.parent;
+            while(root._parent != null) root = root._parent;
             return root;
         }
 

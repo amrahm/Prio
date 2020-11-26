@@ -1,4 +1,5 @@
 ﻿using Infrastructure.SharedResources;
+using Prism.Commands;
 using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
@@ -10,7 +11,12 @@ namespace Timer {
             private set => NotificationBubbler.BubbleSetter(ref _model, value, (o, e) => OnPropertyChanged());
         }
 
-        public ResetConditionViewModel(ResetCondition model) => Model = model;
+        public DelegateCommand DeleteCommand { get; }
+
+        public ResetConditionViewModel(ResetCondition model) {
+            Model = model;
+            DeleteCommand = new DelegateCommand(() => Model.DeleteMe());
+        }
 
         public string OffDesktopsConverter {
             get => DesktopSetToString(Model.OffDesktopsSet);
