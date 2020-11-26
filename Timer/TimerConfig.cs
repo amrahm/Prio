@@ -20,7 +20,7 @@ namespace Timer {
         public ShortcutDefinition StopShortcut { get; set; }
         public ShortcutDefinition ShowHideShortcut { get; set; }
         public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new Dictionary<int, WindowPosition>();
-        public ResetConditionTree ResetConditions { get; set; }
+        public ResetConditionTree ResetConditions { get; set; } = new ResetConditionTree();
     }
 
     public readonly struct WindowPosition {

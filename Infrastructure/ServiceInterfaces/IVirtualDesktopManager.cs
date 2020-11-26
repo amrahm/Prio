@@ -15,7 +15,6 @@ namespace Prio.GlobalServices {
 
     public class DesktopChangedEventArgs : EventArgs {
         public int OldDesktop { get; }
-
         public int NewDesktop { get; }
 
         public DesktopChangedEventArgs(int oldDesktop, int newDesktop) {
