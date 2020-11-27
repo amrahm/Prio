@@ -11,7 +11,7 @@ namespace Timer {
         public ResetCondition Condition {
             get => _condition;
             set {
-                //if(_condition != null) _condition.DeleteRequested -= ConditionOnDeleteRequested;
+                if(_condition != null) _condition.DeleteRequested -= ConditionOnDeleteRequested;
                 _condition = value;
                 if(_condition != null) _condition.DeleteRequested += ConditionOnDeleteRequested;
             }
@@ -19,13 +19,15 @@ namespace Timer {
 
         private void ConditionOnDeleteRequested(object sender, EventArgs eventArgs) {
             Condition = null;
+            ResetConditionTree root = Root();
             _parent?._DeleteChild(IsLeftChild);
-            Root().OnPropertyChanged();
+            root.OnPropertyChanged();
         }
 
         private void _DeleteChild(bool fromDir) {
             if(GetDir(!fromDir).IsLeaf) {
                 Condition = GetDir(!fromDir).Condition;
+                GetDir(!fromDir).Condition = null;
                 _left = _right = null;
             } else {
                 GetDir(fromDir) = GetDir(!fromDir).GetDir(fromDir);
@@ -99,8 +101,8 @@ namespace Timer {
                     _right = newConditionTree._right;
                 }
             } else {
-                GetDir(!toLeft) = IsLeaf ? new ResetConditionTree(Condition) : new ResetConditionTree(_left, _right, isAnd);
-                GetDir(toLeft) = newConditionTree;
+                GetDir(toLeft) = IsLeaf ? new ResetConditionTree(Condition) : new ResetConditionTree(_left, _right, isAnd);
+                GetDir(!toLeft) = newConditionTree;
                 IsAnd = isAnd;
                 Condition = null;
             }
@@ -123,7 +125,6 @@ namespace Timer {
                 tree._parent._DeleteChild(fromDir);
                 GetDir(toLeft).AddCondition(tree, true, toLeftOfAdded);
             }
-
             Root().OnPropertyChanged();
         }
 

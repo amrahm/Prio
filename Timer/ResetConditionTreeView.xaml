@@ -25,6 +25,7 @@
 			           x:Name="AdornerRectangle" Width="500" Height="100" Visibility="Collapsed" />
 		</ad:AdornedControl.AdornerContent>
 		<StackPanel Margin="5, 0">
+			<ContentControl x:Name="Condition" Effect="{StaticResource DefaultDropShadow}" />
 			<ContentControl x:Name="LeftTree" Effect="{StaticResource DefaultDropShadow}" />
 			<ComboBox x:Name="AndOr" Style="{StaticResource NormalComboBox}" Visibility="Collapsed"
 			          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:BooleanType}}}"

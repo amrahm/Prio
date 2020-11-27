@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "00:51:59",
+        "TimeLeft": "00:48:22",
         "DesktopsVisible": [
           -1
         ],
@@ -177,8 +177,8 @@
             "Condition": null,
             "Left": {
               "Condition": {
-                "Type": 0,
-                "AllowOverride": true,
+                "Type": 1,
+                "AllowOverride": false,
                 "WaitForMinutes": 0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null
@@ -190,8 +190,8 @@
             },
             "Right": {
               "Condition": {
-                "Type": 1,
-                "AllowOverride": false,
+                "Type": 0,
+                "AllowOverride": true,
                 "WaitForMinutes": 0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null
@@ -204,7 +204,7 @@
             "IsAnd": true,
             "IsLeaf": false
           },
-          "IsAnd": false,
+          "IsAnd": true,
           "IsLeaf": false
         }
       }

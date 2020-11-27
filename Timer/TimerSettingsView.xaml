@@ -101,7 +101,7 @@
 							<CheckBox Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
 						</StackPanel>
-						<ContentControl x:Name="RootResetCondition" Visibility="Collapsed" />
+						<ContentControl x:Name="RootResetCondition" />
 						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
 						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
 							<Viewbox>

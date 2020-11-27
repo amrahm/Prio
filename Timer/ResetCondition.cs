@@ -22,7 +22,6 @@ namespace Timer {
             remove => _deleteRequested.Unsubscribe(value);
         }
 
-
         public virtual void DeleteMe() {
             _deleteRequested.Raise(this, EventArgs.Empty);
         }

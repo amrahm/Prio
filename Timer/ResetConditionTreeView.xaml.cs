@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -54,27 +53,25 @@ namespace Timer {
 
         private void UpdateTreeLayout() {
             if(_vm.Tree.IsLeaf) {
-                LeftTree.Content = _vm.Tree.Condition != null ?
+                Condition.Content = _vm.Tree.Condition != null ?
                         new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition)) :
                         null;
-                RightTree.Content = null;
+                LeftTree.Content = _leftTreeContent = null;
+                RightTree.Content = _rightTreeContent = null;
 
                 Background = Brushes.Transparent;
                 AndOr.Visibility = Visibility.Collapsed;
-                RightTree.Visibility = Visibility.Collapsed;
             } else {
-                var leftTreeContent = new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Left),
-                                                                 _bgColor.Rotate(ROTATION));
-                var rightTreeContent = new ResetConditionTreeView(new ResetConditionTreeViewModel(_vm.Tree.Right),
-                                                                  _bgColor.Rotate(ROTATION));
-                LeftTree.Content = leftTreeContent;
-                RightTree.Content = rightTreeContent;
-                _leftTreeContent = leftTreeContent;
-                _rightTreeContent = rightTreeContent;
+                Condition.Content = null;
+                LeftTree.Content = _leftTreeContent = new ResetConditionTreeView(
+                    new ResetConditionTreeViewModel(_vm.Tree.Left), _bgColor.Rotate(ROTATION)
+                );
+                RightTree.Content = _rightTreeContent = new ResetConditionTreeView(
+                    new ResetConditionTreeViewModel(_vm.Tree.Right), _bgColor.Rotate(ROTATION)
+                );
 
                 if(!_isRoot) Background = new SolidColorBrush(_bgColor.ToMediaColor());
                 AndOr.Visibility = Visibility.Visible;
-                RightTree.Visibility = Visibility.Visible;
             }
         }
 
@@ -90,7 +87,7 @@ namespace Timer {
                !AnyChildIsDropCandidate(dropped, c => c.Control_MouseLeftButtonUpPreview(sender, e))) {
                 bool toLeft = e.GetPosition(AndOr).Y < AndOr.ActualHeight / 2;
                 FrameworkElement addingTo = toLeft ? _leftTreeContent : _rightTreeContent;
-                bool toLeftOfAdded = e.GetPosition(addingTo).Y < addingTo.ActualHeight / 2;
+                bool toLeftOfAdded = e.GetPosition(addingTo).Y > addingTo.ActualHeight / 2;
                 dropped.Control_MouseLeftButtonUp(dropped, e);
                 _vm.Tree.MoveNode(dropped._vm.Tree, toLeft, toLeftOfAdded);
             }
@@ -100,13 +97,14 @@ namespace Timer {
         ///           If they are, call callback with them as a parameter </summary>
         private bool AnyChildIsDropCandidate(ResetConditionTreeView dropped,
                                              Action<ResetConditionTreeView> callback = null) => ChildDraggables.Any(
-                delegate(UIElement x) {
-                    if(x != dropped && x is ResetConditionTreeView c && c.ContainsMouse() && !c._vm.Tree.IsLeaf) {
-                        callback?.Invoke(c);
-                        return true;
-                    }
-                    return false;
-                });
+            delegate(UIElement x) {
+                if(x != dropped && x is ResetConditionTreeView c && c.ContainsMouse() && !c._vm.Tree.IsLeaf) {
+                    callback?.Invoke(c);
+                    return true;
+                }
+                return false;
+            }
+        );
 
         private void Control_MouseLeftButtonUp(object sender, MouseEventArgs e) {
             if(_isDragging && sender is ResetConditionTreeView draggable) {

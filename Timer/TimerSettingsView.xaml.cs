@@ -47,11 +47,7 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ResetConditions), conditionsVm, nameof(conditionsVm.Tree));
                 RootResetCondition.Content = new ResetConditionTreeView(conditionsVm);
 
-                //TODO have to account for removal too
-                conditionsVm.PropertyChanged += (sender,  args) => RootResetCondition.Visibility = Visibility.Visible;
-                if(vm.Config.ResetConditions.Condition != null || vm.Config.ResetConditions.Left != null)
-                    RootResetCondition.Visibility = Visibility.Visible;
-
+                
                 // Window Setup
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
