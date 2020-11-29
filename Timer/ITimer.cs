@@ -14,6 +14,6 @@ namespace Timer {
         [JsonIgnore] bool IsRunning { get; }
         Task<ButtonResult> OpenSettings();
         void SaveSettings();
-        [CanBeNull] public Window TimerWindow { get; set; }
+        [CanBeNull] public Window TimerWindow { get; }
     }
 }

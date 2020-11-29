@@ -21,11 +21,14 @@
 		<StackPanel>
 			<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceBetween" AlignContent="FlexStart">
 				<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="0, 0, 2, 2" CornerRadius="0, 0, 10, 0">
-					<ComboBox Style="{StaticResource NormalComboBox}" hc:InfoElement.TitleWidth="Auto"
-					          hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Type:"
-					          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:ResetConditionType}}}"
-					          DisplayMemberPath="Description" SelectedValuePath="Value"
-					          SelectedValue="{Binding Model.Type, FallbackValue=0}" />
+					<StackPanel Orientation="Horizontal" Margin="5">
+						<TextBlock Style="{StaticResource BaseControlStyle}" Text="Type:" />
+						<ComboBox Style="{StaticResource NormalComboBox}"
+						          ItemsSource="{Binding Source={sr:Enumeration {x:Type local:ResetConditionType}}}"
+						          DisplayMemberPath="Description" SelectedValuePath="Value"
+						          SelectedValue="{Binding Model.Type, FallbackValue=0}"
+						          sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True" />
+					</StackPanel>
 				</Border>
 				<StackPanel Orientation="Horizontal" Margin="5">
 					<CheckBox IsChecked="{Binding Model.AllowOverride}" />
@@ -54,15 +57,17 @@
 
 			<hc:FlexPanel x:Name="DependencyOptions" FlexWrap="Wrap" JustifyContent="SpaceAround">
 				<ComboBox Style="{StaticResource NormalComboBox}" hc:InfoElement.TitleWidth="Auto"
-				          hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer:" Margin="5, 5, 10, 5" />
+				          hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer:" Margin="5, 5, 10, 5"
+				          ItemsSource="{Binding Timers}" sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True"
+				          SelectedValue="{Binding SelectedTimer}" />
 				<StackPanel Orientation="Horizontal" Margin="10, 5">
-					<CheckBox IsChecked="{Binding Model.OffDesktopsEnabled}" />
+					<CheckBox IsChecked="{Binding Model.MustRunForXEnabled}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must run for" />
-					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.WaitForMinutes}" />
+					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.MustRunForXMinutes}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" Margin="10, 5, 5, 5">
-					<CheckBox IsChecked="{Binding Model.OffDesktopsEnabled}" />
+					<CheckBox IsChecked="{Binding Model.MustBeFinished}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must be finished" />
 				</StackPanel>
 			</hc:FlexPanel>

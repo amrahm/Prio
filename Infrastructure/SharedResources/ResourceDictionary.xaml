@@ -3,7 +3,9 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:local="clr-namespace:Infrastructure"
                     xmlns:hc="https://handyorg.github.io/handycontrol"
-                    xmlns:adornedControl="clr-namespace:AdornedControl">
+                    xmlns:adornedControl="clr-namespace:AdornedControl"
+                    xmlns:sharedResources="clr-namespace:Infrastructure.SharedResources"
+                    xmlns:converters="clr-namespace:Infrastructure.SharedResources.Converters">
 
 
 	<ResourceDictionary.MergedDictionaries>
@@ -54,7 +56,7 @@
 
 
 	<!-- Border Styles-->
-	<local:WidthAndHeightToRectConverter x:Key="WidthAndHeightToRectConverter" />
+	<converters:WidthAndHeightToRectConverter x:Key="WidthAndHeightToRectConverter" />
 	<Style x:Key="BorderClip" TargetType="Border">
 		<Setter Property="CornerRadius" Value="15" />
 		<Setter Property="Clip">

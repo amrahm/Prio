@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Prism.Services.Dialogs;
@@ -225,6 +228,7 @@ namespace Infrastructure.SharedResources {
         public class EnumerationMember {
             public string Description { [UsedImplicitly] get; set; }
             public object Value { [UsedImplicitly] get; set; }
+            public override string ToString() => Description;
         }
     }
 
@@ -331,9 +335,78 @@ namespace Infrastructure.SharedResources {
         }
     }
 
+    // ReSharper disable once UnusedType.Global
     public static class Log {
         public static void Write(object o) {
             Debug.WriteLine(o?.ToString());
+        }
+    }
+
+    public static class ComboBoxAutoWidthBehavior {
+        public static readonly DependencyProperty ComboBoxAutoWidthProperty =
+                DependencyProperty.RegisterAttached(
+                    "ComboBoxAutoWidth",
+                    typeof(bool),
+                    typeof(ComboBoxAutoWidthBehavior),
+                    new UIPropertyMetadata(false, OnComboBoxAutoWidthPropertyChanged)
+                );
+
+        public static bool GetComboBoxAutoWidth(DependencyObject obj) {
+            return (bool) obj.GetValue(ComboBoxAutoWidthProperty);
+        }
+
+        public static void SetComboBoxAutoWidth(DependencyObject obj, bool value) {
+            obj.SetValue(ComboBoxAutoWidthProperty, value);
+        }
+
+        private static void OnComboBoxAutoWidthPropertyChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
+            if(dpo is ComboBox comboBox) {
+                if((bool) e.NewValue) {
+                    comboBox.Loaded += OnComboBoxLoaded;
+                    comboBox.DropDownOpened += OnComboBoxOpened;
+                    comboBox.DropDownClosed += OnComboBoxClosed;
+                } else {
+                    comboBox.Loaded -= OnComboBoxLoaded;
+                    comboBox.DropDownOpened -= OnComboBoxOpened;
+                    comboBox.DropDownClosed -= OnComboBoxClosed;
+                }
+            }
+        }
+
+        private static void OnComboBoxLoaded(object sender, EventArgs eventArgs) {
+            ComboBox comboBox = (ComboBox) sender;
+            comboBox.SetMaxWidthFromItems();
+        }
+
+        private static void OnComboBoxOpened(object sender, EventArgs eventArgs) {
+            ComboBox comboBox = (ComboBox) sender;
+            comboBox.Width = comboBox.MaxWidth;
+        }
+
+        private static void OnComboBoxClosed(object sender, EventArgs eventArgs) => ((ComboBox) sender).Width = double.NaN;
+    }
+
+    public static class ComboBoxExtensionMethods {
+        public static void SetMaxWidthFromItems(this ComboBox combo) {
+            double idealWidth = combo.MinWidth;
+            string longestItem = combo.Items.Cast<object>().Select(x => x.ToString()).Max(x => (x?.Length, x)).x;
+            if(longestItem != null && longestItem.Length >= 0) {
+                string tmpTxt = combo.Text;
+                combo.Text = longestItem;
+                Thickness tmpMarg = combo.Margin;
+                combo.Margin = new Thickness(0);
+                combo.UpdateLayout();
+
+                combo.Width = double.NaN;
+                combo.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+                idealWidth = Math.Max(idealWidth, combo.DesiredSize.Width);
+
+                combo.Text = tmpTxt;
+                combo.Margin = tmpMarg;
+            }
+
+            combo.MaxWidth = idealWidth;
         }
     }
 }

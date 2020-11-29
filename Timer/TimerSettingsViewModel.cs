@@ -61,7 +61,7 @@ namespace Timer {
         public DelegateCommand OkCommand { get; }
 
         public TimerSettingsViewModel() {
-            AddResetConditionCommand = new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition()));
+            AddResetConditionCommand = new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
 
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {

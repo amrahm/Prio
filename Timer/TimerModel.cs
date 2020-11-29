@@ -119,5 +119,6 @@ namespace Timer {
 
         public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
         public override int GetHashCode() => Config.InstanceID.GetHashCode();
+        public override string ToString() => Config.Name;
     }
 }
