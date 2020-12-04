@@ -16,6 +16,7 @@ namespace Timer {
         public TimersGeneralConfig GeneralConfig { get; set; }
 
         public ObservableHashSet<ITimer> Timers { get; } = new ObservableHashSet<ITimer>();
+        public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
 
         private TimersService() {
             GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();

@@ -98,8 +98,12 @@
 						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
 						<StackPanel Orientation="Horizontal">
-							<CheckBox Margin="5" />
+							<CheckBox IsChecked="{Binding Config.AutoResetOnConditions}" Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
 						</StackPanel>
 						<ContentControl x:Name="RootResetCondition" />
 						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
@@ -129,7 +133,7 @@
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="As Alert" />
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
-								<CheckBox Margin="5" />
+								<CheckBox Margin="5" IsChecked="{Binding Config.OverflowEnabled}" />
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Overflow" />
 								<TextBlock Style="{StaticResource HintControlDark}" Text="(Count Up)" />
 							</StackPanel>

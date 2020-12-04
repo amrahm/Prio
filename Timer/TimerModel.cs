@@ -7,6 +7,7 @@ using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
+using WeakEvent;
 
 namespace Timer {
     public class TimerModel : NotifyPropertyWithDependencies, ITimer {
@@ -17,10 +18,17 @@ namespace Timer {
             set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
         }
 
-        public Window TimerWindow { get; set; }
+        public Window TimerWindow { get; private set; }
 
+        private readonly WeakEventSource<EventArgs> _finished = new WeakEventSource<EventArgs>();
+        public event EventHandler<EventArgs> Finished {
+            add => _finished.Subscribe(value);
+            remove => _finished.Unsubscribe(value);
+        }
+
+        private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly IDialogService _dialogService;
-        private readonly DispatcherTimer _timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+        private readonly DispatcherTimer _timer = new DispatcherTimer {Interval = OneSecond};
         private bool _hidden;
         private readonly IVirtualDesktopManager _vdm;
 
@@ -31,12 +39,30 @@ namespace Timer {
             IContainerProvider container = UnityInstance.GetContainer();
             _dialogService = container.Resolve<IDialogService>();
 
-            _timer.Tick += (o,  e) => Config.TimeLeft -= TimeSpan.FromSeconds(1);
+            _timer.Tick += OnTimerOnTick;
 
             RegisterShortcuts();
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
             _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
+
+            Config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
+        }
+
+        private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
+            if(Config.AutoResetOnConditions) {
+                ResetTimer();
+                StartStopForDesktopsActive(_vdm.CurrentDesktop());
+            }
+        }
+
+        private void OnTimerOnTick(object o, EventArgs e) {
+            Config.TimeLeft -= OneSecond;
+            if(Math.Abs(Config.TimeLeft.TotalSeconds) < 0.4) {
+                _finished.Raise(this, EventArgs.Empty);
+                if(!Config.OverflowEnabled) StopTimer();
+                Config.ResetConditions.StartConditions();
+            }
         }
 
         private void HandleDesktopChanged(int newDesktop) {
@@ -51,6 +77,10 @@ namespace Timer {
                 }
             });
 
+            StartStopForDesktopsActive(newDesktop);
+        }
+
+        private void StartStopForDesktopsActive(int newDesktop) {
             Config.DesktopsActive ??= new HashSet<int>();
             if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(newDesktop)) StartTimer();
             else if(Config.DesktopsVisible.Count > 0) StopTimer();
@@ -75,10 +105,14 @@ namespace Timer {
         }
 
         public void ResetTimer() => Config.TimeLeft = Config.Duration;
-        public void StartTimer() => _timer.Start();
+
+        public void StartTimer() {
+            if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) _timer.Start();
+        }
+
         public void StopTimer() => _timer.Stop();
 
-        public void ShowHideTimer() {
+        private void ShowHideTimer() {
             if(TimerWindow == null) return;
             if(_hidden) {
                 TimerWindow.Visibility = Visibility.Visible;

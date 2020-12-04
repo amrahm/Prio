@@ -52,16 +52,7 @@ namespace Timer {
         }
 
         private void UpdateTreeLayout() {
-            if(_vm.Tree.IsLeaf) {
-                Condition.Content = _vm.Tree.Condition != null ?
-                        new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition)) :
-                        null;
-                LeftTree.Content = _leftTreeContent = null;
-                RightTree.Content = _rightTreeContent = null;
-
-                Background = Brushes.Transparent;
-                AndOr.Visibility = Visibility.Collapsed;
-            } else {
+            if(_vm.Tree.IsBranch) {
                 Condition.Content = null;
                 LeftTree.Content = _leftTreeContent = new ResetConditionTreeView(
                     new ResetConditionTreeViewModel(_vm.Tree.Left), _bgColor.Rotate(ROTATION)
@@ -72,6 +63,15 @@ namespace Timer {
 
                 if(!_isRoot) Background = new SolidColorBrush(_bgColor.ToMediaColor());
                 AndOr.Visibility = Visibility.Visible;
+            } else {
+                Condition.Content = _vm.Tree.Condition != null ?
+                        new ResetConditionView(new ResetConditionViewModel(_vm.Tree.Condition)) :
+                        null;
+                LeftTree.Content = _leftTreeContent = null;
+                RightTree.Content = _rightTreeContent = null;
+
+                Background = Brushes.Transparent;
+                AndOr.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -82,7 +82,7 @@ namespace Timer {
         private ResetConditionTreeView _rightTreeContent;
 
         private void Control_MouseLeftButtonUpPreview(object sender, MouseEventArgs e) {
-            if(_isDragging || _vm.Tree.IsLeaf) return;
+            if(_isDragging || !_vm.Tree.IsBranch) return;
             if(Mouse.Captured is ResetConditionTreeView dropped &&
                !AnyChildIsDropCandidate(dropped, c => c.Control_MouseLeftButtonUpPreview(sender, e))) {
                 bool toLeft = e.GetPosition(AndOr).Y < AndOr.ActualHeight / 2;
@@ -98,7 +98,7 @@ namespace Timer {
         private bool AnyChildIsDropCandidate(ResetConditionTreeView dropped,
                                              Action<ResetConditionTreeView> callback = null) => ChildDraggables.Any(
             delegate(UIElement x) {
-                if(x != dropped && x is ResetConditionTreeView c && c.ContainsMouse() && !c._vm.Tree.IsLeaf) {
+                if(x != dropped && x is ResetConditionTreeView c && c.ContainsMouse() && c._vm.Tree.IsBranch) {
                     callback?.Invoke(c);
                     return true;
                 }
@@ -135,7 +135,7 @@ namespace Timer {
                 }
                 transform.X = currentPosition.X - _initPosition.X;
                 transform.Y = currentPosition.Y - _initPosition.Y;
-            } else if(!_vm.Tree.IsLeaf) {
+            } else if(_vm.Tree.IsBranch) {
                 if(Mouse.Captured is ResetConditionTreeView toDrop && this.ContainsMouse() &&
                    !AnyChildIsDropCandidate(toDrop, c => c?.Control_MouseMove(sender, e))) {
                     if(_leftTreeContent != toDrop)

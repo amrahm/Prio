@@ -30,11 +30,6 @@
 						          sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True" />
 					</StackPanel>
 				</Border>
-				<StackPanel Orientation="Horizontal" Margin="5">
-					<CheckBox IsChecked="{Binding Model.AllowOverride}" />
-					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
-				</StackPanel>
-
 				<Button Content="DELETE" Style="{StaticResource NormalButtonLight2Bordered}" Command="{Binding DeleteCommand}" />
 			</hc:FlexPanel>
 
@@ -58,8 +53,8 @@
 			<hc:FlexPanel x:Name="DependencyOptions" FlexWrap="Wrap" JustifyContent="SpaceAround">
 				<ComboBox Style="{StaticResource NormalComboBox}" hc:InfoElement.TitleWidth="Auto"
 				          hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Timer:" Margin="5, 5, 10, 5"
-				          ItemsSource="{Binding Timers}" sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True"
-				          SelectedValue="{Binding SelectedTimer}" />
+				          ItemsSource="{Binding Timers, FallbackValue=null}" sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True"
+				          SelectedValue="{Binding Model.DependencyTimer}" />
 				<StackPanel Orientation="Horizontal" Margin="10, 5">
 					<CheckBox IsChecked="{Binding Model.MustRunForXEnabled}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must run for" />

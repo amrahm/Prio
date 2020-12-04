@@ -21,6 +21,9 @@ namespace Timer {
         public ShortcutDefinition ShowHideShortcut { get; set; }
         public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new Dictionary<int, WindowPosition>();
         public ResetConditionTree ResetConditions { get; set; } = new ResetConditionTree();
+        public bool AutoResetOnConditions { get; set; }
+        public bool AllowResetOverride { get; set; } //TODO
+        public bool OverflowEnabled { get; set; } = true;
     }
 
     public readonly struct WindowPosition {
