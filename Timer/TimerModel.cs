@@ -15,7 +15,18 @@ namespace Timer {
 
         public TimerConfig Config {
             get => _config;
-            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+            set {
+                void ResetConditionsOnSatisfied(object sender, EventArgs e) {
+                    if(Config.AutoResetOnConditions) {
+                        ResetTimer();
+                        StartStopForDesktopsActive(_vdm.CurrentDesktop());
+                    }
+                }
+
+                if(_config != null) _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
+                NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+                if(_config != null) _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
+            }
         }
 
         public Window TimerWindow { get; private set; }
@@ -30,6 +41,7 @@ namespace Timer {
         private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer = new DispatcherTimer {Interval = OneSecond};
         private bool _hidden;
+        private bool _finishedSet;
         private readonly IVirtualDesktopManager _vdm;
 
         public bool IsRunning => _timer.IsEnabled;
@@ -45,20 +57,12 @@ namespace Timer {
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
             _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
-
-            Config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
-        }
-
-        private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
-            if(Config.AutoResetOnConditions) {
-                ResetTimer();
-                StartStopForDesktopsActive(_vdm.CurrentDesktop());
-            }
         }
 
         private void OnTimerOnTick(object o, EventArgs e) {
             Config.TimeLeft -= OneSecond;
-            if(Math.Abs(Config.TimeLeft.TotalSeconds) < 0.4) {
+            if(!_finishedSet && Config.TimeLeft.TotalSeconds <= 0.01) {
+                _finishedSet = true;
                 _finished.Raise(this, EventArgs.Empty);
                 if(!Config.OverflowEnabled) StopTimer();
                 Config.ResetConditions.StartConditions();
@@ -104,7 +108,11 @@ namespace Timer {
             HandleDesktopChanged(_vdm.CurrentDesktop());
         }
 
-        public void ResetTimer() => Config.TimeLeft = Config.Duration;
+        public void ResetTimer() {
+            Config.TimeLeft = Config.Duration;
+            _finishedSet = false;
+            Config.ResetConditions.StopAllConditions();
+        }
 
         public void StartTimer() {
             if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) _timer.Start();

@@ -34,10 +34,10 @@ namespace Timer {
             if(_parent == null) {
                 _satisfied.Raise(this, EventArgs.Empty);
                 StopAllConditions();
-            } else if(_parent.GetDir(!IsLeftChild).IsSat()) _parent.ConditionOnSatisfied(sender, e);
+            } else if(!_parent.IsAnd || _parent.GetDir(!IsLeftChild).IsSat()) _parent.ConditionOnSatisfied(sender, e);
         }
 
-        private void StopAllConditions() {
+        public void StopAllConditions() {
             if(IsLeaf) Condition.Stop();
             else if(IsBranch) {
                 Left.StopAllConditions();
@@ -126,7 +126,7 @@ namespace Timer {
                     Condition = newConditionTree.Condition;
                 }
             } else {
-                GetDir(toLeft) = IsBranch ? new ResetConditionTree(_left, _right, isAnd) : new ResetConditionTree(Condition);
+                GetDir(toLeft) = IsBranch ? new ResetConditionTree(_left, _right, IsAnd) : new ResetConditionTree(Condition);
                 GetDir(!toLeft) = newConditionTree;
                 IsAnd = isAnd;
                 Condition = null;

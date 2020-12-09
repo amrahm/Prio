@@ -5,21 +5,18 @@ using JetBrains.Annotations;
 namespace Timer {
     public enum BooleanType { [Description("AND")] And, [Description("OR")] [UsedImplicitly] Or }
 
-    public class ResetConditionTreeViewModel : NotifyPropertyChanged {
+    public class ResetConditionTreeViewModel : NotifyPropertyWithDependencies {
         private ResetConditionTree _tree;
-        private BooleanType _isAnd;
 
         public ResetConditionTree Tree {
             get => _tree;
-            set => NotificationBubbler.BubbleSetter(ref _tree, value, (o, e) => OnPropertyChanged());
+            set => NotificationBubbler.BubbleSetter(ref _tree, value, (o, e) => this.OnPropertyChanged());
         }
 
+        [DependsOnProperty(nameof(Tree))]
         public BooleanType IsAnd {
-            get => _isAnd;
-            set {
-                _isAnd = value;
-                Tree.IsAnd = value == BooleanType.And;
-            }
+            get => Tree.IsAnd ? BooleanType.And : BooleanType.Or;
+            set => Tree.IsAnd = value == BooleanType.And;
         }
 
         public ResetConditionTreeViewModel(ResetConditionTree tree) => Tree = tree;
