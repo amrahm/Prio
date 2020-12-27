@@ -50,7 +50,7 @@ namespace Timer {
                 if(Timer.IsRunning) Timer.StopTimer();
                 else Timer.StartTimer();
             });
-            ResetTimer = new DelegateCommand(() => Timer.ResetTimer());
+            ResetTimer = new DelegateCommand(() => Timer.RequestResetTimer());
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
     }

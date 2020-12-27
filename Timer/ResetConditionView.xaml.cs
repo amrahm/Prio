@@ -22,7 +22,7 @@ namespace Timer {
                         CooldownOptions.Visibility = Visibility.Collapsed;
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException(nameof(resetConditionModel));
                 }
             }
 

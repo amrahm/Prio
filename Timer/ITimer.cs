@@ -10,7 +10,7 @@ namespace Timer {
     public interface ITimer : INotifyPropertyChanged {
         TimerConfig Config { get; set; }
         void ShowTimer();
-        void ResetTimer();
+        void RequestResetTimer();
         void StartTimer();
         void StopTimer();
         [JsonIgnore] bool IsRunning { get; }

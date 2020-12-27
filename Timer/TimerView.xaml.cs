@@ -23,9 +23,8 @@ namespace Timer {
             _vm = (TimerViewModel) DataContext;
 
             Loaded += (o, e) => {
-                _window = Window.GetWindow(this) as TimerWindow;
-                if(_window != null) // This ensures the timer is a floating window
-                    InitializeFloatingWindow();
+                _window = Window.GetWindow(this) as TimerWindow; // This ensures the timer is a floating window
+                if(_window != null) InitializeFloatingWindow();
             };
         }
 
@@ -57,7 +56,7 @@ namespace Timer {
             WindowPosition newPos = new WindowPosition(_window.Left, _window.Top,
                                                        _window.ActualWidth, _window.ActualHeight);
             if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition configPos) ||
-               !configPos.Equals(newPos)) {
+               configPos != newPos) {
                 _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
                 _vm.Timer.SaveSettings();
             }
@@ -84,10 +83,6 @@ namespace Timer {
             _window.Left += Math.Min(wA.Right / dpiWidthFactor - (_window.Left + _window.ActualWidth), 0);
             _window.Top += Math.Max(wA.Top / dpiHeightFactor - _window.Top, 0);
             _window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (_window.Top + _window.ActualHeight), 0);
-
-            foreach(ITimer timer in TimersService.Singleton.Timers) {
-                //TODO move this out of the way if there's an overlap
-            }
         }
 
         private void TimerAspectRatioLimits(object sender, SizeChangedEventArgs sizeChangedEventArgs) {

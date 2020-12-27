@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "00:26:57",
+        "TimeLeft": "02:29:29",
         "DesktopsVisible": [
           -1
         ],
@@ -126,9 +126,18 @@
         "TimeLeft": "00:00:03",
         "DesktopsVisible": [],
         "DesktopsActive": [],
-        "ResetShortcut": null,
-        "StartShortcut": null,
-        "StopShortcut": null,
+        "ResetShortcut": {
+          "Key": 93,
+          "Modifiers": 6
+        },
+        "StartShortcut": {
+          "Key": 92,
+          "Modifiers": 6
+        },
+        "StopShortcut": {
+          "Key": 92,
+          "Modifiers": 6
+        },
         "ShowHideShortcut": null,
         "WindowPositions": {
           "2": {
@@ -151,8 +160,12 @@
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
               "WaitForMinutes": 0.1,
-              "OffDesktopsEnabled": false,
-              "OffDesktopsSet": null,
+              "OffDesktopsEnabled": true,
+              "OffDesktopsSet": [
+                1,
+                2,
+                8
+              ],
               "DependencyTimerId": "ebe64c8b-6141-403c-ba69-367fd614ccdf",
               "MustRunForXEnabled": false,
               "MustRunForXMinutes": 0.0,
@@ -189,7 +202,7 @@
                 "OffDesktopsSet": null,
                 "DependencyTimerId": "12866e1e-d5fe-4ed7-ba62-9f116ca15ca2",
                 "MustRunForXEnabled": true,
-                "MustRunForXMinutes": 0.15,
+                "MustRunForXMinutes": 30.0,
                 "MustBeFinished": false
               },
               "Left": null,
@@ -201,7 +214,7 @@
           "IsAnd": true
         },
         "AutoResetOnConditions": true,
-        "AllowResetOverride": false,
+        "AllowResetOverride": true,
         "OverflowEnabled": true
       }
     ]

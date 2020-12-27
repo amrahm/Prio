@@ -71,7 +71,7 @@ namespace Timer {
         [JsonIgnore] public bool IsBranch => Left != null;
 
         public bool IsSat() => Condition?.IsSatisfied() ??
-                               (IsAnd ? _left.IsSat() && _right.IsSat() : _left.IsSat() || _right.IsSat());
+                               !IsBranch || (IsAnd ? _left.IsSat() && _right.IsSat() : _left.IsSat() || _right.IsSat());
 
         public void StartConditions() {
             if(IsLeaf) Condition.Start();
@@ -80,6 +80,30 @@ namespace Timer {
                 Right.StartConditions();
             }
         }
+
+        public string UnmetStrings() {
+            if(IsSat()) return "";
+            string st = Left.IsSat() ? Right._UnmetStrings() : Right.IsSat() ? Left._UnmetStrings() : _UnmetStrings();
+            return _parent == null ? st.TrimEnd('\n') : st;
+        }
+
+
+        private string _UnmetStrings(string indent = "", bool init = true) {
+            if(IsLeaf) return $"{indent}{Condition.UnmetString()}\n";
+            if(!IsBranch) return "";
+
+            string rep = indent;
+            if(!init) indent += "  ";
+
+            if(!Left.IsSat()) {
+                rep += Left._UnmetStrings(indent, false);
+                rep += $"{indent}{(IsAnd ? "and" : "or")}\n";
+            }
+            if(!Right.IsSat())
+                rep += Right._UnmetStrings(indent, false);
+            return rep;
+        }
+
 
         private ResetConditionTree _parent;
         private ResetConditionTree _left;

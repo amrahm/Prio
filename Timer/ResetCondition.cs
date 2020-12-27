@@ -37,14 +37,32 @@ namespace Timer {
             }
         }
 
-        public bool MustRunForXEnabled { get; set; }
+        public bool MustRunForXEnabled { get; set; } //TODO validation to ensure this or MustBeFinished is true, but not both
         public double MustRunForXMinutes { get; set; }
         public bool MustBeFinished { get; set; }
         private bool _timerFinished;
 
+        public string UnmetString() {
+            string st = "";
+            switch(Type) {
+                case ResetConditionType.Cooldown:
+                    st += _secondsLeft > 60 ? $"Must wait {_secondsLeft / 60} minutes" : $"Must wait {_secondsLeft} seconds";
+                    if(OffDesktopsEnabled)
+                        st += $" while off of Desktops {VirtualDesktopExtensions.DesktopSetToString(OffDesktopsSet)}";
+                    break;
+                case ResetConditionType.Dependency:
+                    st += $"{DependencyTimer.Config.Name} must";
+                    if(MustBeFinished) st += " be finished";
+                    else if(MustRunForXEnabled) st += $" run for {_secondsLeft / 60} minutes";
+                    break;
+            }
+            return st + ".";
+        }
+
+
         private readonly DispatcherTimer _conditionTimer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
-        private int _secondsLeft;
         private readonly IVirtualDesktopManager _virtualDesktopManager;
+        private int _secondsLeft;
 
         private readonly WeakEventSource<EventArgs> _deleteRequested = new WeakEventSource<EventArgs>();
         public event EventHandler<EventArgs> DeleteRequested {
@@ -74,7 +92,7 @@ namespace Timer {
         private void OnTimerOnTick(object sender, EventArgs e) {
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    if(!OffDesktopsEnabled || OffDesktopsSet.Contains(_virtualDesktopManager.CurrentDesktop()))
+                    if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(_virtualDesktopManager.CurrentDesktop()))
                         _secondsLeft -= 1;
                     break;
                 case ResetConditionType.Dependency:
@@ -101,10 +119,10 @@ namespace Timer {
         public void Start() {
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    _secondsLeft = (int) (WaitForMinutes*60);
+                    _secondsLeft = (int) (WaitForMinutes * 60);
                     break;
                 case ResetConditionType.Dependency:
-                    _secondsLeft = (int) (MustRunForXMinutes*60);
+                    _secondsLeft = (int) (MustRunForXMinutes * 60);
                     if(MustBeFinished) {
                         _timerFinished = DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
                         DependencyTimer.Finished += (sender, e) => _timerFinished = true;

@@ -57,10 +57,16 @@ namespace Timer {
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
             _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
+
+            //TimerFinishCheckRaise();
         }
 
         private void OnTimerOnTick(object o, EventArgs e) {
             Config.TimeLeft -= OneSecond;
+            TimerFinishCheckRaise();
+        }
+
+        private void TimerFinishCheckRaise() {
             if(!_finishedSet && Config.TimeLeft.TotalSeconds <= 0.01) {
                 _finishedSet = true;
                 _finished.Raise(this, EventArgs.Empty);
@@ -108,10 +114,26 @@ namespace Timer {
             HandleDesktopChanged(_vdm.CurrentDesktop());
         }
 
-        public void ResetTimer() {
+        private void ResetTimer() {
             Config.TimeLeft = Config.Duration;
             _finishedSet = false;
             Config.ResetConditions.StopAllConditions();
+        }
+
+        public void RequestResetTimer() {
+            if(!Config.ResetConditions.IsSat()) {
+                if(Config.AllowResetOverride) {
+                    MessageBoxResult result = MessageBox.Show(
+                        $"Not all reset conditions are met:\n\n{Config.ResetConditions.UnmetStrings()}\n\nDo you want to override?",
+                        $"Resetting: {Config.Name}", MessageBoxButton.YesNo);
+                    if(result == MessageBoxResult.No) return;
+                } else {
+                    MessageBox.Show($"Not all reset conditions are met:\n{Config.ResetConditions.UnmetStrings()}");
+                    return;
+                }
+            }
+
+            ResetTimer();
         }
 
         public void StartTimer() {
@@ -146,7 +168,8 @@ namespace Timer {
         private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();
             var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut, ResetTimer,
+            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut,
+                                         RequestResetTimer,
                                          CompatibilityType.Reset);
 
             int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);

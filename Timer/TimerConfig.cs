@@ -22,7 +22,7 @@ namespace Timer {
         public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new Dictionary<int, WindowPosition>();
         public ResetConditionTree ResetConditions { get; set; } = new ResetConditionTree();
         public bool AutoResetOnConditions { get; set; }
-        public bool AllowResetOverride { get; set; } //TODO
+        public bool AllowResetOverride { get; set; }
         public bool OverflowEnabled { get; set; } = true;
     }
 
@@ -41,9 +41,13 @@ namespace Timer {
 
         public override bool Equals(object obj) => obj is WindowPosition other && Equals(other);
 
-        public bool Equals(WindowPosition other) =>
+        private bool Equals(WindowPosition other) =>
                 X.Equals(other.X) && Y.Equals(other.Y) && Width.Equals(other.Width) && Height.Equals(other.Height);
 
         public override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
+
+        public static bool operator ==(WindowPosition left, WindowPosition right) => left.Equals(right);
+
+        public static bool operator !=(WindowPosition left, WindowPosition right) => !(left == right);
     }
 }
