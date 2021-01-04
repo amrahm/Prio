@@ -23,6 +23,7 @@ namespace Timer {
         public ResetConditionTree ResetConditions { get; set; } = new ResetConditionTree();
         public bool AutoResetOnConditions { get; set; }
         public bool AllowResetOverride { get; set; }
+        public bool AllowResetWhileRunning { get; set; }
         public bool OverflowEnabled { get; set; } = true;
     }
 

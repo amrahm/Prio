@@ -57,9 +57,9 @@ namespace Timer {
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
             _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
-
-            //TimerFinishCheckRaise();
         }
+
+        public void CheckStart() => TimerFinishCheckRaise();
 
         private void OnTimerOnTick(object o, EventArgs e) {
             Config.TimeLeft -= OneSecond;
@@ -121,19 +121,21 @@ namespace Timer {
         }
 
         public void RequestResetTimer() {
-            if(!Config.ResetConditions.IsSat()) {
-                if(Config.AllowResetOverride) {
-                    MessageBoxResult result = MessageBox.Show(
-                        $"Not all reset conditions are met:\n\n{Config.ResetConditions.UnmetStrings()}\n\nDo you want to override?",
-                        $"Resetting: {Config.Name}", MessageBoxButton.YesNo);
-                    if(result == MessageBoxResult.No) return;
-                } else {
-                    MessageBox.Show($"Not all reset conditions are met:\n{Config.ResetConditions.UnmetStrings()}");
-                    return;
-                }
+            if(!_finishedSet && Config.AllowResetWhileRunning || Config.ResetConditions.IsSat()) {
+                ResetTimer();
+                return;
             }
 
-            ResetTimer();
+            string unmetStrings = _finishedSet ? Config.ResetConditions.UnmetStrings() : "The timer has not finished yet.";
+
+            if(Config.AllowResetOverride) {
+                MessageBoxResult result = MessageBox.Show(
+                    $"Not all reset conditions are met:\n\n{unmetStrings}\n\nDo you want to override?",
+                    $"Resetting: {Config.Name}", MessageBoxButton.YesNo);
+                if(result == MessageBoxResult.Yes) ResetTimer();
+            } else {
+                MessageBox.Show($"Not all reset conditions are met:\n{unmetStrings}");
+            }
         }
 
         public void StartTimer() {

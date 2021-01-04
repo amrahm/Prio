@@ -105,6 +105,10 @@
 							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
 						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
+						</StackPanel>
 						<ContentControl x:Name="RootResetCondition" />
 						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
 						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">

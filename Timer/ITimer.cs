@@ -18,5 +18,6 @@ namespace Timer {
         void SaveSettings();
         [CanBeNull] public Window TimerWindow { get; }
         event EventHandler<EventArgs> Finished;
+        void CheckStart();
     }
 }

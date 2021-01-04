@@ -26,7 +26,10 @@ namespace Timer {
             currVisState = GeneralConfig.DefaultVisibilityState;
         }
 
-        public void ShowTimers() => Timers.ForEach(t => t.ShowTimer());
+        public void ShowTimers() => Timers.ForEach(t => {
+            t.ShowTimer();
+            t.CheckStart();
+        });
 
         public void SaveSettings() {
             GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();

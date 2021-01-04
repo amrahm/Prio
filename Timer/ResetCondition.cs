@@ -21,7 +21,10 @@ namespace Timer {
                 if(_timer != null) TimerId = _timer.Config.InstanceID;
             }
         }
+
         public ResetConditionType Type { get; set; }
+        public int SecondsLeft { get; private set; }
+
 
         public double WaitForMinutes { get; set; }
         public bool OffDesktopsEnabled { get; set; }
@@ -40,20 +43,20 @@ namespace Timer {
         public bool MustRunForXEnabled { get; set; } //TODO validation to ensure this or MustBeFinished is true, but not both
         public double MustRunForXMinutes { get; set; }
         public bool MustBeFinished { get; set; }
-        private bool _timerFinished;
+        public bool TimerFinished { get; private set; }
 
         public string UnmetString() {
             string st = "";
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    st += _secondsLeft > 60 ? $"Must wait {_secondsLeft / 60} minutes" : $"Must wait {_secondsLeft} seconds";
+                    st += SecondsLeft > 60 ? $"Must wait {SecondsLeft / 60} minutes" : $"Must wait {SecondsLeft} seconds";
                     if(OffDesktopsEnabled)
                         st += $" while off of Desktops {VirtualDesktopExtensions.DesktopSetToString(OffDesktopsSet)}";
                     break;
                 case ResetConditionType.Dependency:
                     st += $"{DependencyTimer.Config.Name} must";
                     if(MustBeFinished) st += " be finished";
-                    else if(MustRunForXEnabled) st += $" run for {_secondsLeft / 60} minutes";
+                    else if(MustRunForXEnabled) st += $" run for {SecondsLeft / 60} minutes";
                     break;
             }
             return st + ".";
@@ -62,7 +65,6 @@ namespace Timer {
 
         private readonly DispatcherTimer _conditionTimer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
         private readonly IVirtualDesktopManager _virtualDesktopManager;
-        private int _secondsLeft;
 
         private readonly WeakEventSource<EventArgs> _deleteRequested = new WeakEventSource<EventArgs>();
         public event EventHandler<EventArgs> DeleteRequested {
@@ -93,11 +95,11 @@ namespace Timer {
             switch(Type) {
                 case ResetConditionType.Cooldown:
                     if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(_virtualDesktopManager.CurrentDesktop()))
-                        _secondsLeft -= 1;
+                        SecondsLeft -= 1;
                     break;
                 case ResetConditionType.Dependency:
                     if(MustRunForXEnabled && DependencyTimer.IsRunning)
-                        _secondsLeft -= 1;
+                        SecondsLeft -= 1;
                     break;
             }
 
@@ -109,9 +111,9 @@ namespace Timer {
 
         public bool IsSatisfied() {
             return Type switch {
-                ResetConditionType.Cooldown => _secondsLeft <= 0,
-                ResetConditionType.Dependency => (!MustRunForXEnabled || _secondsLeft <= 0) &&
-                                                 (!MustBeFinished || _timerFinished),
+                ResetConditionType.Cooldown => SecondsLeft <= 0,
+                ResetConditionType.Dependency => (!MustRunForXEnabled || SecondsLeft <= 0) &&
+                                                 (!MustBeFinished || TimerFinished),
                 _ => true
             };
         }
@@ -119,13 +121,13 @@ namespace Timer {
         public void Start() {
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    _secondsLeft = (int) (WaitForMinutes * 60);
+                    SecondsLeft = (int) (WaitForMinutes * 60);
                     break;
                 case ResetConditionType.Dependency:
-                    _secondsLeft = (int) (MustRunForXMinutes * 60);
+                    SecondsLeft = (int) (MustRunForXMinutes * 60);
                     if(MustBeFinished) {
-                        _timerFinished = DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
-                        DependencyTimer.Finished += (sender, e) => _timerFinished = true;
+                        TimerFinished = DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
+                        DependencyTimer.Finished += (sender, e) => TimerFinished = true;
                     }
                     break;
             }
