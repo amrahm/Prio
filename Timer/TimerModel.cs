@@ -31,7 +31,7 @@ namespace Timer {
 
         public Window TimerWindow { get; private set; }
 
-        private readonly WeakEventSource<EventArgs> _finished = new WeakEventSource<EventArgs>();
+        private readonly WeakEventSource<EventArgs> _finished = new();
         public event EventHandler<EventArgs> Finished {
             add => _finished.Subscribe(value);
             remove => _finished.Unsubscribe(value);
@@ -39,7 +39,7 @@ namespace Timer {
 
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly IDialogService _dialogService;
-        private readonly DispatcherTimer _timer = new DispatcherTimer {Interval = OneSecond};
+        private readonly DispatcherTimer _timer = new()  {Interval = OneSecond};
         private bool _hidden;
         private bool _finishedSet;
         private readonly IVirtualDesktopManager _vdm;
@@ -56,7 +56,7 @@ namespace Timer {
             RegisterShortcuts();
 
             _vdm = container.Resolve<IVirtualDesktopManager>();
-            _vdm.DesktopChanged += (o, e) => HandleDesktopChanged(e.NewDesktop);
+            _vdm.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
         }
 
         public void CheckStart() => TimerFinishCheckRaise();
@@ -105,7 +105,7 @@ namespace Timer {
 
             TimerWindow = new TimerWindow {Content = new TimerView(new TimerViewModel(this)), Title = Config.Name};
             TimerWindow.Show();
-            TimerWindow.Closed += (o,  e) => {
+            TimerWindow.Closed += (_,  _) => {
                 SaveSettings();
                 TimerWindow = null;
             };

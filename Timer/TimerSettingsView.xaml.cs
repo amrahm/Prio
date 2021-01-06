@@ -33,7 +33,7 @@ namespace Timer {
             VirtualDesktopExtensions.EnforceIntList(ShowDesktops);
             VirtualDesktopExtensions.EnforceIntList(ActiveDesktops);
 
-            Loaded += (o, e) => {
+            Loaded += (_, _) => {
                 this.InitializeDraggable();
 
                 // Manual Bindings:

@@ -32,7 +32,7 @@ namespace Infrastructure.SharedResources {
                        new ShortcutDefinition(newKey, Modifiers);
         }
 
-        public ShortcutDefinition WithKey(ModifierKeys mod) => new ShortcutDefinition(Key, Modifiers | mod);
+        public ShortcutDefinition WithKey(ModifierKeys mod) => new(Key, Modifiers | mod);
 
 
         public ShortcutDefinition WithoutKey(Key newKey) {
@@ -41,7 +41,7 @@ namespace Infrastructure.SharedResources {
                        new ShortcutDefinition(Key.None, Modifiers);
         }
 
-        public ShortcutDefinition WithoutKey(ModifierKeys mod) => new ShortcutDefinition(Key, Modifiers & ~mod);
+        public ShortcutDefinition WithoutKey(ModifierKeys mod) => new(Key, Modifiers & ~mod);
 
 
         public override bool Equals(object obj) =>
@@ -50,7 +50,7 @@ namespace Infrastructure.SharedResources {
         public override int GetHashCode() => HashCode.Combine(Key, Modifiers);
 
 
-        private static readonly KeyConverter  KeyConverter = new KeyConverter();
+        private static readonly KeyConverter  KeyConverter = new();
 
         public override string ToString() {
             string keyString = KeyConverter.ConvertToString(Key) ?? string.Empty;
@@ -74,7 +74,7 @@ namespace Infrastructure.SharedResources {
             int virtualKey = KeyInterop.VirtualKeyFromKey(key);
 
             uint scanCode = MapVirtualKey((uint) virtualKey, MapType.MapvkVkToVsc);
-            StringBuilder stringBuilder = new StringBuilder(2);
+            StringBuilder stringBuilder = new(2);
 
             int result = ToUnicode((uint) virtualKey, scanCode, new byte[256], stringBuilder, stringBuilder.Capacity, 0);
             if(result == -1 || result == 0) return ' ';

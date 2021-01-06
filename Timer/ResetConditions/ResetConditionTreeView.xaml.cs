@@ -13,9 +13,9 @@ namespace Timer {
     /// <summary> Interaction logic for ResetConditionTreeView.xaml </summary>
     public partial class ResetConditionTreeView : IDraggable {
         private const int ROTATION = 100;
-        public List<UIElement> ChildDraggables { get; } = new List<UIElement>();
+        public List<UIElement> ChildDraggables { get; } = new();
         private readonly ResetConditionTreeViewModel _vm;
-        private readonly Storyboard _opacityStoryboard = new Storyboard();
+        private readonly Storyboard _opacityStoryboard = new();
         private  DispatcherTimer _unhighlightTimer;
         private  bool _isRoot;
 
@@ -27,7 +27,7 @@ namespace Timer {
             DataContext = _vm;
             InitializeComponent();
 
-            Loaded += (sender,  args) => {
+            Loaded += (_,  _) => {
                 this.InitializeDraggable();
 
                 if(this.TryFindAncestor<IDraggable>() is TimerSettingsView settings) {
@@ -35,7 +35,7 @@ namespace Timer {
                     Background = Brushes.Transparent;
                     settings.ChildDraggables = ChildDraggables;
 
-                    _vm.PropertyChanged += (o,  e) => {
+                    _vm.PropertyChanged += (_,  e) => {
                         if(e.PropertyName == nameof(_vm.Tree)) {
                             ChildDraggables.Clear();
                             UpdateTreeLayout();
@@ -117,7 +117,7 @@ namespace Timer {
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e) {
-            if(e.LeftButton != MouseButtonState.Pressed || !(sender is ResetConditionTreeView draggable)) return;
+            if(e.LeftButton != MouseButtonState.Pressed || sender is not ResetConditionTreeView draggable) return;
 
             if(!_isDragging && Mouse.Captured == null && !ChildDraggables.Any(x => x.IsMouseOver) && !_isRoot) {
                 _isDragging = true;
@@ -129,7 +129,7 @@ namespace Timer {
 
             if(_isDragging) {
                 Point currentPosition = e.GetPosition(Parent as UIElement);
-                if(!(draggable.RenderTransform is TranslateTransform transform)) {
+                if(draggable.RenderTransform is not TranslateTransform transform) {
                     transform = new TranslateTransform();
                     draggable.RenderTransform = transform;
                 }
@@ -159,7 +159,7 @@ namespace Timer {
             if(treeView._unhighlightTimer != null && treeView._unhighlightTimer.IsEnabled) return;
 
             treeView._unhighlightTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(10)};
-            treeView._unhighlightTimer.Tick += (o,  args) => {
+            treeView._unhighlightTimer.Tick += (_,  _) => {
                 if(!ShouldHighlight()) {
                     treeView.AdornerRectangle.Visibility = Visibility.Collapsed;
                     treeView._unhighlightTimer.Stop();

@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Threading;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Prism.Services.Dialogs;
@@ -63,17 +60,17 @@ namespace Infrastructure.SharedResources {
                 else if(defaultValue != null) tProp.SetValue(target, defaultValue);
 
                 if(tProp.GetValue(target) is INotifyPropertyChanged tPropChange)
-                    tPropChange.PropertyChanged += (oo, ee) => sProp.SetValue(source, tProp.GetValue(target));
+                    tPropChange.PropertyChanged += (_, _) => sProp.SetValue(source, tProp.GetValue(target));
                 if(target is INotifyPropertyChanged tChange)
-                    tChange.PropertyChanged += (oo, ee) => {
+                    tChange.PropertyChanged += (_, _) => {
                         sProp.SetValue(source, tProp.GetValue(target));
                     };
 
                 if(twoWay) {
                     if(sProp.GetValue(source) is INotifyPropertyChanged sPropChange)
-                        sPropChange.PropertyChanged += (oo, ee) => tProp.SetValue(target, sProp.GetValue(source));
+                        sPropChange.PropertyChanged += (_, _) => tProp.SetValue(target, sProp.GetValue(source));
                     if(source is INotifyPropertyChanged sChange)
-                        sChange.PropertyChanged += (oo, ee) => tProp.SetValue(target, sProp.GetValue(source));
+                        sChange.PropertyChanged += (_, _) => tProp.SetValue(target, sProp.GetValue(source));
                 }
             }
         }
@@ -92,11 +89,11 @@ namespace Infrastructure.SharedResources {
                 string.Join(", ", set?.Select(x => x + 1) ?? new HashSet<int>());
 
 
-        private static readonly Regex Rx = new Regex(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
-                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex Rx = new(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
+                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static void EnforceIntList(TextBox textBox) {
-            textBox.TextChanged += (o,  e) => {
+            textBox.TextChanged += (_,  _) => {
                 int oldIndex = textBox.CaretIndex;
                 string oldValue = textBox.Text;
                 string validInput = Rx.Replace(textBox.Text, "");
@@ -104,7 +101,7 @@ namespace Infrastructure.SharedResources {
 
                 if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
             };
-            textBox.LostFocus += (o,  e) => textBox.Text = textBox.Text.Trim().Trim(',');
+            textBox.LostFocus += (_,  _) => textBox.Text = textBox.Text.Trim().Trim(',');
         }
     }
 
@@ -208,7 +205,7 @@ namespace Infrastructure.SharedResources {
     }
 
     public class EnumerationExtension : MarkupExtension {
-        private Type _enumType;
+        private readonly Type _enumType;
 
 
         public EnumerationExtension(Type enumType) =>
@@ -216,7 +213,7 @@ namespace Infrastructure.SharedResources {
 
         public Type EnumType {
             get => _enumType;
-            private set {
+            private init {
                 if(_enumType == value) return;
 
                 var enumType = Nullable.GetUnderlyingType(value) ?? value;
@@ -246,8 +243,8 @@ namespace Infrastructure.SharedResources {
         }
 
         public class EnumerationMember {
-            public string Description { [UsedImplicitly] get; set; }
-            public object Value { [UsedImplicitly] get; set; }
+            public string Description { [UsedImplicitly] get; init; }
+            public object Value { [UsedImplicitly] get; init; }
             public override string ToString() => Description;
         }
     }

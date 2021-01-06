@@ -19,14 +19,14 @@ namespace Timer {
         public ShortcutDefinition StartShortcut { get; set; }
         public ShortcutDefinition StopShortcut { get; set; }
         public ShortcutDefinition ShowHideShortcut { get; set; }
-        public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new Dictionary<int, WindowPosition>();
-        public ResetConditionTree ResetConditions { get; set; } = new ResetConditionTree();
+        public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new();
+        public ResetConditionTree ResetConditions { get; set; } = new();
         public bool AutoResetOnConditions { get; set; }
         public bool AllowResetOverride { get; set; }
         public bool AllowResetWhileRunning { get; set; }
         public bool OverflowEnabled { get; set; } = true;
-        public OverflowAction ZeroOverflowAction { get; set; } = new OverflowAction();
-        public List<OverflowAction> OverflowActions { get; set; } = new List<OverflowAction>();
+        public OverflowAction ZeroOverflowAction { get; set; } = new();
+        public List<OverflowAction> OverflowActions { get; set; } = new();
     }
 
     public readonly struct WindowPosition {

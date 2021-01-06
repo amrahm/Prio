@@ -57,7 +57,7 @@ namespace Timer {
         public string ShortcutString { get; private set; }
 
         private bool _newFocus;
-        private ShortcutDefinition _shortcut = new ShortcutDefinition();
+        private ShortcutDefinition _shortcut = new();
         private readonly Dictionary<ModifierKeys, ToggleButton> _modToToggle;
 
         public ShortcutSetter() {
@@ -71,27 +71,27 @@ namespace Timer {
                 {ModifierKeys.Windows, WinToggle}
             };
 
-            GotKeyboardFocus += (o,  e) => {
+            GotKeyboardFocus += (_, _) => {
                 _newFocus = true;
                 Shortcut ??= new ShortcutDefinition();
             };
-            LostKeyboardFocus += (o,  e) => {
+            LostKeyboardFocus += (_, _) => {
                 if(Shortcut.Key == Key.None) Shortcut = null;
             };
 
             foreach((ModifierKeys key, ToggleButton value) in _modToToggle) {
-                value.Checked += (o,  e) => {
+                value.Checked += (_, _) => {
                     _newFocus = false;
                     Shortcut = Shortcut.WithKey(key);
                     UpdateShortcutString();
                 };
-                value.Unchecked += (o,  e) => {
+                value.Unchecked += (_, _) => {
                     Shortcut = Shortcut.WithoutKey(key);
                     UpdateShortcutString();
                 };
             }
 
-            KeyDown += (o, e) => {
+            KeyDown += (_, e) => {
                 if(_newFocus) {
                     Shortcut = new ShortcutDefinition();
                     _newFocus = false;
@@ -109,7 +109,7 @@ namespace Timer {
                 UpdateShortcutString();
             };
 
-            KeyUp += (o,  e) => {
+            KeyUp += (_,  e) => {
                 if(e.Key == Key.Back) Shortcut = new ShortcutDefinition();
             };
         }

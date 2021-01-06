@@ -13,14 +13,6 @@ namespace Timer {
     [Serializable]
     public class ResetCondition : NotifyPropertyChanged {
         public Guid TimerId { get; set; }
-        private ITimer _timer;
-        [JsonIgnore] public ITimer Timer {
-            get => _timer ??= TimersService.Singleton.GetTimer(TimerId);
-            set {
-                _timer = value;
-                if(_timer != null) TimerId = _timer.Config.InstanceID;
-            }
-        }
 
         public ResetConditionType Type { get; set; }
         public int SecondsLeft { get; private set; }
@@ -63,17 +55,17 @@ namespace Timer {
         }
 
 
-        private readonly DispatcherTimer _conditionTimer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+        private readonly DispatcherTimer _conditionTimer = new()  {Interval = TimeSpan.FromSeconds(1)};
         private readonly IVirtualDesktopManager _virtualDesktopManager;
 
-        private readonly WeakEventSource<EventArgs> _deleteRequested = new WeakEventSource<EventArgs>();
+        private readonly WeakEventSource<EventArgs> _deleteRequested = new();
         public event EventHandler<EventArgs> DeleteRequested {
             add => _deleteRequested.Subscribe(value);
             remove => _deleteRequested.Unsubscribe(value);
         }
         public void DeleteMe() => _deleteRequested.Raise(this, EventArgs.Empty);
 
-        private readonly WeakEventSource<EventArgs> _satisfied = new WeakEventSource<EventArgs>();
+        private readonly WeakEventSource<EventArgs> _satisfied = new();
         public event EventHandler<EventArgs> Satisfied {
             add => _satisfied.Subscribe(value);
             remove => _satisfied.Unsubscribe(value);
@@ -124,7 +116,7 @@ namespace Timer {
                     SecondsLeft = (int) (MustRunForXMinutes * 60);
                     if(MustBeFinished) {
                         TimerFinished = DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
-                        DependencyTimer.Finished += (sender, e) => TimerFinished = true;
+                        DependencyTimer.Finished += (_, _) => TimerFinished = true;
                     }
                     break;
             }

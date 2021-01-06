@@ -11,11 +11,11 @@ using Prism.Ioc;
 
 namespace Timer {
     public class TimersService : NotifyPropertyChanged {
-        public static readonly TimersService Singleton = new TimersService();
+        public static readonly TimersService Singleton = new();
 
         public TimersGeneralConfig GeneralConfig { get; set; }
 
-        public ObservableHashSet<ITimer> Timers { get; } = new ObservableHashSet<ITimer>();
+        public ObservableHashSet<ITimer> Timers { get; } = new();
         public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
 
         private TimersService() {

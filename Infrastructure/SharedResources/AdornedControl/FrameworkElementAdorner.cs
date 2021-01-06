@@ -73,7 +73,7 @@ namespace AdornedControl {
 
         protected override IEnumerator LogicalChildren {
             get {
-                ArrayList list = new ArrayList {_child};
+                ArrayList list = new()  {_child};
                 return list.GetEnumerator();
             }
         }

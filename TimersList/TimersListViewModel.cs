@@ -9,9 +9,9 @@ using Timer;
 
 namespace TimersList {
     public class TimersListViewModel : BindableBase {
-        public ObservableCollection<TimersListItemView> Timers { get; } = new ObservableCollection<TimersListItemView>();
+        public ObservableCollection<TimersListItemView> Timers { get; } = new();
 
-        public DelegateCommand AddTimerCommand { get; set; }
+        public DelegateCommand AddTimerCommand { get; }
 
         public TimersListViewModel() {
             IContainerProvider container = Infrastructure.SharedResources.UnityInstance.GetContainer();
@@ -21,7 +21,7 @@ namespace TimersList {
                 Timers.Add(new TimersListItemView(new TimersListItemViewModel(timer)));
 
             // Update if a timer is added/removed
-            TimersService.Singleton.Timers.CollectionChanged += (sender, e) => {
+            TimersService.Singleton.Timers.CollectionChanged += (_, e) => {
                 if(e.NewItems != null)
                     foreach(ITimer timer in e.NewItems)
                         Timers.Add(new TimersListItemView(new TimersListItemViewModel(timer)));

@@ -177,7 +177,7 @@ namespace AdornedControl {
 
             if(_adornerShowState != AdornerShowState.FadingOut) _adorner.Opacity = 0.0;
 
-            DoubleAnimation doubleAnimation = new DoubleAnimation(1.0, new Duration(TimeSpan.FromSeconds(FadeInTime)));
+            DoubleAnimation doubleAnimation = new(1.0, new Duration(TimeSpan.FromSeconds(FadeInTime)));
             doubleAnimation.Completed += fadeInAnimation_Completed;
             doubleAnimation.Freeze();
 
@@ -200,7 +200,7 @@ namespace AdornedControl {
                 //
                 return;
 
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation(0.0, new Duration(TimeSpan.FromSeconds(FadeOutTime)));
+            DoubleAnimation fadeOutAnimation = new(0.0, new Duration(TimeSpan.FromSeconds(FadeOutTime)));
             fadeOutAnimation.Completed += fadeOutAnimation_Completed;
             fadeOutAnimation.Freeze();
 
@@ -276,15 +276,15 @@ namespace AdornedControl {
         /// <summary>
         ///     Commands.
         /// </summary>
-        public static readonly RoutedCommand ShowAdornerCommand = new RoutedCommand("ShowAdorner", typeof(AdornedControl));
+        public static readonly RoutedCommand ShowAdornerCommand = new("ShowAdorner", typeof(AdornedControl));
 
         public static readonly RoutedCommand FadeInAdornerCommand =
-            new RoutedCommand("FadeInAdorner", typeof(AdornedControl));
+            new("FadeInAdorner", typeof(AdornedControl));
 
-        public static readonly RoutedCommand HideAdornerCommand = new RoutedCommand("HideAdorner", typeof(AdornedControl));
+        public static readonly RoutedCommand HideAdornerCommand = new("HideAdorner", typeof(AdornedControl));
 
         public static readonly RoutedCommand FadeOutAdornerCommand =
-            new RoutedCommand("FadeOutAdorner", typeof(AdornedControl));
+            new("FadeOutAdorner", typeof(AdornedControl));
 
         #endregion Commands
 
@@ -294,16 +294,16 @@ namespace AdornedControl {
         ///     Command bindings.
         /// </summary>
         private static readonly CommandBinding ShowAdornerCommandBinding =
-            new CommandBinding(ShowAdornerCommand, ShowAdornerCommand_Executed);
+            new(ShowAdornerCommand, ShowAdornerCommand_Executed);
 
         private static readonly CommandBinding FadeInAdornerCommandBinding =
-            new CommandBinding(FadeInAdornerCommand, FadeInAdornerCommand_Executed);
+            new(FadeInAdornerCommand, FadeInAdornerCommand_Executed);
 
         private static readonly CommandBinding HideAdornerCommandBinding =
-            new CommandBinding(HideAdornerCommand, HideAdornerCommand_Executed);
+            new(HideAdornerCommand, HideAdornerCommand_Executed);
 
         private static readonly CommandBinding FadeOutAdornerCommandBinding =
-            new CommandBinding(FadeInAdornerCommand, FadeOutAdornerCommand_Executed);
+            new(FadeInAdornerCommand, FadeOutAdornerCommand_Executed);
 
         /// <summary>
         ///     Specifies the current show/hide state of the adorner.
@@ -333,12 +333,12 @@ namespace AdornedControl {
         /// <summary>
         ///     This timer is used to fade in and open the adorner.
         /// </summary>
-        private readonly DispatcherTimer _openAdornerTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _openAdornerTimer = new();
 
         /// <summary>
         ///     This timer is used to fade out and close the adorner.
         /// </summary>
-        private readonly DispatcherTimer _closeAdornerTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _closeAdornerTimer = new();
 
         #endregion
 
@@ -544,7 +544,7 @@ namespace AdornedControl {
                 return;
 
             if(AdornerContent != null) {
-                if(_adornerLayer == null) _adornerLayer = AdornerLayer.GetAdornerLayer(this);
+                _adornerLayer ??= AdornerLayer.GetAdornerLayer(this);
 
                 if(_adornerLayer != null) {
                     FrameworkElement adornedControl = this; // The control to be adorned defaults to 'this'.

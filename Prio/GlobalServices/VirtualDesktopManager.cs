@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using WindowsDesktop;
 using JetBrains.Annotations;
@@ -10,7 +8,7 @@ namespace Prio.GlobalServices {
     [UsedImplicitly]
     internal class VirtualDesktopManager : IVirtualDesktopManager {
         private readonly WeakEventSource<DesktopChangedEventArgs> _desktopChanged =
-                new WeakEventSource<DesktopChangedEventArgs>();
+                new();
 
         public event EventHandler<DesktopChangedEventArgs> DesktopChanged {
             add => _desktopChanged.Subscribe(value);

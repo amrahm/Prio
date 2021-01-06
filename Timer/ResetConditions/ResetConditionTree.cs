@@ -8,7 +8,7 @@ namespace Timer {
     /// <summary> A Boolean-Algebra-Tree that can evaluate if a set of ResetConditions are met </summary>
     [Serializable]
     public class ResetConditionTree : NotifyPropertyChanged {
-        private readonly WeakEventSource<EventArgs> _satisfied = new WeakEventSource<EventArgs>();
+        private readonly WeakEventSource<EventArgs> _satisfied = new();
         public event EventHandler<EventArgs> Satisfied {
             add => _satisfied.Subscribe(value);
             remove => _satisfied.Unsubscribe(value);

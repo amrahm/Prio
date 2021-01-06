@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Timer"
              xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:st="http://schemas.spicytaco.io/"
              mc:Ignorable="d" d:DesignWidth="550"
              d:DataContext="{d:DesignInstance local:OverflowActionViewModel}">
 
@@ -31,8 +32,8 @@
 				<StackPanel Orientation="Horizontal" Margin="0"
 				            Visibility="{Binding IsChecked, ElementName=FlashColorCheckbox, Converter={StaticResource B2V}}">
 					<Button Style="{StaticResource BaseButton}" Width="40" Height="30" Tag="5" BorderThickness="3"
-					        Background="{Binding Model.FlashColor, FallbackValue=Crimson}" Margin="0" 
-					        Command="{Binding SelectColorCommand}"/>
+					        Background="{Binding Model.FlashColor, FallbackValue=Crimson}" Margin="0"
+					        Command="{Binding SelectColorCommand}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="for" />
 					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.FlashColorSeconds}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Seconds" />
@@ -46,13 +47,14 @@
 				        Content="{Binding PlaySoundFile, TargetNullValue=&lt;No File Selected&gt;}" Tag="10"
 				        Command="{Binding SelectSoundCommand}" />
 			</StackPanel>
-			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
+			<st:AutoGrid Columns="auto, auto, *" Margin="5, 5, 10, 5">
 				<CheckBox Margin="5" x:Name="ShowMessageCheckbox" IsChecked="{Binding Model.ShowMessageEnabled}" />
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Show a Message" />
-				<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5" hc:InfoElement.Placeholder="enter message"
-				         Style="{StaticResource NormalTextBox}"
+				<TextBox MinWidth="60" MaxHeight="80" hc:InfoElement.Placeholder="enter message"
+				         Margin="5" Style="{StaticResource NormalTextBox}" HorizontalAlignment="Left"
+				         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
 				         Visibility="{Binding IsChecked, ElementName=ShowMessageCheckbox, Converter={StaticResource B2V}}" />
-			</StackPanel>
+			</st:AutoGrid>
 			<Button Content="DELETE" Style="{StaticResource NormalButtonDarkBordered}" Command="{Binding DeleteCommand}" />
 		</hc:FlexPanel>
 

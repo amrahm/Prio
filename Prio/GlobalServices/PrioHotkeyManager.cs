@@ -13,19 +13,19 @@ namespace Prio.GlobalServices {
     [UsedImplicitly]
     public class PrioHotkeyManager : IPrioHotkeyManager {
         private static readonly Dictionary<ShortcutDefinition, HotkeyHolder> HotKeyRegistry =
-                new Dictionary<ShortcutDefinition, HotkeyHolder>();
+                new();
 
         private static readonly Dictionary<HotkeyRegistration, ShortcutDefinition> RegistrationToShortcut =
-                new Dictionary<HotkeyRegistration, ShortcutDefinition>();
+                new();
 
         private class HotkeyHolder {
             private EventHandler<HotkeyEventArgs> _handler;
 
             private readonly Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>> _registrations =
-                    new Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>>();
+                    new();
 
             private readonly ShortcutDefinition _shortcut;
-            private readonly Queue<Action> _actionQueue = new Queue<Action>();
+            private readonly Queue<Action> _actionQueue = new();
 
             public HotkeyHolder(HotkeyRegistration registration, Action action) {
                 _shortcut = registration.Shortcut;
@@ -51,9 +51,9 @@ namespace Prio.GlobalServices {
                 // This lets us first check the instance state on all events before changing it with one of them
                 EventHandler<HotkeyEventArgs> handler;
                 if(registration.GetInstanceState == null)
-                    handler = (sender, args) => _actionQueue.Enqueue(action);
+                    handler = (_, _) => _actionQueue.Enqueue(action);
                 else {
-                    handler = (sender, args) => {
+                    handler = (_, _) => {
                         if(registration.GetInstanceState(registration.InstanceState) == registration.InstanceState)
                             _actionQueue.Enqueue(action);
                     };
@@ -111,8 +111,8 @@ namespace Prio.GlobalServices {
         public bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
                                    CompatibilityType compatibilityType, int instanceState,
                                    Func<int, int> nextInstanceState) {
-            HotkeyRegistration registration = new HotkeyRegistration(instanceId, hotkeyName, shortcut,
-                                                                     compatibilityType, instanceState, nextInstanceState);
+            HotkeyRegistration registration = new(instanceId, hotkeyName, shortcut,
+                                                  compatibilityType, instanceState, nextInstanceState);
 
             UnregisterHotkey(registration);
 
