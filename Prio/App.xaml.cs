@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Infrastructure.Prism;
+using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prio.RegionAdapters;
 using Prism.Ioc;
@@ -13,10 +14,11 @@ namespace Prio {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterSingleton<IPrioHotkeyManager, PrioHotkeyManager>();
             containerRegistry.RegisterSingleton<IVirtualDesktopManager, VirtualDesktopManager>();
+            containerRegistry.RegisterDialog<ColorPickerView, ColorPickerViewModel>();
         }
 
         protected override Window CreateShell() {
-            Current.Resources.Add(Infrastructure.SharedResources.UnityInstance.CONTAINER_NAME, Container);
+            Current.Resources.Add(UnityInstance.CONTAINER_NAME, Container);
             FindResource("PrioTrayIcon");
             return null;
         }

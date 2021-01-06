@@ -71,15 +71,12 @@ namespace Timer {
             add => _deleteRequested.Subscribe(value);
             remove => _deleteRequested.Unsubscribe(value);
         }
+        public void DeleteMe() => _deleteRequested.Raise(this, EventArgs.Empty);
 
         private readonly WeakEventSource<EventArgs> _satisfied = new WeakEventSource<EventArgs>();
         public event EventHandler<EventArgs> Satisfied {
             add => _satisfied.Subscribe(value);
             remove => _satisfied.Unsubscribe(value);
-        }
-
-        public virtual void DeleteMe() {
-            _deleteRequested.Raise(this, EventArgs.Empty);
         }
 
         [JsonConstructor]

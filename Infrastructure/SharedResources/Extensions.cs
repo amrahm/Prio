@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,6 +23,7 @@ using TextBox = System.Windows.Controls.TextBox;
 using Color = System.Drawing.Color;
 using MColor = System.Windows.Media.Color;
 using Screen = System.Windows.Forms.Screen;
+using Size = System.Windows.Size;
 
 // ReSharper disable UnusedMember.Global
 
@@ -139,6 +141,24 @@ namespace Infrastructure.SharedResources {
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
                 Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
+
+        
+
+        public static void MoveWindowInBounds(Window window) {
+            PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(window);
+            Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
+            Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
+            Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
+            double dpiWidthFactor = m.M11;
+            double dpiHeightFactor = m.M22;
+
+            Rectangle wA = window.CurrentScreen().WorkingArea;
+
+            window.Left += Math.Max(wA.Left / dpiWidthFactor - window.Left, 0);
+            window.Left += Math.Min(wA.Right / dpiWidthFactor - (window.Left + window.ActualWidth), 0);
+            window.Top += Math.Max(wA.Top / dpiHeightFactor - window.Top, 0);
+            window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (window.Top + window.ActualHeight), 0);
+        }
     }
 
     public static class UIHelpers {

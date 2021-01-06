@@ -70,19 +70,7 @@ namespace Timer {
                 _window.Height = position.Height;
             }
 
-            PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
-            Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-            Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-            Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-            double dpiWidthFactor = m.M11;
-            double dpiHeightFactor = m.M22;
-
-            Rectangle wA = _window.CurrentScreen().WorkingArea;
-
-            _window.Left += Math.Max(wA.Left / dpiWidthFactor - _window.Left, 0);
-            _window.Left += Math.Min(wA.Right / dpiWidthFactor - (_window.Left + _window.ActualWidth), 0);
-            _window.Top += Math.Max(wA.Top / dpiHeightFactor - _window.Top, 0);
-            _window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (_window.Top + _window.ActualHeight), 0);
+            WindowHelpers.MoveWindowInBounds(_window);
         }
 
         private void TimerAspectRatioLimits(object sender, SizeChangedEventArgs sizeChangedEventArgs) {

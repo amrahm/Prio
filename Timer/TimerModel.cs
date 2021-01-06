@@ -154,7 +154,6 @@ namespace Timer {
         }
 
         public async Task<ButtonResult> OpenSettings() {
-            StopTimer();
             IDialogResult r = await _dialogService.ShowDialogAsync(nameof(TimerSettingsView),
                                                                    new DialogParameters {{nameof(ITimer), this}});
             return r.Result;

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using Infrastructure.SharedResources;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -8,14 +8,21 @@ using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 namespace Timer {
     public class TimerSettingsViewModel : NotifyPropertyWithDependencies, IDialogAware {
         private ITimer Model { get; set; }
-        private TimerConfig _config;
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
+        private TimerConfig _config;
         public TimerConfig Config {
             get => _config;
-            set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+            set {
+                NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
+
+                OverflowActionViews.Clear();
+                foreach(OverflowAction action in Config.OverflowActions) AddActionView(action);
+            }
         }
+
+        public ObservableCollection<OverflowActionView> OverflowActionViews { get; } = new();
 
         [DependsOnProperty(nameof(Config))]
         public int Hours {
@@ -55,13 +62,34 @@ namespace Timer {
             set => Config.DesktopsActive = DesktopStringToSet(value);
         }
 
+        private OverflowActionViewModel _zeroOverflowActionVm;
+        public OverflowActionViewModel ZeroOverflowActionVm => _zeroOverflowActionVm ??=
+                Config != null ? new OverflowActionViewModel(Config.ZeroOverflowAction) : null;
+
+        private void AddAction(OverflowAction overflowAction) {
+            Config.OverflowActions.Add(overflowAction);
+            AddActionView(overflowAction);
+        }
+
+        private void AddActionView(OverflowAction overflowAction) {
+            OverflowActionView view = new(new OverflowActionViewModel(overflowAction));
+            OverflowActionViews.Add(view);
+            overflowAction.DeleteRequested += (_,  _) => {
+                Config.OverflowActions.Remove(overflowAction);
+                OverflowActionViews.Remove(view);
+            };
+        }
+
         public DelegateCommand AddResetConditionCommand { get; }
+        public DelegateCommand AddOverflowActionCommand { get; }
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand ApplyCommand { get; }
         public DelegateCommand OkCommand { get; }
 
         public TimerSettingsViewModel() {
-            AddResetConditionCommand = new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
+            AddResetConditionCommand =
+                    new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
+            AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction()));
 
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {

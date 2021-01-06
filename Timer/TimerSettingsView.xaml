@@ -30,6 +30,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="B2V" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -94,56 +95,6 @@
 						<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
-						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
-						           Margin="10, -5, 0, 2" />
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AutoResetOnConditions}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
-						</StackPanel>
-						<ContentControl x:Name="RootResetCondition" />
-						<Button Height="40" HorizontalAlignment="Center" Background="Transparent" Margin="0, 0, 0, 8"
-						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
-							<Viewbox>
-								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
-							</Viewbox>
-						</Button>
-					</StackPanel>
-					<StackPanel Width="550" Background="{StaticResource LightBrush}">
-						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
-						<StackPanel>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Margin="5" />
-								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound:" />
-								<Button Style="{StaticResource NormalButtonLight2Bordered}" Content="&lt;No File Selected&gt;" Tag="10" />
-							</StackPanel>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Margin="5" />
-								<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5"
-								         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="enter message"
-								         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show Message:"
-								         Style="{StaticResource NormalTextBox}" />
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="20, -5, 0, 0">
-								<CheckBox Margin="5" />
-								<TextBlock Style="{StaticResource BaseControlStyle}" Text="As Alert" />
-							</StackPanel>
-							<StackPanel Orientation="Horizontal">
-								<CheckBox Margin="5" IsChecked="{Binding Config.OverflowEnabled}" />
-								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Overflow" />
-								<TextBlock Style="{StaticResource HintControlDark}" Text="(Count Up)" />
-							</StackPanel>
-						</StackPanel>
-					</StackPanel>
-					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
 						<TextBlock Text="TODO" Style="{StaticResource BaseControlStyle}" />
 					</StackPanel>
@@ -177,6 +128,85 @@
 								</hc:TimePicker.Clock>
 							</hc:TimePicker>
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
+						</StackPanel>
+					</StackPanel>
+										<StackPanel Width="550" Background="{StaticResource LightBrush}">
+						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
+						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
+						           Margin="10, -5, 0, 2" />
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AutoResetOnConditions}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
+						</StackPanel>
+						<ContentControl x:Name="RootResetCondition" />
+						<Button Height="40" HorizontalAlignment="Center" Margin="0, 5, 0, 8"
+						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
+							<Viewbox>
+								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
+							</Viewbox>
+						</Button>
+					</StackPanel>
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
+						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" x:Name="FlashColorCheckbox"
+								          IsChecked="{Binding Config.ZeroOverflowAction.FlashColorEnabled}" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Flash Color" />
+								<StackPanel Orientation="Horizontal" Margin="0"
+								            Visibility="{Binding IsChecked, ElementName=FlashColorCheckbox, Converter={StaticResource B2V}}">
+									<Button Style="{StaticResource BaseButton}" Width="40" Height="30" Tag="5" BorderThickness="3"
+									        Background="{Binding Config.ZeroOverflowAction.FlashColor, FallbackValue=Crimson}" Margin="0"
+									        Command="{Binding ZeroOverflowActionVm.SelectColorCommand}" />
+									<TextBlock Style="{StaticResource BaseControlStyle}" Text="for" />
+									<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50"
+									         Text="{Binding Config.ZeroOverflowAction.FlashColorSeconds}" />
+									<TextBlock Style="{StaticResource BaseControlStyle}" Text="Seconds" />
+								</StackPanel>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" x:Name="PlaySoundCheckbox"
+								          IsChecked="{Binding Config.ZeroOverflowAction.PlaySoundEnabled}" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound" />
+								<Button Visibility="{Binding IsChecked, ElementName=PlaySoundCheckbox, Converter={StaticResource B2V}}"
+								        Style="{StaticResource NormalButtonLight2Bordered}"
+								        Content="{Binding ZeroOverflowActionVm.PlaySoundFile, TargetNullValue=&lt;No File Selected&gt;}"
+								        Tag="10"
+								        Command="{Binding ZeroOverflowActionVm.SelectSoundCommand}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" x:Name="ShowMessageCheckbox"
+								          IsChecked="{Binding Config.ZeroOverflowAction.ShowMessageEnabled}" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Show a Message" />
+								<TextBox MinWidth="60" HorizontalAlignment="Left" Margin="5" hc:InfoElement.Placeholder="enter message"
+								         Style="{StaticResource NormalTextBox}"
+								         Visibility="{Binding IsChecked, ElementName=ShowMessageCheckbox, Converter={StaticResource B2V}}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<CheckBox Margin="5" x:Name="OverflowCheckbox" IsChecked="{Binding Config.OverflowEnabled}" />
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Overflow" />
+								<TextBlock Style="{StaticResource HintControlDark}" Text="(Keep Counting into the Negatives)" />
+							</StackPanel>
+							<StackPanel Visibility="{Binding IsChecked, ElementName=OverflowCheckbox, Converter={StaticResource B2V}}">
+								<ItemsControl ItemsSource="{Binding OverflowActionViews}" />
+								<Button HorizontalAlignment="Center" Style="{StaticResource IconButtonBordered}"
+								        Command="{Binding AddOverflowActionCommand}" Tag="15" MaxHeight="40" MinWidth="190">
+									<Button.Effect>
+										<DropShadowEffect ShadowDepth="2" Direction="330" Color="Black" Opacity="0.2" BlurRadius="3" />
+									</Button.Effect>
+									<Viewbox>
+										<TextBlock Text="Add an Overflow Action" Style="{StaticResource HintControlDark}" />
+									</Viewbox>
+								</Button>
+							</StackPanel>
 						</StackPanel>
 					</StackPanel>
 				</WrapPanel>

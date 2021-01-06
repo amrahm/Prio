@@ -79,7 +79,7 @@ namespace AdornedControl {
         /// <summary>
         ///     Set to 'true' to make the adorner automatically fade-in and become visible when the mouse is hovered
         ///     over the adorned control.  Also the adorner automatically fades-out when the mouse cursor is moved
-        ///     aware from the adorned control (and the adorner).
+        ///     away from the adorned control (and the adorner).
         /// </summary>
         public bool IsMouseOverShowEnabled {
             get => (bool) GetValue(IsMouseOverShowEnabledProperty);
@@ -88,12 +88,19 @@ namespace AdornedControl {
 
         /// <summary>
         ///     Set to 'true' to make the adorner automatically fade-in and become visible when the element is focused
-        ///     over the adorned control.  Also the adorner automatically fades-out when the focus is moved
-        ///     aware from the adorned control (and the adorner).
+        ///     over the adorned control.
         /// </summary>
         public bool IsFocusShowEnabled {
             get => (bool) GetValue(IsFocusShowEnabledProperty);
             set => SetValue(IsFocusShowEnabledProperty, value);
+        }
+
+        /// <summary>
+        ///     Set to 'true' to make the adorner automatically fade-out and become visible when the element is unfocused.
+        /// </summary>
+        public bool IsUnfocusHideEnabled {
+            get => (bool) GetValue(IsUnfocusHideEnabledProperty);
+            set => SetValue(IsUnfocusHideEnabledProperty, value);
         }
 
         /// <summary>
@@ -234,8 +241,13 @@ namespace AdornedControl {
                                         new FrameworkPropertyMetadata(false, IsMouseOverShowEnabled_PropertyChanged));
 
         public static readonly DependencyProperty IsFocusShowEnabledProperty =
-            DependencyProperty.Register(nameof(IsFocusShowEnabled), typeof(bool), typeof(AdornedControl),
-                                        new FrameworkPropertyMetadata(false, IsFocusShowEnabled_PropertyChanged));
+                DependencyProperty.Register(nameof(IsFocusShowEnabled), typeof(bool), typeof(AdornedControl),
+                                            new FrameworkPropertyMetadata(false, IsFocusShowEnabled_PropertyChanged));
+
+        public static readonly DependencyProperty IsUnfocusHideEnabledProperty =
+                DependencyProperty.Register(nameof(IsUnfocusHideEnabled), typeof(bool), typeof(AdornedControl),
+                                            new FrameworkPropertyMetadata(true, IsUnfocusHideEnabled_PropertyChanged));
+
 
         public static readonly DependencyProperty FadeInTimeProperty =
             DependencyProperty.Register(nameof(FadeInTime), typeof(double), typeof(AdornedControl),
@@ -411,6 +423,16 @@ namespace AdornedControl {
         ///     Event raised when the IsFocusShowEnabled property has changed.
         /// </summary>
         private static void IsFocusShowEnabled_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
+            AdornedControl c = (AdornedControl) o;
+            c._openAdornerTimer.Stop();
+            c._closeAdornerTimer.Stop();
+            c.HideAdorner();
+        }
+
+        /// <summary>
+        ///     Event raised when the IsUnfocusHideEnabled property has changed.
+        /// </summary>
+        private static void IsUnfocusHideEnabled_PropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e) {
             AdornedControl c = (AdornedControl) o;
             c._openAdornerTimer.Stop();
             c._closeAdornerTimer.Stop();
@@ -684,7 +706,7 @@ namespace AdornedControl {
         ///     Shared unfocus code.
         /// </summary>
         private void UnFocusLogic() {
-            if(!IsFocusShowEnabled) return;
+            if(!IsUnfocusHideEnabled) return;
 
             _openAdornerTimer.Stop();
             _closeAdornerTimer.Start();

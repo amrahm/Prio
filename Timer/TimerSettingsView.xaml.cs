@@ -15,7 +15,7 @@ using Color = System.Windows.Media.Color;
 namespace Timer {
     /// <summary> Interaction logic for TimerSettingsView.xaml </summary>
     public partial class TimerSettingsView : IDraggable {
-        public List<UIElement> ChildDraggables { get; protected internal set; } = new List<UIElement>();
+        public List<UIElement> ChildDraggables { get; protected internal set; } = new();
         private const int MIN_CTRL_WIDTH = 470;
         private const int SCREEN_MARGIN = 50;
         private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 90;
@@ -47,12 +47,11 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ResetConditions), conditionsVm, nameof(conditionsVm.Tree));
                 RootResetCondition.Content = new ResetConditionTreeView(conditionsVm);
 
-                
                 // Window Setup
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
 
-                WindowChrome windowChrome = new WindowChrome {
+                WindowChrome windowChrome = new() {
                     ResizeBorderThickness = new Thickness(9, 0, 9, 0),
                     CaptionHeight = 0
                 };
@@ -84,7 +83,7 @@ namespace Timer {
                 _window.Top = (screen.Height / dpiHeightFactor -  _window.ActualHeight) / 2 + screen.Top;
             };
 
-            SizeChanged += (o, e) => {
+            SizeChanged += (_, e) => {
                 const double spacing = 3;
 
                 double newSizeWidth = e.NewSize.Width;
@@ -105,7 +104,7 @@ namespace Timer {
                 }
             };
 
-            ScrollViewer.ScrollChanged += (o,  e) => {
+            ScrollViewer.ScrollChanged += (_,  e) => {
                 if(ScrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible  ||
                    Math.Abs(e.VerticalOffset + e.ViewportHeight - e.ExtentHeight) < 1)
                     OkBar.ClearValue(EffectProperty);
@@ -120,7 +119,7 @@ namespace Timer {
             };
 
 
-            MouseDown += (o, e) => {
+            MouseDown += (_, e) => {
                 if(e.ChangedButton == MouseButton.Left) {
                     DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
                     FocusManager.SetFocusedElement(scope, _window);
