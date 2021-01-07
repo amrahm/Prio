@@ -177,18 +177,17 @@
 								          IsChecked="{Binding Config.ZeroOverflowAction.PlaySoundEnabled}" />
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound" />
 								<Button Visibility="{Binding IsChecked, ElementName=PlaySoundCheckbox, Converter={StaticResource B2V}}"
-								        Style="{StaticResource NormalButtonLight2Bordered}"
+								        Style="{StaticResource NormalButtonLight2Bordered}" Tag="10"
 								        Content="{Binding ZeroOverflowActionVm.PlaySoundFile, TargetNullValue=&lt;No File Selected&gt;}"
-								        Tag="10"
 								        Command="{Binding ZeroOverflowActionVm.SelectSoundCommand}" />
 							</StackPanel>
 							<st:AutoGrid Columns="auto, auto, *">
 								<CheckBox Margin="5" x:Name="ShowMessageCheckbox"
 								          IsChecked="{Binding Config.ZeroOverflowAction.ShowMessageEnabled}" />
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Show a Message" />
-								<TextBox MinWidth="60" MaxHeight="80" Margin="5" HorizontalAlignment="Left"
-								         hc:InfoElement.Placeholder="enter message" Style="{StaticResource NormalTextBox}"
-								         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
+								<TextBox MinWidth="60" MaxHeight="80" hc:InfoElement.Placeholder="enter message" HorizontalAlignment="Left"
+								         Margin="5" Style="{StaticResource NormalTextBox}" Text="{Binding Config.ZeroOverflowAction.Message}"
+								         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
 								         Visibility="{Binding IsChecked, ElementName=ShowMessageCheckbox, Converter={StaticResource B2V}}" />
 							</st:AutoGrid>
 							<StackPanel Orientation="Horizontal">

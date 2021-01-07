@@ -24,7 +24,7 @@ namespace Timer {
                 }
 
                 if(_config != null) _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
-                NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+                NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
                 if(_config != null) _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
             }
         }
@@ -39,7 +39,7 @@ namespace Timer {
 
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly IDialogService _dialogService;
-        private readonly DispatcherTimer _timer = new()  {Interval = OneSecond};
+        private readonly DispatcherTimer _timer = new() {Interval = OneSecond};
         private bool _hidden;
         private bool _finishedSet;
         private readonly IVirtualDesktopManager _vdm;
@@ -121,20 +121,21 @@ namespace Timer {
         }
 
         public void RequestResetTimer() {
-            if(!_finishedSet && Config.AllowResetWhileRunning || Config.ResetConditions.IsSat()) {
+            if(_finishedSet && Config.ResetConditions.IsSat() || !_finishedSet && Config.AllowResetWhileRunning) {
                 ResetTimer();
                 return;
             }
 
             string unmetStrings = _finishedSet ? Config.ResetConditions.UnmetStrings() : "The timer has not finished yet.";
 
+            string  message = $"Not all reset conditions are met:\n\n<Bold>{unmetStrings}</Bold>";
             if(Config.AllowResetOverride) {
-                MessageBoxResult result = MessageBox.Show(
-                    $"Not all reset conditions are met:\n\n{unmetStrings}\n\nDo you want to override?",
-                    $"Resetting: {Config.Name}", MessageBoxButton.YesNo);
-                if(result == MessageBoxResult.Yes) ResetTimer();
+                IDialogResult r = _dialogService.ShowNotification(message + "\n\nDo you want to override?",
+                                                                        $"Resetting {Config.Name}", hasCancel: true,
+                                                                        customOk: "YES", customCancel: "NO").Result;
+                if(r.Result == ButtonResult.OK) ResetTimer();
             } else {
-                MessageBox.Show($"Not all reset conditions are met:\n{unmetStrings}");
+                _dialogService.ShowNotification(message, $"Unable to Reset {Config.Name}");
             }
         }
 

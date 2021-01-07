@@ -10,7 +10,7 @@ namespace Infrastructure.SharedResources {
             ColorPickerViewModel vm = (ColorPickerViewModel) DataContext;
             vm.Picker = ColorPicker;
 
-            Loaded += (o, e) => {
+            Loaded += (_, _) => {
                 Window window = Window.GetWindow(this);
                 if(window == null) return;
 

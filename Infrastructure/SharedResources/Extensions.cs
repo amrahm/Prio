@@ -49,6 +49,34 @@ namespace Infrastructure.SharedResources {
         }
     }
 
+    public static class DialogServiceExtensions {
+        public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
+                                                          IDialogParameters parameters) {
+            var tcs = new TaskCompletionSource<IDialogResult>();
+
+            try {
+                dialogService.ShowDialog(name, parameters, result => tcs.SetResult(result));
+            } catch(Exception ex) {
+                tcs.SetException(ex);
+            }
+            return tcs.Task;
+        }
+
+        public static Task<IDialogResult> ShowNotification(this IDialogService dialogService, string message, string title,
+                                                           bool isCountdown = false, bool hasCancel = false,
+                                                           string customOk = null, string customCancel = null) {
+            return dialogService.ShowDialogAsync(nameof(MessageBoxView),
+                                          new DialogParameters {
+                                              {nameof(MessageBoxViewModel.Message), message},
+                                              {nameof(MessageBoxViewModel.Title), title},
+                                              {nameof(MessageBoxViewModel.isCountdown), isCountdown},
+                                              {nameof(MessageBoxViewModel.HasCancel), hasCancel},
+                                              {nameof(MessageBoxViewModel.customOk), customOk},
+                                              {nameof(MessageBoxViewModel.CancelText), customCancel}
+                                          });
+        }
+    }
+
     public static class BindingHelpers {
         public static void ManualBinding(object source, string sourcePropName, object target, string targetPropName,
                                          object defaultValue = null, bool twoWay = true) {
@@ -139,7 +167,6 @@ namespace Infrastructure.SharedResources {
         public static Screen CurrentScreen(this Window window) =>
                 Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
 
-        
 
         public static void MoveWindowInBounds(Window window) {
             PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(window);
@@ -188,20 +215,6 @@ namespace Infrastructure.SharedResources {
         /// <summary> Checks if the mouse is contained within </summary>
         public static bool ContainsMouse(this FrameworkElement element) =>
                 element.ContainsRelativePoint(Mouse.GetPosition(element));
-    }
-
-    public static class PrismExtensions {
-        public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
-                                                          IDialogParameters parameters) {
-            var tcs = new TaskCompletionSource<IDialogResult>();
-
-            try {
-                dialogService.ShowDialog(name, parameters, result => tcs.SetResult(result));
-            } catch(Exception ex) {
-                tcs.SetException(ex);
-            }
-            return tcs.Task;
-        }
     }
 
     public class EnumerationExtension : MarkupExtension {

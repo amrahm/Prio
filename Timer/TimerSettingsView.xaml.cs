@@ -110,7 +110,7 @@ namespace Timer {
                     OkBar.ClearValue(EffectProperty);
                 else
                     OkBar.Effect = new DropShadowEffect {
-                        Color = Color.FromRgb(0, 0, 0),
+                        Color = Colors.Black,
                         Direction = 90,
                         ShadowDepth = 0,
                         Opacity = .5,

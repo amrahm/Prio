@@ -1,10 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:local="clr-namespace:Infrastructure"
                     xmlns:hc="https://handyorg.github.io/handycontrol"
                     xmlns:adornedControl="clr-namespace:AdornedControl"
-                    xmlns:sharedResources="clr-namespace:Infrastructure.SharedResources"
                     xmlns:converters="clr-namespace:Infrastructure.SharedResources.Converters">
 
 
@@ -21,6 +19,7 @@
 	<FontFamily x:Key="NormalFont">Nirmala UI</FontFamily>
 	<system:Double x:Key="HintFontSize">12</system:Double>
 	<FontFamily x:Key="HintFont">Segoe UI</FontFamily>
+	<system:Double x:Key="SemiMediumFontSize">17</system:Double>
 	<system:Double x:Key="SubHeaderFontSize">26</system:Double>
 	<FontFamily x:Key="SubHeaderFont">Corbel</FontFamily>
 	<system:Double x:Key="BigFontSize">36</system:Double>
@@ -126,6 +125,10 @@
 		<Setter Property="Label.FontFamily" Value="{StaticResource SubHeaderFont}" />
 		<Setter Property="Label.Foreground" Value="{StaticResource MediumBrush}" />
 		<Setter Property="Label.FontSize" Value="{StaticResource SubHeaderFontSize}" />
+	</Style>
+	<Style x:Key="SemiMediumControlStyle" TargetType="{x:Type FrameworkElement}"
+	       BasedOn="{StaticResource MediumControlStyle}">
+		<Setter Property="Label.FontSize" Value="{StaticResource SemiMediumFontSize}" />
 	</Style>
 	<Style x:Key="BigControlStyle" TargetType="{x:Type FrameworkElement}" BasedOn="{StaticResource BaseControlStyle}">
 		<Setter Property="Label.FontFamily" Value="{StaticResource BigFont}" />

@@ -65,7 +65,7 @@
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="OverflowActionView.xaml">
+    <Page Update="OverflowActions\OverflowActionView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>

@@ -15,6 +15,7 @@ namespace Prio {
             containerRegistry.RegisterSingleton<IPrioHotkeyManager, PrioHotkeyManager>();
             containerRegistry.RegisterSingleton<IVirtualDesktopManager, VirtualDesktopManager>();
             containerRegistry.RegisterDialog<ColorPickerView, ColorPickerViewModel>();
+            containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>();
         }
 
         protected override Window CreateShell() {

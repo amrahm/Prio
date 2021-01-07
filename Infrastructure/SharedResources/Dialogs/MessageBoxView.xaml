@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Infrastructure.SharedResources.MessageBoxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Infrastructure.SharedResources"
+             mc:Ignorable="d"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:st="http://schemas.spicytaco.io/"
+             d:DesignHeight="150" d:DesignWidth="250">
+
+	<prism:Dialog.WindowStyle>
+		<Style TargetType="Window">
+			<Setter Property="WindowStyle" Value="None" />
+			<Setter Property="AllowsTransparency" Value="True" />
+			<Setter Property="SizeToContent" Value="WidthAndHeight" />
+			<Setter Property="ShowInTaskbar" Value="False" />
+			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/prio.ico" />
+			<Setter Property="prism:Dialog.WindowStartupLocation" Value="Manual" />
+		</Style>
+	</prism:Dialog.WindowStyle>
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="B2V" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<UserControl.DataContext>
+		<local:MessageBoxViewModel />
+	</UserControl.DataContext>
+
+	<ContentControl Template="{StaticResource RoundedWithShadowTemplate}" HorizontalContentAlignment="Stretch"
+	                VerticalContentAlignment="Stretch">
+		<st:AutoGrid Background="{StaticResource LightBrush}" Rows="auto, *, auto" ColumnWidth="*">
+			<st:AutoGrid Columns="Auto, *">
+				<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+					<Border Margin="5" Style="{StaticResource BorderClip}">
+						<Label Margin="0" Padding="10, 5" Content="{Binding Title, TargetNullValue=MessageTitle}"
+						       Background="{StaticResource SemiLightBrush}"
+						       Foreground="{StaticResource MediumAccentBrush}" Style="{StaticResource BaseControlStyle}" />
+					</Border>
+				</Viewbox>
+				<Separator Background="{StaticResource MediumAccentBrush}" />
+			</st:AutoGrid>
+			<TextBlock x:Name="MessageBlock" Text="{Binding Message, TargetNullValue=This_Is_A_Message}"
+			           Style="{StaticResource SemiMediumControlStyle}" FontSize="17" HorizontalAlignment="Center"
+			           Margin="20, 10"/>
+			<DockPanel LastChildFill="False">
+				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal"
+				        Content="{Binding OkText, TargetNullValue=OK}" Command="{Binding OkCommand}"
+				        Style="{StaticResource NormalButtonLight2Bordered}" Background="{StaticResource LightBrush}" />
+				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal"
+				        Content="{Binding CancelText, TargetNullValue=Cancel}" Command="{Binding CancelCommand}"
+				        Style="{StaticResource NormalButtonLight2Bordered}" Background="{StaticResource LightBrush}"
+				        Visibility="{Binding HasCancel, Converter={StaticResource B2V}}" />
+			</DockPanel>
+		</st:AutoGrid>
+	</ContentControl>
+
+</UserControl>

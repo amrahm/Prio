@@ -25,8 +25,13 @@ namespace Timer {
         public bool AllowResetOverride { get; set; }
         public bool AllowResetWhileRunning { get; set; }
         public bool OverflowEnabled { get; set; } = true;
-        public OverflowAction ZeroOverflowAction { get; set; } = new();
+        public OverflowAction ZeroOverflowAction { get; set; }
         public List<OverflowAction> OverflowActions { get; set; } = new();
+
+
+        public TimerConfig() {
+            ZeroOverflowAction ??= new OverflowAction(InstanceID);
+        }
     }
 
     public readonly struct WindowPosition {

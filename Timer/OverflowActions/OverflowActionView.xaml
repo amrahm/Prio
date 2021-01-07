@@ -43,15 +43,15 @@
 				<CheckBox Margin="5" x:Name="PlaySoundCheckbox" IsChecked="{Binding Model.PlaySoundEnabled}" />
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Play a Sound" />
 				<Button Visibility="{Binding IsChecked, ElementName=PlaySoundCheckbox, Converter={StaticResource B2V}}"
-				        Style="{StaticResource NormalButtonLight2Bordered}"
-				        Content="{Binding PlaySoundFile, TargetNullValue=&lt;No File Selected&gt;}" Tag="10"
+				        Style="{StaticResource NormalButtonLight2Bordered}" Tag="10"
+				        Content="{Binding PlaySoundFile, TargetNullValue=&lt;No File Selected&gt;}"
 				        Command="{Binding SelectSoundCommand}" />
 			</StackPanel>
 			<st:AutoGrid Columns="auto, auto, *" Margin="5, 5, 10, 5">
 				<CheckBox Margin="5" x:Name="ShowMessageCheckbox" IsChecked="{Binding Model.ShowMessageEnabled}" />
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Show a Message" />
-				<TextBox MinWidth="60" MaxHeight="80" hc:InfoElement.Placeholder="enter message"
-				         Margin="5" Style="{StaticResource NormalTextBox}" HorizontalAlignment="Left"
+				<TextBox MinWidth="60" MaxHeight="80" hc:InfoElement.Placeholder="enter message" HorizontalAlignment="Left"
+				         Margin="5" Style="{StaticResource NormalTextBox}" Text="{Binding Model.Message}"
 				         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
 				         Visibility="{Binding IsChecked, ElementName=ShowMessageCheckbox, Converter={StaticResource B2V}}" />
 			</st:AutoGrid>

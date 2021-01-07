@@ -89,7 +89,7 @@ namespace Timer {
         public TimerSettingsViewModel() {
             AddResetConditionCommand =
                     new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
-            AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction()));
+            AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction(Config.InstanceID)));
 
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
