@@ -12,7 +12,7 @@ namespace TimersList {
             InitializeComponent();
             ViewModel = vm;
             DataContext = ViewModel;
-            Loaded += (o,  e) => RegionManagerA.AddToRegionRMAware(TIMER_IN_LIST_REGION,
+            Loaded += (_,  _) => RegionManagerA.AddToRegionRMAware(TIMER_IN_LIST_REGION,
                                                                    new TimerView(new TimerViewModel(ViewModel.Timer)));
         }
 

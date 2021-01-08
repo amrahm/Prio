@@ -27,7 +27,7 @@ namespace Timer {
             }
 
             ToggleOptions(vm.Model);
-            vm.PropertyChanged += (o,  e) => {
+            vm.PropertyChanged += (_,  e) => {
                 if(e.PropertyName == nameof(vm.Model)) ToggleOptions(vm.Model);
             };
         }

@@ -7,11 +7,11 @@ using Prism.Ioc;
 
 namespace Timer {
     public class TimersGeneralConfigViewModel : NotifyPropertyChanged {
-        private TimersGeneralConfig _config;
+        private readonly TimersGeneralConfig _config;
 
         public TimersGeneralConfig GeneralConfig {
             get => _config;
-            private set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => OnPropertyChanged());
+            private init => NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => OnPropertyChanged());
         }
 
         public IEnumerable<VisibilityState> VisibilityStateTypeValues =>
@@ -24,7 +24,7 @@ namespace Timer {
             mainConfigService.ApplySettingsPress += SaveSettings;
         }
 
-        public void SaveSettings() {
+        private void SaveSettings() {
             TimersService.Singleton.GeneralConfig = GeneralConfig;
             TimersService.Singleton.SaveSettings();
         }

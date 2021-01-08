@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows;
 using Infrastructure.Prism;
 using Prism.Regions;
@@ -15,7 +16,7 @@ namespace TimersList {
 
             TimersListViewModel vm = (TimersListViewModel) DataContext;
             IRegion region = null;
-            Loaded += (o,  e) => {
+            Loaded += (_,  _) => {
                 region = RegionManagerA.Regions[TIMERS_LIST_REGION];
                 foreach(TimersListItemView timersListItemView in vm.Timers) {
                     if(!region.ActiveViews.Contains(timersListItemView)) {
@@ -24,9 +25,10 @@ namespace TimersList {
                     }
                 }
             };
-            vm.Timers.CollectionChanged += (o, e) => {
+            vm.Timers.CollectionChanged += (_, e) => {
                 switch(e.Action) {
                     case NotifyCollectionChangedAction.Add: {
+                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
                         foreach(TimersListItemView newItem in e.NewItems) {
                             region.AddToRegionScopedRMAware(newItem);
                             SizeChangedEventHandler();
@@ -34,6 +36,7 @@ namespace TimersList {
                         break;
                     }
                     case NotifyCollectionChangedAction.Remove: {
+                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
                         foreach(TimersListItemView newItem in e.NewItems) {
                             region.Remove(newItem);
                             SizeChangedEventHandler();

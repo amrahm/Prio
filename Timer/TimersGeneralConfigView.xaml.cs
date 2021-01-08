@@ -8,7 +8,7 @@ namespace Timer {
 
             var vm = (TimersGeneralConfigViewModel) DataContext;
 
-            Loaded += (o,  e) => {
+            Loaded += (_,  _) => {
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.ShowHideTimersShortcut), ShowHideShortcut,
                               nameof(ShowHideShortcut.Shortcut));
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.KeepTimersOnTopShortcut), KeepOnTopShortcut,

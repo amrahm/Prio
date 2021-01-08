@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using JetBrains.Annotations;
@@ -11,15 +12,17 @@ namespace Prio.RegionAdapters {
             : base(factory) { }
 
         protected override void Adapt(IRegion region, WrapPanel regionTarget) {
-            region.Views.CollectionChanged += (s, e) => {
+            region.Views.CollectionChanged += (_, e) => {
                 switch(e.Action) {
                     case NotifyCollectionChangedAction.Add: {
+                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
                         foreach(FrameworkElement element in e.NewItems) {
                             regionTarget.Children.Add(element);
                         }
                         break;
                     }
                     case NotifyCollectionChangedAction.Remove: {
+                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
                         foreach(FrameworkElement element in e.NewItems) {
                             regionTarget.Children.Remove(element);
                         }

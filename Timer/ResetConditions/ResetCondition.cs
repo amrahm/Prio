@@ -15,7 +15,7 @@ namespace Timer {
         public Guid TimerId { get; set; }
 
         public ResetConditionType Type { get; set; }
-        public int SecondsLeft { get; private set; }
+        public int SecondsLeft { get; set; }
 
 
         public double WaitForMinutes { get; set; }
@@ -35,7 +35,7 @@ namespace Timer {
         public bool MustRunForXEnabled { get; set; } //TODO validation to ensure this or MustBeFinished is true, but not both
         public double MustRunForXMinutes { get; set; }
         public bool MustBeFinished { get; set; }
-        public bool TimerFinished { get; private set; }
+        public bool TimerFinished { get; set; }
 
         public string UnmetString() {
             string st = "";
@@ -51,7 +51,7 @@ namespace Timer {
                     else if(MustRunForXEnabled) st += $" run for {SecondsLeft / 60} minutes";
                     break;
             }
-            return st + ".";
+            return st;
         }
 
 
@@ -108,21 +108,27 @@ namespace Timer {
         }
 
         public void Start() {
+            if(Type == ResetConditionType.Dependency && MustBeFinished) {
+                TimerFinished |= DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
+                DependencyTimer.Finished += OnDependencyTimerOnFinished;
+            }
+            _conditionTimer.Start();
+        }
+
+        private void OnDependencyTimerOnFinished(object o, EventArgs eventArgs) => TimerFinished = true;
+
+        public void StopAndReset() {
             switch(Type) {
                 case ResetConditionType.Cooldown:
                     SecondsLeft = (int) (WaitForMinutes * 60);
                     break;
                 case ResetConditionType.Dependency:
                     SecondsLeft = (int) (MustRunForXMinutes * 60);
-                    if(MustBeFinished) {
-                        TimerFinished = DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
-                        DependencyTimer.Finished += (_, _) => TimerFinished = true;
-                    }
+                    TimerFinished = false;
+                    DependencyTimer.Finished -= OnDependencyTimerOnFinished;
                     break;
             }
-            _conditionTimer.Start();
+            _conditionTimer.Stop();
         }
-
-        public void Stop() => _conditionTimer.Stop();
     }
 }

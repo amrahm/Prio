@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows;
 using Prism.Regions;
 
@@ -12,11 +13,9 @@ namespace Infrastructure.Prism {
                 invocation(rmAwareItem);
             }
 
-            if(item is FrameworkElement rmAwareFrameWorkElement &&
-               rmAwareFrameWorkElement.DataContext is IRegionManagerAware rmAwareDataContext) {
-
-                if(rmAwareFrameWorkElement.Parent is FrameworkElement frameworkElementParent &&
-                   frameworkElementParent.DataContext is IRegionManagerAware rmAwareDataContextParent &&
+            if(item is FrameworkElement {DataContext: IRegionManagerAware rmAwareDataContext} rmAwareFrameWorkElement) {
+                if(rmAwareFrameWorkElement.Parent is FrameworkElement
+                           {DataContext: IRegionManagerAware rmAwareDataContextParent}  &&
                    rmAwareDataContext == rmAwareDataContextParent) return;
 
                 invocation(rmAwareDataContext);
@@ -24,14 +23,16 @@ namespace Infrastructure.Prism {
         }
 
         protected override void OnAttach() {
-            Region.ActiveViews.CollectionChanged += (o,  e) => {
+            Region.ActiveViews.CollectionChanged += (_,  e) => {
                 switch(e.Action) {
                     case NotifyCollectionChangedAction.Add: {
+                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
                         foreach(object item in e.NewItems) {
                             IRegionManager regionManager = Region.RegionManager;
 
-                            if(item is FrameworkElement element && element.GetValue(RegionManager.RegionManagerProperty) is IRegionManager
-                                   scopedRegionManager) {
+                            if(item is FrameworkElement element &&
+                               element.GetValue(RegionManager.RegionManagerProperty) is IRegionManager
+                                       scopedRegionManager) {
                                 regionManager = scopedRegionManager;
                             }
 
@@ -40,6 +41,7 @@ namespace Infrastructure.Prism {
                         break;
                     }
                     case NotifyCollectionChangedAction.Remove: {
+                        Debug.Assert(e.OldItems != null, "e.OldItems != null");
                         foreach(object item in e.OldItems)
                             InvokeOnRegionManagerAwareElement(item, x => x.RegionManagerA = null);
                         break;

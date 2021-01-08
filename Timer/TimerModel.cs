@@ -117,7 +117,7 @@ namespace Timer {
         private void ResetTimer() {
             Config.TimeLeft = Config.Duration;
             _finishedSet = false;
-            Config.ResetConditions.StopAllConditions();
+            Config.ResetConditions.StopAndResetAllConditions();
         }
 
         public void RequestResetTimer() {

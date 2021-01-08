@@ -6,11 +6,11 @@ namespace Timer {
     public enum BooleanType { [Description("AND")] And, [Description("OR")] [UsedImplicitly] Or }
 
     public class ResetConditionTreeViewModel : NotifyPropertyWithDependencies {
-        private ResetConditionTree _tree;
+        private readonly ResetConditionTree _tree;
 
         public ResetConditionTree Tree {
             get => _tree;
-            set => NotificationBubbler.BubbleSetter(ref _tree, value, (o, e) => this.OnPropertyChanged());
+            init => NotificationBubbler.BubbleSetter(ref _tree, value, (_, _) => this.OnPropertyChanged());
         }
 
         [DependsOnProperty(nameof(Tree))]

@@ -33,15 +33,15 @@ namespace Timer {
         private void ConditionOnSatisfied(object sender, EventArgs e) {
             if(_parent == null) {
                 _satisfied.Raise(this, EventArgs.Empty);
-                StopAllConditions();
+                StopAndResetAllConditions();
             } else if(!_parent.IsAnd || _parent.GetDir(!IsLeftChild).IsSat()) _parent.ConditionOnSatisfied(sender, e);
         }
 
-        public void StopAllConditions() {
-            if(IsLeaf) Condition.Stop();
+        public void StopAndResetAllConditions() {
+            if(IsLeaf) Condition.StopAndReset();
             else if(IsBranch) {
-                Left.StopAllConditions();
-                Right.StopAllConditions();
+                Left.StopAndResetAllConditions();
+                Right.StopAndResetAllConditions();
             }
         }
 

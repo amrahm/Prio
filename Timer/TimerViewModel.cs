@@ -7,11 +7,11 @@ using Prism.Ioc;
 
 namespace Timer {
     public class TimerViewModel : NotifyPropertyWithDependencies {
-        private ITimer _timer;
+        private readonly ITimer _timer;
 
         public ITimer Timer {
             get => _timer;
-            set => NotificationBubbler.BubbleSetter(ref _timer, value, (o, e) => this.OnPropertyChanged());
+            init => NotificationBubbler.BubbleSetter(ref _timer, value, (_, _) => this.OnPropertyChanged());
         }
         private TimerConfig Config => Timer.Config;
 

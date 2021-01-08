@@ -6,10 +6,10 @@ using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
     public class ResetConditionViewModel : NotifyPropertyChanged {
-        private ResetCondition _model;
+        private readonly ResetCondition _model;
         public ResetCondition Model {
             get => _model;
-            private set => NotificationBubbler.BubbleSetter(ref _model, value, (o, e) => OnPropertyChanged());
+            private init => NotificationBubbler.BubbleSetter(ref _model, value, (_, _) => OnPropertyChanged());
         }
 
         public IEnumerable<ITimer> Timers =>

@@ -8,7 +8,7 @@ namespace MainConfig {
     public partial class MainConfigView : IRegionManagerAware {
         public MainConfigView() {
             InitializeComponent();
-            Loaded += (o,  e) => {
+            Loaded += (_,  _) => {
                 RegionManagerA.RegisterViewWithRMAware<NavigationMenuView>(RegionNames.MENU_REGION);
                 RegionManagerA.RequestNavigate(RegionNames.SHELL_CONFIG_REGION, nameof(GeneralConfigView));
             };

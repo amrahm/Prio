@@ -23,7 +23,7 @@ namespace MainConfig {
             }
 
             _configView = _container.Resolve<MainConfigView>();
-            _configView.Closed += (o,  e) => {
+            _configView.Closed += (_,  _) => {
                 _configView = null;
             };
 

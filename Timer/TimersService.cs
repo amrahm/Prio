@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -18,12 +19,18 @@ namespace Timer {
         public ObservableHashSet<ITimer> Timers { get; } = new();
         public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
 
+        
+        private readonly DispatcherTimer _autosaveTimer = new() {Interval = TimeSpan.FromMinutes(5)};
+
         private TimersService() {
             GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
             foreach(TimerConfig config in GeneralConfig.TimerConfigs) Timers.Add(new TimerModel(config));
 
             RegisterShortcuts();
             currVisState = GeneralConfig.DefaultVisibilityState;
+
+            _autosaveTimer.Tick += (_,  _) => SaveSettings();
+            _autosaveTimer.Start();
         }
 
         public void ShowTimers() => Timers.ForEach(t => {

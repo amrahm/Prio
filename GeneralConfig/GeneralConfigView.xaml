@@ -7,7 +7,6 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
-             xmlns:s="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
