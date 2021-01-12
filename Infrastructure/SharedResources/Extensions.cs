@@ -62,18 +62,34 @@ namespace Infrastructure.SharedResources {
             return tcs.Task;
         }
 
+        public static Task<IDialogResult> ShowAsync(this IDialogService dialogService, string name,
+                                                    IDialogParameters parameters) {
+            var tcs = new TaskCompletionSource<IDialogResult>();
+
+            try {
+                dialogService.Show(name, parameters, result => tcs.SetResult(result));
+            } catch(Exception ex) {
+                tcs.SetException(ex);
+            }
+            return tcs.Task;
+        }
+
         public static Task<IDialogResult> ShowNotification(this IDialogService dialogService, string message, string title,
-                                                           bool isCountdown = false, bool hasCancel = false,
-                                                           string customOk = null, string customCancel = null) {
-            return dialogService.ShowDialogAsync(nameof(MessageBoxView),
-                                          new DialogParameters {
-                                              {nameof(MessageBoxViewModel.Message), message},
-                                              {nameof(MessageBoxViewModel.Title), title},
-                                              {nameof(MessageBoxViewModel.isCountdown), isCountdown},
-                                              {nameof(MessageBoxViewModel.HasCancel), hasCancel},
-                                              {nameof(MessageBoxViewModel.customOk), customOk},
-                                              {nameof(MessageBoxViewModel.CancelText), customCancel}
-                                          });
+                                                           bool isCountdown = false, bool getsFocus = true,
+                                                           bool modal = true, bool hasCancel = false, string customOk = null,
+                                                           string customCancel = null) {
+            DialogParameters dialogParameters = new()  {
+                {nameof(MessageBoxViewModel.Message), message},
+                {nameof(MessageBoxViewModel.Title), title},
+                {nameof(MessageBoxViewModel.isCountdown), isCountdown},
+                {nameof(MessageBoxViewModel.getsFocus), getsFocus},
+                {nameof(MessageBoxViewModel.HasCancel), hasCancel},
+                {nameof(MessageBoxViewModel.customOk), customOk},
+                {nameof(MessageBoxViewModel.CancelText), customCancel}
+            };
+            return modal ?
+                    dialogService.ShowDialogAsync(nameof(MessageBoxView), dialogParameters) :
+                    dialogService.ShowAsync(nameof(MessageBoxView), dialogParameters);
         }
     }
 

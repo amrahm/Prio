@@ -46,7 +46,7 @@ namespace Timer {
                         st += $" while off of Desktops {VirtualDesktopExtensions.DesktopSetToString(OffDesktopsSet)}";
                     break;
                 case ResetConditionType.Dependency:
-                    st += $"{DependencyTimer.Config.Name} must";
+                    st += $"<italic>{DependencyTimer.Config.Name}</italic> must";
                     if(MustBeFinished) st += " be finished";
                     else if(MustRunForXEnabled) st += $" run for {SecondsLeft / 60} minutes";
                     break;

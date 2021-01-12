@@ -16,6 +16,7 @@ namespace Infrastructure.SharedResources {
 
         public string Message { get; set; }
         public string OkText { get; private set; } = "OK";
+        internal bool getsFocus = true;
         public bool HasCancel { get; set; }
         public string CancelText { get; private set; } = "Cancel";
 
@@ -39,6 +40,7 @@ namespace Infrastructure.SharedResources {
             Message = parameters.GetValue<string>(nameof(Message));
             Title = parameters.GetValue<string>(nameof(Title));
             isCountdown = parameters.GetValue<bool>(nameof(isCountdown));
+            getsFocus = parameters.GetValue<bool>(nameof(getsFocus));
             HasCancel = parameters.GetValue<bool>(nameof(HasCancel));
             OkText = customOk = parameters.GetValue<string>(nameof(customOk)) ?? customOk;
             CancelText = parameters.GetValue<string>(nameof(CancelText)) ?? CancelText;

@@ -32,7 +32,6 @@ namespace Timer {
         private readonly MediaPlayer _mediaPlayer = new();
         private IDialogService _dialogService;
 
-
         public OverflowAction(Guid timerID) {
             TimerId = timerID;
             IContainerProvider container = UnityInstance.GetContainer();
@@ -57,7 +56,7 @@ namespace Timer {
                 _mediaPlayer.Play();
             }
 
-            if(ShowMessageEnabled) _dialogService.ShowNotification(Message, Timer.Config.Name, true);
+            if(ShowMessageEnabled) _dialogService.ShowNotification(Message, Timer.Config.Name, true, false, false);
         }
     }
 }

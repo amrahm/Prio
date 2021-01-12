@@ -25,7 +25,10 @@ namespace Timer {
 
                 if(_config != null) _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
                 NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
-                if(_config != null) _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
+                if(_config != null) {
+                    _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
+                    SetupTimerActions();
+                }
             }
         }
 
@@ -51,6 +54,7 @@ namespace Timer {
             IContainerProvider container = UnityInstance.GetContainer();
             _dialogService = container.Resolve<IDialogService>();
 
+            SetupTimerActions();
             _timer.Tick += OnTimerOnTick;
 
             RegisterShortcuts();
@@ -59,21 +63,62 @@ namespace Timer {
             _vdm.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
         }
 
-        public void CheckStart() => TimerFinishCheckRaise();
+        public void CheckStart() {
+            if(Config.TimeLeft.TotalSeconds <= 0.01) TimerFinishedRaise();
+        }
 
         private void OnTimerOnTick(object o, EventArgs e) {
             Config.TimeLeft -= OneSecond;
-            TimerFinishCheckRaise();
+            CheckTimerActions();
         }
 
-        private void TimerFinishCheckRaise() {
-            if(!_finishedSet && Config.TimeLeft.TotalSeconds <= 0.01) {
-                _finishedSet = true;
-                _finished.Raise(this, EventArgs.Empty);
-                if(!Config.OverflowEnabled) StopTimer();
-                Config.ResetConditions.StartConditions();
+        private void TimerFinishedRaise() {
+            _finishedSet = true;
+            _finished.Raise(this, EventArgs.Empty);
+            if(!Config.OverflowEnabled) StopTimer();
+            Config.ResetConditions.StartConditions();
+        }
+
+        #region TimerActions
+
+        private class TimerAction : IComparable<TimerAction> {
+            public TimeSpan TriggerTime { get; }
+            public Action Action { get; }
+
+            public TimerAction(TimeSpan triggerTime, Action action) {
+                TriggerTime = triggerTime;
+                Action = action;
+            }
+
+            public int CompareTo(TimerAction other) => -TriggerTime.CompareTo(other.TriggerTime);
+        }
+
+        private readonly List<TimerAction> _timerActions = new();
+        private int _timerActionsPointer;
+
+        private void SetupTimerActions() {
+            _timerActions.Clear();
+            _timerActions.Add(new TimerAction(TimeSpan.Zero, TimerFinishedRaise));
+            _timerActions.Add(new TimerAction(TimeSpan.Zero, Config.ZeroOverflowAction.DoAction));
+            foreach(var x in Config.OverflowActions)
+                _timerActions.Add(new TimerAction(TimeSpan.FromMinutes(-x.AfterMinutes), x.DoAction));
+            _timerActions.Sort();
+            _timerActionsPointer = 0;
+            while(_timerActionsPointer < _timerActions.Count &&
+                  Config.TimeLeft <= _timerActions[_timerActionsPointer].TriggerTime) _timerActionsPointer++;
+        }
+
+        private void CheckTimerActions() {
+            while(_timerActionsPointer < _timerActions.Count &&
+                  Config.TimeLeft <= _timerActions[_timerActionsPointer].TriggerTime) {
+                _timerActions[_timerActionsPointer].Action(); //TODO timer hangs
+                _timerActionsPointer++;
             }
         }
+
+        #endregion
+
+        #region VirtualDesktops
 
         private void HandleDesktopChanged(int newDesktop) {
             TimerWindow?.Dispatcher.Invoke(() => {
@@ -96,6 +141,9 @@ namespace Timer {
             else if(Config.DesktopsVisible.Count > 0) StopTimer();
         }
 
+        #endregion
+
+        #region ShowHide
 
         public void ShowTimer() {
             if(TimerWindow != null) {
@@ -114,9 +162,23 @@ namespace Timer {
             HandleDesktopChanged(_vdm.CurrentDesktop());
         }
 
+        private void ShowHideTimer() {
+            if(TimerWindow == null) return;
+            if(_hidden) {
+                TimerWindow.Visibility = Visibility.Visible;
+                TimerWindow.Activate();
+            } else TimerWindow.Visibility = Visibility.Hidden;
+            _hidden = !_hidden;
+        }
+
+        #endregion
+
+        #region Reset
+
         private void ResetTimer() {
             Config.TimeLeft = Config.Duration;
             _finishedSet = false;
+            _timerActionsPointer = 0;
             Config.ResetConditions.StopAndResetAllConditions();
         }
 
@@ -131,13 +193,15 @@ namespace Timer {
             string  message = $"Not all reset conditions are met:\n\n<Bold>{unmetStrings}</Bold>";
             if(Config.AllowResetOverride) {
                 IDialogResult r = _dialogService.ShowNotification(message + "\n\nDo you want to override?",
-                                                                        $"Resetting {Config.Name}", hasCancel: true,
-                                                                        customOk: "YES", customCancel: "NO").Result;
+                                                                  $"Resetting {Config.Name}", hasCancel: true,
+                                                                  customOk: "YES", customCancel: "NO").Result;
                 if(r.Result == ButtonResult.OK) ResetTimer();
             } else {
                 _dialogService.ShowNotification(message, $"Unable to Reset {Config.Name}");
             }
         }
+
+        #endregion
 
         public void StartTimer() {
             if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) _timer.Start();
@@ -145,14 +209,7 @@ namespace Timer {
 
         public void StopTimer() => _timer.Stop();
 
-        private void ShowHideTimer() {
-            if(TimerWindow == null) return;
-            if(_hidden) {
-                TimerWindow.Visibility = Visibility.Visible;
-                TimerWindow.Activate();
-            } else TimerWindow.Visibility = Visibility.Hidden;
-            _hidden = !_hidden;
-        }
+        #region Settings
 
         public async Task<ButtonResult> OpenSettings() {
             IDialogResult r = await _dialogService.ShowDialogAsync(nameof(TimerSettingsView),
@@ -165,14 +222,17 @@ namespace Timer {
             RegisterShortcuts();
         }
 
+        #endregion
+
+        #region Shortcuts
+
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
         private void RegisterShortcuts() {
             IContainerProvider container = UnityInstance.GetContainer();
             var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut,
-                                         RequestResetTimer,
-                                         CompatibilityType.Reset);
+                                         RequestResetTimer, CompatibilityType.Reset);
 
             int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
@@ -183,6 +243,8 @@ namespace Timer {
             hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ShowHideShortcut), Config.ShowHideShortcut,
                                          ShowHideTimer, CompatibilityType.Visibility);
         }
+
+        #endregion
 
         public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
         public override int GetHashCode() => Config.InstanceID.GetHashCode();

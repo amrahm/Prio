@@ -14,7 +14,7 @@
 			<Setter Property="WindowStyle" Value="None" />
 			<Setter Property="AllowsTransparency" Value="True" />
 			<Setter Property="SizeToContent" Value="WidthAndHeight" />
-			<Setter Property="ShowInTaskbar" Value="False" />
+			<Setter Property="ShowInTaskbar" Value="True" />
 			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/prio.ico" />
 			<Setter Property="prism:Dialog.WindowStartupLocation" Value="Manual" />
 		</Style>
@@ -50,10 +50,10 @@
 			           Style="{StaticResource SemiMediumControlStyle}" FontSize="17" HorizontalAlignment="Center"
 			           Margin="20, 10"/>
 			<DockPanel LastChildFill="False">
-				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal"
+				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal" IsDefault="True"
 				        Content="{Binding OkText, TargetNullValue=OK}" Command="{Binding OkCommand}"
 				        Style="{StaticResource NormalButtonLight2Bordered}" Background="{StaticResource LightBrush}" />
-				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal"
+				<Button DockPanel.Dock="Right" Padding="10, 5" FontWeight="Normal" IsCancel="True"
 				        Content="{Binding CancelText, TargetNullValue=Cancel}" Command="{Binding CancelCommand}"
 				        Style="{StaticResource NormalButtonLight2Bordered}" Background="{StaticResource LightBrush}"
 				        Visibility="{Binding HasCancel, Converter={StaticResource B2V}}" />

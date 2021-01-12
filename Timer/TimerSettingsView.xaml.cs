@@ -21,8 +21,6 @@ namespace Timer {
         private const int SNAPPING_INCREMENT = MIN_CTRL_WIDTH + 90;
 
         private Window _window;
-
-
         private double _startHeight;
 
         public TimerSettingsView() {
