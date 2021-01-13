@@ -3,11 +3,10 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Infrastructure.SharedResources;
 using PropertyChanged;
 using static Infrastructure.SharedResources.ShortcutDefinition;
 
-namespace Timer {
+namespace Infrastructure.SharedResources {
     /// <summary> Interaction logic for ShortcutSetter.xaml </summary>
     public partial class ShortcutSetter : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;

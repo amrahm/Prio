@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Prio.GlobalServices;
 using Prism.Ioc;
 using WeakEvent;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public enum ResetConditionType { Cooldown, Dependency }
@@ -56,7 +57,6 @@ namespace Timer {
 
 
         private readonly DispatcherTimer _conditionTimer = new()  {Interval = TimeSpan.FromSeconds(1)};
-        private readonly IVirtualDesktopManager _virtualDesktopManager;
 
         private readonly WeakEventSource<EventArgs> _deleteRequested = new();
         public event EventHandler<EventArgs> DeleteRequested {
@@ -77,13 +77,12 @@ namespace Timer {
         public ResetCondition(ITimer timer) {
             if(timer != null) TimerId = timer.Config.InstanceID;
             _conditionTimer.Tick += OnTimerOnTick;
-            _virtualDesktopManager = UnityInstance.GetContainer().Resolve<IVirtualDesktopManager>();
         }
 
         private void OnTimerOnTick(object sender, EventArgs e) {
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(_virtualDesktopManager.CurrentDesktop()))
+                    if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(VirtualDesktopManager.CurrentDesktop()))
                         SecondsLeft -= 1;
                     break;
                 case ResetConditionType.Dependency:

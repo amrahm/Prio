@@ -5,8 +5,8 @@ using System.Windows.Media;
 using HandyControl.Controls;
 using Microsoft.Win32;
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Services.Dialogs;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public class OverflowActionViewModel : NotifyPropertyWithDependencies {
@@ -23,10 +23,9 @@ namespace Timer {
 
         public OverflowActionViewModel(OverflowAction model) {
             Model = model;
-            IDialogService dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
 
             SelectColorCommand = new DelegateCommand(() => {
-                var r = dialogService.ShowColorPicker(Model.FlashColor).Result;
+                var r = Dialogs.ShowColorPicker(Model.FlashColor).Result;
                 if(r.Result == ButtonResult.OK)
                     Model.FlashColor = r.Parameters.GetValue<SolidColorBrush>(nameof(ColorPicker.SelectedBrush));
             });

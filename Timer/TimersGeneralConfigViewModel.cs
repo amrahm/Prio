@@ -15,12 +15,11 @@ namespace Timer {
         }
 
         public IEnumerable<VisibilityState> VisibilityStateTypeValues =>
-            Enum.GetValues(typeof(VisibilityState)).Cast<VisibilityState>();
+                Enum.GetValues(typeof(VisibilityState)).Cast<VisibilityState>();
 
         public TimersGeneralConfigViewModel() {
             GeneralConfig = TimersService.Singleton.GeneralConfig.DeepCopy();
-            IContainerProvider container = UnityInstance.GetContainer();
-            var mainConfigService = container.Resolve<IMainConfigService>();
+            var mainConfigService = UnityInstance.Container.Resolve<IMainConfigService>();
             mainConfigService.ApplySettingsPress += SaveSettings;
         }
 

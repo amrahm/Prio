@@ -2,8 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
-using Prism.Ioc;
-using Prism.Services.Dialogs;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     [Serializable]
@@ -31,12 +30,9 @@ namespace Timer {
         private double _flashColorSecondsLeft;
 
         private readonly MediaPlayer _mediaPlayer = new();
-        private IDialogService _dialogService;
 
         public OverflowAction(Guid timerID) {
             TimerId = timerID;
-            IContainerProvider container = UnityInstance.GetContainer();
-            _dialogService = container.Resolve<IDialogService>();
 
             _flashColorTimer.Tick += (_,  _) => {
                 Timer.TempBackgroundBrush = Timer.TempBackgroundBrush == null ? FlashColor : null;
@@ -62,7 +58,9 @@ namespace Timer {
                 _mediaPlayer.Play();
             }
 
-            if(ShowMessageEnabled) _dialogService.ShowNotification(Message, Timer.Config.Name, true, false, false, Timer.TimerWindow?.CurrentScreen());
+            if(ShowMessageEnabled)
+                Dialogs.ShowNotification(Message, Timer.Config.Name, true, false, false,
+                                               Timer.TimerWindow?.CurrentScreen());
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Timer {
                 ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
                 ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut, nameof(StopShortcut.Shortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.ShowHideShortcut), ShowHideShortcut,
+                ManualBinding(vm.Config, nameof(vm.Config.ToggleVisibilityShortcut), ShowHideShortcut,
                               nameof(ShowHideShortcut.Shortcut));
 
                 var conditionsVm = new ResetConditionTreeViewModel(vm.Config.ResetConditions);

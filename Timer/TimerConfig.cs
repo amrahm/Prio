@@ -20,7 +20,7 @@ namespace Timer {
         public ShortcutDefinition ResetShortcut { get; set; }
         public ShortcutDefinition StartShortcut { get; set; }
         public ShortcutDefinition StopShortcut { get; set; }
-        public ShortcutDefinition ShowHideShortcut { get; set; }
+        public ShortcutDefinition ToggleVisibilityShortcut { get; set; }
         public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new();
         public ResetConditionTree ResetConditions { get; set; } = new();
         public bool AutoResetOnConditions { get; set; }

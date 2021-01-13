@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Timer"
              xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500">
 
@@ -26,18 +27,18 @@
 		           Margin="10, -5, 0, 2" />
 		<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 			<hc:FlexPanel JustifyContent="SpaceAround" FlexWrap="Wrap" AlignContent="SpaceAround">
-				<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility (All):" Hint="Show/Hide all timers" />
-				<local:ShortcutSetter Label="Keep On Top:" x:Name="KeepOnTopShortcut"
-				                      Hint="Show all timers and keep them above all other windows" />
-				<local:ShortcutSetter Label="Move Behind:" x:Name="MoveBehindShortcut"
-				                      Hint="Show all timers but move them below all other windows" />
+				<sr:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility (All):" Hint="Show/Hide all timers" />
+				<sr:ShortcutSetter Label="Keep On Top:" x:Name="KeepOnTopShortcut"
+				                   Hint="Show all timers and keep them above all other windows" />
+				<sr:ShortcutSetter Label="Move Behind:" x:Name="MoveBehindShortcut"
+				                   Hint="Show all timers but move them below all other windows" />
 			</hc:FlexPanel>
 		</Border>
 		<Border BorderBrush="{StaticResource DarkAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 			<hc:FlexPanel JustifyContent="SpaceAround" FlexWrap="Wrap" AlignContent="SpaceAround">
-				<local:ShortcutSetter x:Name="StopAllShortcut" Label="Stop All:" Hint="Stop all timers" />
-				<local:ShortcutSetter Label="Resume Previously Running:" x:Name="ResumeAllShortcut"
-				                      Hint="Resumes timers that were running before you hit 'Stop All'" />
+				<sr:ShortcutSetter x:Name="StopAllShortcut" Label="Stop All:" Hint="Stop all timers" />
+				<sr:ShortcutSetter Label="Resume Previously Running:" x:Name="ResumeAllShortcut"
+				                   Hint="Resumes timers that were running before you hit 'Stop All'" />
 			</hc:FlexPanel>
 		</Border>
 		<StackPanel Orientation="Horizontal">

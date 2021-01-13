@@ -9,7 +9,7 @@ using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prio.GlobalServices;
-using Prism.Ioc;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public class TimersService : NotifyPropertyChanged {
@@ -113,9 +113,6 @@ namespace Timer {
         #endregion
 
         private void RegisterShortcuts() {
-            IContainerProvider container = UnityInstance.GetContainer();
-            var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
-
             bool hideIsTop = Equals(GeneralConfig.ShowHideTimersShortcut, GeneralConfig.KeepTimersOnTopShortcut);
             bool hideIsBottom = Equals(GeneralConfig.ShowHideTimersShortcut, GeneralConfig.MoveTimersBehindShortcut);
             bool topIsBottom = Equals(GeneralConfig.MoveTimersBehindShortcut, GeneralConfig.KeepTimersOnTopShortcut);
@@ -139,25 +136,23 @@ namespace Timer {
                 return r; //otherwise, do the requested action
             }
 
-            hotkeyManager.RegisterHotkey(nameof(GeneralConfig.ShowHideTimersShortcut), GeneralConfig.ShowHideTimersShortcut,
-                                         ShowHideAll, CompatibilityType.Visibility,
-                                         (int) VisibilityHotkeyState.ShouldHide, NextVisibilityState);
+            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.ShowHideTimersShortcut), ShowHideAll,
+                                         CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldHide,
+                                         NextVisibilityState);
 
-            hotkeyManager.RegisterHotkey(nameof(GeneralConfig.KeepTimersOnTopShortcut),
-                                         GeneralConfig.KeepTimersOnTopShortcut,
-                                         TopAll, CompatibilityType.Visibility,
-                                         (int) VisibilityHotkeyState.ShouldTop, NextVisibilityState);
+            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.KeepTimersOnTopShortcut),
+                                         TopAll, CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldTop,
+                                         NextVisibilityState);
 
-            hotkeyManager.RegisterHotkey(nameof(GeneralConfig.MoveTimersBehindShortcut),
-                                         GeneralConfig.MoveTimersBehindShortcut,
-                                         BottomAll, CompatibilityType.Visibility,
-                                         (int) VisibilityHotkeyState.ShouldBehind, NextVisibilityState);
+            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.MoveTimersBehindShortcut),
+                                         BottomAll, CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldBehind,
+                                         NextVisibilityState);
 
 
             int NextTimerState(int r) => (int) (isStopAll ? TimerHotkeyState.ShouldStart : TimerHotkeyState.ShouldStop);
-            hotkeyManager.RegisterHotkey(nameof(GeneralConfig.StopAllShortcut), GeneralConfig.StopAllShortcut, StopAll,
+            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.StopAllShortcut), StopAll,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
-            hotkeyManager.RegisterHotkey(nameof(GeneralConfig.ResumeAllShortcut), GeneralConfig.ResumeAllShortcut, ResumeAll,
+            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.ResumeAllShortcut), ResumeAll,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
         }
 

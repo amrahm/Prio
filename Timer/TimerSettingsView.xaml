@@ -6,6 +6,7 @@
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
              xmlns:local="clr-namespace:Timer"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              x:Name="Root">
 
 	<prism:Dialog.WindowStyle>
@@ -86,13 +87,13 @@
 						<TextBlock Text="(Items in orange box can have the same shortcut)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
 						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
-							<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
-							<local:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
+							<sr:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
+							<sr:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
 						</hc:FlexPanel>
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 							<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
-								<local:ShortcutSetter x:Name="StartShortcut" Label="Start:" Hint="Start the timer" />
-								<local:ShortcutSetter x:Name="StopShortcut" Label="Stop:" Hint="Stop the timer" />
+								<sr:ShortcutSetter x:Name="StartShortcut" Label="Start:" Hint="Start the timer" />
+								<sr:ShortcutSetter x:Name="StopShortcut" Label="Stop:" Hint="Stop the timer" />
 							</hc:FlexPanel>
 						</Border>
 					</StackPanel>

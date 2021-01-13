@@ -6,9 +6,9 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
-using Prism.Ioc;
 using Prism.Services.Dialogs;
 using WeakEvent;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public class TimerModel : NotifyPropertyWithDependencies, ITimer {
@@ -20,7 +20,7 @@ namespace Timer {
                 void ResetConditionsOnSatisfied(object sender, EventArgs e) {
                     if(Config.AutoResetOnConditions) {
                         ResetTimer();
-                        StartStopForDesktopsActive(_vdm.CurrentDesktop());
+                        StartStopForDesktopsActive(VirtualDesktopManager.CurrentDesktop());
                     }
                 }
 
@@ -44,26 +44,21 @@ namespace Timer {
         }
 
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
-        private readonly IDialogService _dialogService;
         private readonly DispatcherTimer _timer = new() {Interval = OneSecond};
         private bool _hidden;
         private bool _finishedSet;
-        private readonly IVirtualDesktopManager _vdm;
 
         public bool IsRunning => _timer.IsEnabled;
 
         public TimerModel(TimerConfig config) {
             Config = config;
-            IContainerProvider container = UnityInstance.GetContainer();
-            _dialogService = container.Resolve<IDialogService>();
 
             SetupTimerActions();
             _timer.Tick += OnTimerOnTick;
 
             RegisterShortcuts();
 
-            _vdm = container.Resolve<IVirtualDesktopManager>();
-            _vdm.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
+            VirtualDesktopManager.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
         }
 
         public void CheckStart() {
@@ -114,7 +109,7 @@ namespace Timer {
         private void CheckTimerActions() {
             while(_timerActionsPointer < _timerActions.Count &&
                   Config.TimeLeft <= _timerActions[_timerActionsPointer].TriggerTime) {
-                _timerActions[_timerActionsPointer].Action(); //TODO timer hangs
+                _timerActions[_timerActionsPointer].Action();
                 _timerActionsPointer++;
             }
         }
@@ -129,7 +124,7 @@ namespace Timer {
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !_hidden &&
                    TimersService.Singleton.currVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
-                    _vdm.MoveToDesktop(TimerWindow, newDesktop);
+                    VirtualDesktopManager.MoveToDesktop(TimerWindow, newDesktop);
                 } else if(Config.DesktopsVisible.Count > 0)  {
                     TimerWindow.Visibility = Visibility.Hidden;
                 }
@@ -162,7 +157,7 @@ namespace Timer {
             };
 
             TimersService.Singleton.ApplyVisState();
-            HandleDesktopChanged(_vdm.CurrentDesktop());
+            HandleDesktopChanged(VirtualDesktopManager.CurrentDesktop());
         }
 
         private void ShowHideTimer() {
@@ -195,12 +190,12 @@ namespace Timer {
 
             string  message = $"Not all reset conditions are met:\n\n<Bold>{unmetStrings}</Bold>";
             if(Config.AllowResetOverride) {
-                IDialogResult r = _dialogService.ShowNotification(message + "\n\nDo you want to override?",
-                                                                  $"Resetting {Config.Name}", hasCancel: true,
-                                                                  customOk: "YES", customCancel: "NO").Result;
+                IDialogResult r = Dialogs.ShowNotification(message + "\n\nDo you want to override?",
+                                                           $"Resetting {Config.Name}", hasCancel: true,
+                                                           customOk: "YES", customCancel: "NO").Result;
                 if(r.Result == ButtonResult.OK) ResetTimer();
             } else {
-                _dialogService.ShowNotification(message, $"Unable to Reset {Config.Name}");
+                Dialogs.ShowNotification(message, $"Unable to Reset {Config.Name}");
             }
         }
 
@@ -218,8 +213,8 @@ namespace Timer {
         #region Settings
 
         public async Task<ButtonResult> OpenSettings() {
-            IDialogResult r = await _dialogService.ShowDialogAsync(nameof(TimerSettingsView),
-                                                                   new DialogParameters {{nameof(ITimer), this}});
+            IDialogResult r = await Dialogs.ShowDialogAsync(nameof(TimerSettingsView),
+                                                            new DialogParameters {{nameof(ITimer), this}});
             return r.Result;
         }
 
@@ -235,19 +230,17 @@ namespace Timer {
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
         private void RegisterShortcuts() {
-            IContainerProvider container = UnityInstance.GetContainer();
-            var hotkeyManager = container.Resolve<IPrioHotkeyManager>();
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut), Config.ResetShortcut,
-                                         RequestResetTimer, CompatibilityType.Reset);
+            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.ResetShortcut), RequestResetTimer,
+                                         CompatibilityType.Reset);
 
             int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StartShortcut), Config.StartShortcut, StartTimer,
+            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.StartShortcut), StartTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.StopShortcut), Config.StopShortcut, StopTimer,
+            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.StopShortcut), StopTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
 
-            hotkeyManager.RegisterHotkey(Config.InstanceID, nameof(Config.ShowHideShortcut), Config.ShowHideShortcut,
-                                         ShowHideTimer, CompatibilityType.Visibility);
+            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.ToggleVisibilityShortcut), ShowHideTimer,
+                                         CompatibilityType.Visibility);
         }
 
         #endregion

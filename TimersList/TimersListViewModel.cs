@@ -5,6 +5,7 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Timer;
+using Infrastructure.SharedResources;
 
 namespace TimersList {
     public class TimersListViewModel : BindableBase {
@@ -13,7 +14,7 @@ namespace TimersList {
         public DelegateCommand AddTimerCommand { get; }
 
         public TimersListViewModel() {
-            IContainerProvider container = Infrastructure.SharedResources.UnityInstance.GetContainer();
+            IContainerProvider container = UnityInstance.Container;
 
             // Load existing timers
             foreach(ITimer timer in TimersService.Singleton.Timers)

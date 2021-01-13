@@ -49,7 +49,7 @@ namespace Timer {
 
         public TimerViewModel(ITimer timerTimer) {
             Timer = timerTimer;
-            IContainerProvider container = UnityInstance.GetContainer();
+            IContainerProvider container = UnityInstance.Container;
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {

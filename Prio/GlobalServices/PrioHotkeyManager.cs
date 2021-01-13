@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using Infrastructure.SharedResources;
 using JetBrains.Annotations;
 using NHotkey;
-using NHotkey.Wpf;
+using static Infrastructure.SharedResources.UnityInstance;
 using static Prio.GlobalServices.IPrioHotkeyManager;
+using HotkeyManager = NHotkey.Wpf.HotkeyManager;
 
 namespace Prio.GlobalServices {
     [UsedImplicitly]
@@ -24,21 +26,38 @@ namespace Prio.GlobalServices {
             private readonly ShortcutDefinition _shortcut;
             private readonly Queue<Action> _actionQueue = new();
 
-            public HotkeyHolder(HotkeyRegistration registration, Action action) {
+            private HotkeyHolder(HotkeyRegistration registration) {
                 _shortcut = registration.Shortcut;
-                AddAction(registration, action);
-            }
-
-            /// <summary> Call everything in the action queue </summary>
-            private void CallActionQueue(object sender, HotkeyEventArgs args) {
-                while(_actionQueue.Count > 0) _actionQueue.Dequeue()();
             }
 
             /// <summary> Adds a new action to be called when this hotkey is pressed </summary>
             /// <param name="registration"> Info about who added this action </param>
             /// <param name="action"> The action to be called </param>
+            /// <param name="source"> The object holding the shortcut definition </param>
+            /// <param name="sourcePropName"> The property name of the shortcut definition </param>
             /// <returns> true if the action was able to be added </returns>
-            public bool AddAction(HotkeyRegistration registration, Action action) {
+            public static bool AddAction(HotkeyRegistration registration, Action action, object source,
+                                         string sourcePropName) {
+                if(!HotKeyRegistry.TryGetValue(registration.Shortcut, out HotkeyHolder holder))
+                    holder = HotKeyRegistry[registration.Shortcut] = new HotkeyHolder(registration);
+
+                if(holder._AddAction(registration, action)) {
+                    RegistrationToShortcut[registration] = registration.Shortcut;
+                    return true;
+                }
+                UnregisterHotkey(registration);
+
+                PropertyInfo sProp = source.GetType().GetProperty(sourcePropName);
+                Debug.Assert(sProp != null, nameof(sProp) + " != null");
+                sProp.SetValue(source, null);
+
+                Dialogs.ShowNotification($"Unable to register '{registration.HotkeyName}'\n" +
+                                         $"The shortcut '{registration.Shortcut}' is already registered elsewhere",
+                                         "Unable to Set Shortcut");
+                return false;
+            }
+
+            private bool _AddAction(HotkeyRegistration registration, Action action) {
                 Debug.Assert(Equals(registration.Shortcut, _shortcut),
                              $"Tried adding registration with different shortcut to {nameof(HotkeyHolder)}");
                 if(!CheckCompatibilities(registration.CompatibilityType,
@@ -62,9 +81,17 @@ namespace Prio.GlobalServices {
                 _handler += handler;
                 _handler += CallActionQueue;
 
-                //TODO have to deal with hotkeys registered elsewhere
-                HotkeyManager.Current.AddOrReplace(_shortcut.ToString(), _shortcut.Key, _shortcut.Modifiers, _handler);
-                return true;
+                try {
+                    HotkeyManager.Current.AddOrReplace(_shortcut.ToString(), _shortcut.Key, _shortcut.Modifiers, _handler);
+                    return true;
+                } catch(HotkeyAlreadyRegisteredException) {
+                    return false;
+                }
+            }
+
+            /// <summary> Call everything in the action queue </summary>
+            private void CallActionQueue(object sender, HotkeyEventArgs args) {
+                while(_actionQueue.Count > 0) _actionQueue.Dequeue()();
             }
 
             /// <summary> Remove the action associated with the registration if it exists </summary>
@@ -83,7 +110,7 @@ namespace Prio.GlobalServices {
 
         private class HotkeyRegistration {
             private Guid InstanceId { get; }
-            private string HotkeyName { get; }
+            public string HotkeyName { get; }
             public ShortcutDefinition Shortcut { get; }
             public CompatibilityType CompatibilityType { get; }
             public int InstanceState { get; }
@@ -106,25 +133,20 @@ namespace Prio.GlobalServices {
             public override int GetHashCode() => HashCode.Combine(InstanceId, HotkeyName);
         }
 
-        public bool RegisterHotkey(Guid instanceId, string hotkeyName, ShortcutDefinition shortcut, Action action,
+        public bool RegisterHotkey(Guid instanceId, object source, string sourcePropName, Action action,
                                    CompatibilityType compatibilityType, int instanceState,
                                    Func<int, int> nextInstanceState) {
-            HotkeyRegistration registration = new(instanceId, hotkeyName, shortcut,
+            PropertyInfo sProp = source.GetType().GetProperty(sourcePropName);
+            Debug.Assert(sProp != null, nameof(sProp) + " != null");
+            ShortcutDefinition shortcut = sProp.GetValue(source) as ShortcutDefinition;
+
+            HotkeyRegistration registration = new(instanceId, sourcePropName, shortcut,
                                                   compatibilityType, instanceState, nextInstanceState);
 
             UnregisterHotkey(registration);
 
             if(shortcut == null || shortcut.Key == Key.None) return true; //If setting it to null, just unregister and return
-
-            bool registeredHotkey = true;
-
-            if(HotKeyRegistry.TryGetValue(shortcut, out HotkeyHolder holder))
-                registeredHotkey = holder.AddAction(registration, action);
-            else
-                HotKeyRegistry[shortcut] = new HotkeyHolder(registration, action);
-
-            if(registeredHotkey) RegistrationToShortcut[registration] = shortcut;
-            return registeredHotkey;
+            return HotkeyHolder.AddAction(registration, action, source, sourcePropName);
         }
 
 

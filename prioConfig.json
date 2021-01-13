@@ -27,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:10:14",
+        "TimeLeft": "01:04:51",
         "DesktopsVisible": [
           -1
         ],
@@ -50,7 +50,7 @@
           "Key": 90,
           "Modifiers": 6
         },
-        "ShowHideShortcut": null,
+        "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "1": {
             "X": 1336.0,
@@ -119,7 +119,7 @@
         "ResetShortcut": null,
         "StartShortcut": null,
         "StopShortcut": null,
-        "ShowHideShortcut": null,
+        "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "1": {
             "X": 1401.6,
@@ -173,7 +173,7 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:03",
-        "TimeLeft": "-00:00:04",
+        "TimeLeft": "-00:00:29",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": {
@@ -184,15 +184,12 @@
           "Key": 92,
           "Modifiers": 6
         },
-        "StopShortcut": {
-          "Key": 92,
-          "Modifiers": 6
-        },
-        "ShowHideShortcut": null,
+        "StopShortcut": null,
+        "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "2": {
-            "X": 1139.0,
-            "Y": 368.0,
+            "X": 1409.0,
+            "Y": 562.0,
             "Width": 140.0,
             "Height": 100.0
           },
@@ -209,7 +206,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1196,
+              "SecondsLeft": 1009,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -251,7 +248,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1796,
+                "SecondsLeft": 1609,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,

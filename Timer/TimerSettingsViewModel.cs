@@ -4,8 +4,8 @@ using System.Windows.Media;
 using HandyControl.Controls;
 using Infrastructure.SharedResources;
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Services.Dialogs;
+using static Infrastructure.SharedResources.UnityInstance;
 using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
@@ -91,14 +91,12 @@ namespace Timer {
         public DelegateCommand OkCommand { get; }
 
         public TimerSettingsViewModel() {
-            IDialogService dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
-
             AddResetConditionCommand =
                     new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
             AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction(Config.InstanceID)));
 
             SelectColorCommand = new DelegateCommand<object>(zone => {
-                var r = dialogService.ShowColorPicker(Config.GetColor((TimerColorZone) zone)).Result;
+                var r = Dialogs.ShowColorPicker(Config.GetColor((TimerColorZone) zone)).Result;
                 if(r.Result == ButtonResult.OK)
                     Config.SetColor(r.Parameters.GetValue<SolidColorBrush>(nameof(ColorPicker.SelectedBrush)),
                                     (TimerColorZone) zone);

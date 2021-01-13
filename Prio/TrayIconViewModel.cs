@@ -12,7 +12,7 @@ namespace Prio {
         public DelegateCommand ExitProgram { get; }
 
         public TrayIconViewModel() {
-            var container = UnityInstance.GetContainer();
+            var container = UnityInstance.Container;
             ShowWindows = new DelegateCommand(() => {
                 foreach(Window window in Application.Current.Windows) window.Activate();
             });

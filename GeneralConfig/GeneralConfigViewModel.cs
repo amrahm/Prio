@@ -11,8 +11,7 @@ namespace GeneralConfig {
         public DelegateCommand OkCommand { get; }
 
         public GeneralConfigViewModel() {
-            IContainerProvider container = UnityInstance.GetContainer();
-            var mainConfigService = container.Resolve<IMainConfigService>();
+            var mainConfigService = UnityInstance.Container.Resolve<IMainConfigService>();
             CancelCommand = new DelegateCommand(() => mainConfigService.CloseConfigWindow());
             ApplyCommand = new DelegateCommand(() => mainConfigService.InvokeApplySettings());
             OkCommand = new DelegateCommand(() => {

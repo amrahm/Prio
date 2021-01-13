@@ -21,7 +21,7 @@ namespace Infrastructure.Prism {
         }
 
         public static void RegisterViewWithRMAware<T>(this IRegionManager regionManagerA, string regionName) {
-            IContainerProvider container = SharedResources.UnityInstance.GetContainer();
+            IContainerProvider container = SharedResources.UnityInstance.Container;
             T view = container.Resolve<T>();
 
             regionManagerA.SetRMAware(view).AddToRegion(regionName, view);
