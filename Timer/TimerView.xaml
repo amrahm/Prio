@@ -27,14 +27,14 @@
 					<Border Margin="5" Style="{StaticResource BorderClip}">
 						<Label Margin="0" Padding="10, 5" Content="{Binding Timer.Config.Name, FallbackValue=TimerName}"
 						       Style="{StaticResource BaseControlStyle}"
-						       Background="{Binding NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush},
+						       Background="{Binding Timer.Config.NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush},
 										   FallbackValue={StaticResource DarkHintBrush}}"
-						       Foreground="{Binding NameTextColor, TargetNullValue={StaticResource LightBrush},
+						       Foreground="{Binding Timer.Config.NameTextColor, TargetNullValue={StaticResource LightBrush},
 										   FallbackValue={StaticResource LightBrush}}" />
 					</Border>
 				</Viewbox>
 				<Separator
-					Background="{Binding DividerColor, TargetNullValue={StaticResource Light2Brush},
+					Background="{Binding Timer.Config.DividerColor, TargetNullValue={StaticResource Light2Brush},
 								FallbackValue={StaticResource Light2Brush}}" />
 			</st:AutoGrid>
 			<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"

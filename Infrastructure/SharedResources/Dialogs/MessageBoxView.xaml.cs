@@ -27,6 +27,7 @@ namespace Infrastructure.SharedResources {
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
 
+                _window.Topmost = true;
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
                 PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
@@ -36,7 +37,7 @@ namespace Infrastructure.SharedResources {
                 double dpiWidthFactor = m.M11;
                 double dpiHeightFactor = m.M22;
 
-                Rectangle screen = _window.CurrentScreen().WorkingArea;
+                Rectangle screen = vm.openOnScreen?.WorkingArea ?? _window.CurrentScreen().WorkingArea;
                 _window.Left =  (screen.Width / dpiWidthFactor - _window.ActualWidth) / 2 +  screen.Left;
                 _window.Top = (screen.Height / dpiHeightFactor -  _window.ActualHeight) / 2 + screen.Top;
                 WindowHelpers.MoveWindowInBounds(_window);
@@ -47,6 +48,7 @@ namespace Infrastructure.SharedResources {
                     var helper = new WindowInteropHelper(_window);
                     SetWindowLong(helper.Handle, GWL_EXSTYLE, GetWindowLong(helper.Handle, GWL_EXSTYLE) | WS_EX_NOACTIVATE);
                 }
+                _window.Topmost = false;
             };
 
             MouseDown += (_, e) => {

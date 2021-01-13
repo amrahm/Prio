@@ -363,6 +363,8 @@ namespace Infrastructure.SharedResources {
             return HsvToRgb(h + degrees, s, v);
         }
 
+        public static MColor Rotate(this MColor color, int degrees) => color.ToDrawingColor().Rotate(degrees).ToMediaColor();
+
         public static Color FromHex(string colorcode) {
             colorcode = colorcode.TrimStart('#');
             if(colorcode.Length == 6)

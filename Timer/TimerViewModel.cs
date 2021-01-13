@@ -35,11 +35,10 @@ namespace Timer {
         [DependsOnProperty(nameof(Timer))]
         public Visibility ShowName => Config.ShowName ? Visibility.Visible : Visibility.Collapsed;
 
-        [DependsOnProperty(nameof(Timer))] public Brush BackgroundColor => Config.BackgroundColor;
-        [DependsOnProperty(nameof(Timer))] public Brush TextColor => Config.TextColor;
-        [DependsOnProperty(nameof(Timer))] public Brush NameBackgroundColor => Config.NameBackgroundColor;
-        [DependsOnProperty(nameof(Timer))] public Brush NameTextColor => Config.NameTextColor;
-        [DependsOnProperty(nameof(Timer))] public Brush DividerColor => Config.DividerColor;
+        [DependsOnProperty(nameof(Timer))]
+        public Brush BackgroundColor => Timer.TempBackgroundBrush ?? Config.BackgroundColor;
+        [DependsOnProperty(nameof(Timer))]
+        public Brush TextColor => Timer.TempTextBrush ?? Config.TextColor;
 
         public DelegateCommand OpenTimerSettings { get; }
         public DelegateCommand OpenMainSettings { get; }

@@ -8,7 +8,7 @@ using Prism.Services.Dialogs;
 namespace Timer {
     [Serializable]
     public class OverflowAction : NotifyPropertyChanged {
-        private const double FLASH_COLOR_TICK_RATE = 0.5;
+        private const double FLASH_COLOR_TICK_RATE = 0.3;
 
         public Guid TimerId { get; set; }
         private ITimer _timer;
@@ -16,6 +16,7 @@ namespace Timer {
         public double AfterMinutes { get; set; }
         public bool FlashColorEnabled { get; set; }
         public SolidColorBrush FlashColor { get; set; } = Brushes.Crimson;
+        private SolidColorBrush TextFlashColor => new(FlashColor.Color.Rotate(180));
         public double FlashColorSeconds { get; set; }
         public bool PlaySoundEnabled { get; set; }
         public string PlaySoundFile { get; set; }
@@ -38,10 +39,15 @@ namespace Timer {
             _dialogService = container.Resolve<IDialogService>();
 
             _flashColorTimer.Tick += (_,  _) => {
-                //TODO have to figure out appearance stuff first
+                Timer.TempBackgroundBrush = Timer.TempBackgroundBrush == null ? FlashColor : null;
+                Timer.TempTextBrush = Timer.TempTextBrush == null ? TextFlashColor : null;
 
                 _flashColorSecondsLeft -= FLASH_COLOR_TICK_RATE;
-                if(_flashColorSecondsLeft < 0) _flashColorTimer.Stop();
+                if(_flashColorSecondsLeft < 0) {
+                    Timer.TempBackgroundBrush = null;
+                    Timer.TempTextBrush = null;
+                    _flashColorTimer.Stop();
+                }
             };
         }
 
@@ -56,7 +62,7 @@ namespace Timer {
                 _mediaPlayer.Play();
             }
 
-            if(ShowMessageEnabled) _dialogService.ShowNotification(Message, Timer.Config.Name, true, false, false);
+            if(ShowMessageEnabled) _dialogService.ShowNotification(Message, Timer.Config.Name, true, false, false, Timer.TimerWindow?.CurrentScreen());
         }
     }
 }

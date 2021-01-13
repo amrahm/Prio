@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
@@ -33,6 +34,8 @@ namespace Timer {
         }
 
         public Window TimerWindow { get; private set; }
+        public Brush TempBackgroundBrush { get; set; }
+        public Brush TempTextBrush { get; set; }
 
         private readonly WeakEventSource<EventArgs> _finished = new();
         public event EventHandler<EventArgs> Finished {

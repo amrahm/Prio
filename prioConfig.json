@@ -19,7 +19,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:22:22",
+        "TimeLeft": "01:17:54",
         "DesktopsVisible": [
           -1
         ],
@@ -159,7 +159,7 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:03",
-        "TimeLeft": "00:00:01",
+        "TimeLeft": "-00:00:23",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": {
@@ -177,8 +177,8 @@
         "ShowHideShortcut": null,
         "WindowPositions": {
           "2": {
-            "X": 143.0,
-            "Y": 185.0,
+            "X": 1139.0,
+            "Y": 368.0,
             "Width": 140.0,
             "Height": 100.0
           },
@@ -195,7 +195,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1200,
+              "SecondsLeft": 1177,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -237,7 +237,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1800,
+                "SecondsLeft": 1777,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -276,7 +276,7 @@
             "AfterMinutes": 0.1,
             "FlashColorEnabled": true,
             "FlashColor": "#FFE91E63",
-            "FlashColorSeconds": 2.0,
+            "FlashColorSeconds": 3.0,
             "PlaySoundEnabled": false,
             "PlaySoundFile": "C:\\Users\\alt\\Drive\\zz_Backup_Other\\ProgramConfigs\\TimeLeftSettings\\Sound\\xperror.mp3",
             "ShowMessageEnabled": true,
@@ -294,11 +294,11 @@
             "Message": "wowee"
           }
         ],
-        "BackgroundColor": "#B5184A8C",
-        "TextColor": "#FFF26F63",
-        "NameBackgroundColor": "#FF7A90AC",
-        "NameTextColor": "#FFBEF2DC",
-        "DividerColor": "#FFF8F2D7"
+        "BackgroundColor": "#B548188C",
+        "TextColor": "#FFF6877F",
+        "NameBackgroundColor": "#CD7AACA0",
+        "NameTextColor": "#FF4F4BAB",
+        "DividerColor": "#FF79CE98"
       }
     ]
   }
