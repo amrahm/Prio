@@ -19,21 +19,29 @@
 
 
 	<Border CornerRadius="10" Style="{StaticResource BorderClip}">
-		<st:AutoGrid Rows="Auto, *" ColumnWidth="*" Margin="0" Background="{StaticResource MediumBrush}">
+		<st:AutoGrid Rows="Auto, *" ColumnWidth="*" Margin="0"
+		             Background="{Binding BackgroundColor, TargetNullValue={StaticResource MediumBrush},
+								 FallbackValue={StaticResource MediumBrush}}">
 			<st:AutoGrid Columns="Auto, *" Visibility="{Binding ShowName}">
 				<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
 					<Border Margin="5" Style="{StaticResource BorderClip}">
 						<Label Margin="0" Padding="10, 5" Content="{Binding Timer.Config.Name, FallbackValue=TimerName}"
-						       Background="{StaticResource DarkHintBrush}"
-						       Foreground="{StaticResource LightBrush}" Style="{StaticResource BaseControlStyle}" />
+						       Style="{StaticResource BaseControlStyle}"
+						       Background="{Binding NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush},
+										   FallbackValue={StaticResource DarkHintBrush}}"
+						       Foreground="{Binding NameTextColor, TargetNullValue={StaticResource LightBrush},
+										   FallbackValue={StaticResource LightBrush}}" />
 					</Border>
 				</Viewbox>
-				<Separator Background="{StaticResource Light2Brush}" />
+				<Separator
+					Background="{Binding DividerColor, TargetNullValue={StaticResource Light2Brush},
+								FallbackValue={StaticResource Light2Brush}}" />
 			</st:AutoGrid>
 			<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"
 			         st:AutoGrid.ColumnSpan="2">
 				<Label Content="{Binding TimeLeftVm, FallbackValue=00:00}" HorizontalContentAlignment="Center"
-				       Foreground="{StaticResource LightAccentBrush}"
+				       Foreground="{Binding TextColor, TargetNullValue={StaticResource LightAccentBrush},
+								   FallbackValue={StaticResource LightAccentBrush}}"
 				       Padding="6, 0" x:Name="TimerText" Style="{StaticResource BigControlStyle}" Margin="0" />
 			</Viewbox>
 

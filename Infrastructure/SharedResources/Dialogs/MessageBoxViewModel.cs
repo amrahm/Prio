@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Services.Dialogs;
@@ -48,6 +49,26 @@ namespace Infrastructure.SharedResources {
                 OkText = $"{customOk} ({_secondsLeft})";
                 _timer.Start();
             }
+        }
+    }
+
+    public static class DialogServiceMessageExtension {
+        public static Task<IDialogResult> ShowNotification(this IDialogService dialogService, string message, string title,
+                                                           bool isCountdown = false, bool getsFocus = true,
+                                                           bool modal = true, bool hasCancel = false, string customOk = null,
+                                                           string customCancel = null) {
+            DialogParameters dialogParameters = new()  {
+                {nameof(MessageBoxViewModel.Message), message},
+                {nameof(MessageBoxViewModel.Title), title},
+                {nameof(MessageBoxViewModel.isCountdown), isCountdown},
+                {nameof(MessageBoxViewModel.getsFocus), getsFocus},
+                {nameof(MessageBoxViewModel.HasCancel), hasCancel},
+                {nameof(MessageBoxViewModel.customOk), customOk},
+                {nameof(MessageBoxViewModel.CancelText), customCancel}
+            };
+            return modal ?
+                    dialogService.ShowDialogAsync(nameof(MessageBoxView), dialogParameters) :
+                    dialogService.ShowAsync(nameof(MessageBoxView), dialogParameters);
         }
     }
 }

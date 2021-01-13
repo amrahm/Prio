@@ -15,7 +15,7 @@ namespace Timer {
         private ITimer Timer => _timer ??= TimersService.Singleton.GetTimer(TimerId);
         public double AfterMinutes { get; set; }
         public bool FlashColorEnabled { get; set; }
-        public Brush FlashColor { get; set; } = Brushes.Crimson;
+        public SolidColorBrush FlashColor { get; set; } = Brushes.Crimson;
         public double FlashColorSeconds { get; set; }
         public bool PlaySoundEnabled { get; set; }
         public string PlaySoundFile { get; set; }

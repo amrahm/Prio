@@ -96,7 +96,39 @@
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBlock Text="TODO" Style="{StaticResource BaseControlStyle}" />
+						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Background Color:" />
+								<Button Style="{StaticResource ColorPickerButton}"
+								        Background="{Binding Config.BackgroundColor, TargetNullValue={StaticResource MediumBrush}}"
+								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Background}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Text Color:" />
+								<Button Style="{StaticResource ColorPickerButton}"
+								        Background="{Binding Config.TextColor, TargetNullValue={StaticResource LightAccentBrush}}"
+								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Text}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Name Background Color:" />
+								<Button Style="{StaticResource ColorPickerButton}"
+								        Background="{Binding Config.NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush}}"
+								        Command="{Binding SelectColorCommand}"
+								        CommandParameter="{x:Static local:TimerColorZone.NameBackground}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Name Text Color:" />
+								<Button Style="{StaticResource ColorPickerButton}"
+								        Background="{Binding Config.NameTextColor, TargetNullValue={StaticResource LightBrush}}"
+								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.NameText}" />
+							</StackPanel>
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Divider Color:" />
+								<Button Style="{StaticResource ColorPickerButton}"
+								        Background="{Binding Config.DividerColor, TargetNullValue={StaticResource Light2Brush}}"
+								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Divider}" />
+							</StackPanel>
+						</hc:FlexPanel>
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />

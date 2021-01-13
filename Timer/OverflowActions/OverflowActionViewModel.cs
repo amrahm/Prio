@@ -26,10 +26,9 @@ namespace Timer {
             IDialogService dialogService = UnityInstance.GetContainer().Resolve<IDialogService>();
 
             SelectColorCommand = new DelegateCommand(() => {
-                dialogService.ShowDialog(nameof(ColorPickerView), null, r => {
-                    if(r.Result == ButtonResult.OK)
-                        Model.FlashColor = r.Parameters.GetValue<Brush>(nameof(ColorPicker.SelectedBrush));
-                });
+                var r = dialogService.ShowColorPicker(Model.FlashColor).Result;
+                if(r.Result == ButtonResult.OK)
+                    Model.FlashColor = r.Parameters.GetValue<SolidColorBrush>(nameof(ColorPicker.SelectedBrush));
             });
 
             SelectSoundCommand = new DelegateCommand(() => {

@@ -31,7 +31,7 @@
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Flash Color" />
 				<StackPanel Orientation="Horizontal" Margin="0"
 				            Visibility="{Binding IsChecked, ElementName=FlashColorCheckbox, Converter={StaticResource B2V}}">
-					<Button Style="{StaticResource BaseButton}" Width="40" Height="30" Tag="5" BorderThickness="3"
+					<Button Style="{StaticResource ColorPickerButton}"
 					        Background="{Binding Model.FlashColor, FallbackValue=Crimson}" Margin="0"
 					        Command="{Binding SelectColorCommand}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="for" />

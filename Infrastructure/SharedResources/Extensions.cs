@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -72,24 +73,6 @@ namespace Infrastructure.SharedResources {
                 tcs.SetException(ex);
             }
             return tcs.Task;
-        }
-
-        public static Task<IDialogResult> ShowNotification(this IDialogService dialogService, string message, string title,
-                                                           bool isCountdown = false, bool getsFocus = true,
-                                                           bool modal = true, bool hasCancel = false, string customOk = null,
-                                                           string customCancel = null) {
-            DialogParameters dialogParameters = new()  {
-                {nameof(MessageBoxViewModel.Message), message},
-                {nameof(MessageBoxViewModel.Title), title},
-                {nameof(MessageBoxViewModel.isCountdown), isCountdown},
-                {nameof(MessageBoxViewModel.getsFocus), getsFocus},
-                {nameof(MessageBoxViewModel.HasCancel), hasCancel},
-                {nameof(MessageBoxViewModel.customOk), customOk},
-                {nameof(MessageBoxViewModel.CancelText), customCancel}
-            };
-            return modal ?
-                    dialogService.ShowDialogAsync(nameof(MessageBoxView), dialogParameters) :
-                    dialogService.ShowAsync(nameof(MessageBoxView), dialogParameters);
         }
     }
 
@@ -378,6 +361,18 @@ namespace Infrastructure.SharedResources {
         public static Color Rotate(this Color color, int degrees) {
             color.ToHsv(out double h, out double s, out double v);
             return HsvToRgb(h + degrees, s, v);
+        }
+
+        public static Color FromHex(string colorcode) {
+            colorcode = colorcode.TrimStart('#');
+            if(colorcode.Length == 6)
+                return Color.FromArgb(255, int.Parse(colorcode.Substring(0, 2), NumberStyles.HexNumber),
+                                      int.Parse(colorcode.Substring(2, 2), NumberStyles.HexNumber),
+                                      int.Parse(colorcode.Substring(4, 2), NumberStyles.HexNumber));
+            return Color.FromArgb(int.Parse(colorcode.Substring(0, 2), NumberStyles.HexNumber),
+                                  int.Parse(colorcode.Substring(2, 2), NumberStyles.HexNumber),
+                                  int.Parse(colorcode.Substring(4, 2), NumberStyles.HexNumber),
+                                  int.Parse(colorcode.Substring(6, 2), NumberStyles.HexNumber));
         }
     }
 

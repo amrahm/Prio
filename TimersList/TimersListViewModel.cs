@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -31,11 +30,9 @@ namespace TimersList {
             };
 
             // Add new timer on button press
-            AddTimerCommand = new DelegateCommand(async () => {
+            AddTimerCommand = new DelegateCommand(() => {
                 ITimer timer = container.Resolve<ITimer>();
-                Task<ButtonResult> resTask = timer.OpenSettings();
-                ButtonResult res = await resTask;
-                if(res == ButtonResult.OK) {
+                if(timer.OpenSettings().Result == ButtonResult.OK) {
                     TimersService.Singleton.Timers.Add(timer);
                     TimersService.Singleton.SaveSettings();
                     timer.ShowTimer();

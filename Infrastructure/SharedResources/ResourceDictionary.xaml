@@ -287,6 +287,21 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
+	<Style x:Key="ColorPickerButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+		<Setter Property="Height" Value="30" />
+		<Setter Property="Width" Value="40" />
+		<Setter Property="FontWeight" Value="Bold" />
+		<Setter Property="Padding" Value="5" />
+		<Setter Property="Margin" Value="5, 0" />
+		<Setter Property="BorderBrush" Value="{StaticResource DarkHintBgBrush}" />
+		<Setter Property="BorderThickness" Value="2" />
+		<Setter Property="Tag" Value="5" />
+		<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowEffect Opacity="0.7" BlurRadius="4" ShadowDepth="0" />
+			</Setter.Value>
+		</Setter>
+	</Style>
 
 	<!--TextBoxes-->
 	<Style x:Key="NormalTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtend}">

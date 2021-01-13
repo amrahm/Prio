@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using Infrastructure.SharedResources;
 using MainConfig;
 using Prism.Commands;
@@ -33,6 +34,12 @@ namespace Timer {
 
         [DependsOnProperty(nameof(Timer))]
         public Visibility ShowName => Config.ShowName ? Visibility.Visible : Visibility.Collapsed;
+
+        [DependsOnProperty(nameof(Timer))] public Brush BackgroundColor => Config.BackgroundColor;
+        [DependsOnProperty(nameof(Timer))] public Brush TextColor => Config.TextColor;
+        [DependsOnProperty(nameof(Timer))] public Brush NameBackgroundColor => Config.NameBackgroundColor;
+        [DependsOnProperty(nameof(Timer))] public Brush NameTextColor => Config.NameTextColor;
+        [DependsOnProperty(nameof(Timer))] public Brush DividerColor => Config.DividerColor;
 
         public DelegateCommand OpenTimerSettings { get; }
         public DelegateCommand OpenMainSettings { get; }
