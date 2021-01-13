@@ -1,6 +1,6 @@
 {
   "TIMER": {
-    "ShowHideTimersShortcut": null,
+    "ToggleVisibilityShortcut": null,
     "KeepTimersOnTopShortcut": {
       "Key": 146,
       "Modifiers": 6
@@ -27,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:04:51",
+        "TimeLeft": "01:03:28",
         "DesktopsVisible": [
           -1
         ],
@@ -184,7 +184,10 @@
           "Key": 92,
           "Modifiers": 6
         },
-        "StopShortcut": null,
+        "StopShortcut": {
+          "Key": 92,
+          "Modifiers": 6
+        },
         "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "2": {
@@ -206,7 +209,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1009,
+              "SecondsLeft": 999,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -248,7 +251,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1609,
+                "SecondsLeft": 1599,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,

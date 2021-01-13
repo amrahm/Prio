@@ -9,17 +9,18 @@ namespace Timer {
             var vm = (TimersGeneralConfigViewModel) DataContext;
 
             Loaded += (_,  _) => {
-                ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.ShowHideTimersShortcut), ShowHideShortcut,
-                              nameof(ShowHideShortcut.Shortcut));
+                void Callback() => TimersService.Singleton.RegisterShortcuts(vm.GeneralConfig);
+                ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.ToggleVisibilityShortcut), ToggleVisibilityShortcut,
+                              nameof(ToggleVisibilityShortcut.Shortcut), callback: Callback);
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.KeepTimersOnTopShortcut), KeepOnTopShortcut,
-                              nameof(KeepOnTopShortcut.Shortcut));
+                              nameof(KeepOnTopShortcut.Shortcut), callback: Callback);
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.MoveTimersBehindShortcut), MoveBehindShortcut,
-                              nameof(MoveBehindShortcut.Shortcut));
+                              nameof(MoveBehindShortcut.Shortcut), callback: Callback);
 
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.StopAllShortcut), StopAllShortcut,
-                              nameof(StopAllShortcut.Shortcut));
+                              nameof(StopAllShortcut.Shortcut), callback: Callback);
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.ResumeAllShortcut), ResumeAllShortcut,
-                              nameof(ResumeAllShortcut.Shortcut));
+                              nameof(ResumeAllShortcut.Shortcut), callback: Callback);
             };
         }
     }

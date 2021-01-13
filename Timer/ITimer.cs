@@ -22,5 +22,6 @@ namespace Timer {
         Brush TempTextBrush { get; set; }
         event EventHandler<EventArgs> Finished;
         void CheckStart();
+        void RegisterShortcuts(TimerConfig timerConfig);
     }
 }

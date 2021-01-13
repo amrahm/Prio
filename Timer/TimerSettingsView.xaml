@@ -87,7 +87,7 @@
 						<TextBlock Text="(Items in orange box can have the same shortcut)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
 						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
-							<sr:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
+							<sr:ShortcutSetter x:Name="ToggleVisibilityShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
 							<sr:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
 						</hc:FlexPanel>
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">

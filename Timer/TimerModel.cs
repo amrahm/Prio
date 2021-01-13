@@ -46,6 +46,7 @@ namespace Timer {
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly DispatcherTimer _timer = new() {Interval = OneSecond};
         private bool _hidden;
+        private Visibility _lastVisibility;
         private bool _finishedSet;
 
         public bool IsRunning => _timer.IsEnabled;
@@ -56,7 +57,7 @@ namespace Timer {
             SetupTimerActions();
             _timer.Tick += OnTimerOnTick;
 
-            RegisterShortcuts();
+            RegisterShortcuts(Config);
 
             VirtualDesktopManager.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
         }
@@ -163,9 +164,12 @@ namespace Timer {
         private void ShowHideTimer() {
             if(TimerWindow == null) return;
             if(_hidden) {
-                TimerWindow.Visibility = Visibility.Visible;
+                TimerWindow.Visibility = _lastVisibility;
                 TimerWindow.Activate();
-            } else TimerWindow.Visibility = Visibility.Hidden;
+            } else {
+                _lastVisibility = TimerWindow.Visibility;
+                TimerWindow.Visibility = Visibility.Hidden;
+            }
             _hidden = !_hidden;
         }
 
@@ -215,13 +219,11 @@ namespace Timer {
         public async Task<ButtonResult> OpenSettings() {
             IDialogResult r = await Dialogs.ShowDialogAsync(nameof(TimerSettingsView),
                                                             new DialogParameters {{nameof(ITimer), this}});
+            RegisterShortcuts(Config);
             return r.Result;
         }
 
-        public void SaveSettings() {
-            TimersService.Singleton.SaveSettings();
-            RegisterShortcuts();
-        }
+        public void SaveSettings() => TimersService.Singleton.SaveSettings();
 
         #endregion
 
@@ -229,17 +231,17 @@ namespace Timer {
 
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
-        private void RegisterShortcuts() {
-            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.ResetShortcut), RequestResetTimer,
+        public void RegisterShortcuts(TimerConfig timerConfig) {
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ResetShortcut), RequestResetTimer,
                                          CompatibilityType.Reset);
 
             int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
-            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.StartShortcut), StartTimer,
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.StartShortcut), StartTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
-            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.StopShortcut), StopTimer,
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.StopShortcut), StopTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
 
-            HotkeyManager.RegisterHotkey(Config.InstanceID, Config, nameof(Config.ToggleVisibilityShortcut), ShowHideTimer,
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut), ShowHideTimer,
                                          CompatibilityType.Visibility);
         }
 

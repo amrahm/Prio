@@ -35,11 +35,15 @@ namespace Timer {
                 this.InitializeDraggable();
 
                 // Manual Bindings:
-                ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut, nameof(ResetShortcut.Shortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut, nameof(StartShortcut.Shortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut, nameof(StopShortcut.Shortcut));
-                ManualBinding(vm.Config, nameof(vm.Config.ToggleVisibilityShortcut), ShowHideShortcut,
-                              nameof(ShowHideShortcut.Shortcut));
+                void Callback() => TimersService.Singleton.GetTimer(vm.Config.InstanceID).RegisterShortcuts(vm.Config);
+                ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut,
+                              nameof(ResetShortcut.Shortcut), callback: Callback);
+                ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut,
+                              nameof(StartShortcut.Shortcut), callback: Callback);
+                ManualBinding(vm.Config, nameof(vm.Config.StopShortcut), StopShortcut,
+                              nameof(StopShortcut.Shortcut), callback: Callback);
+                ManualBinding(vm.Config, nameof(vm.Config.ToggleVisibilityShortcut), ToggleVisibilityShortcut,
+                              nameof(ToggleVisibilityShortcut.Shortcut), callback: Callback);
 
                 var conditionsVm = new ResetConditionTreeViewModel(vm.Config.ResetConditions);
                 ManualBinding(vm.Config, nameof(vm.Config.ResetConditions), conditionsVm, nameof(conditionsVm.Tree));

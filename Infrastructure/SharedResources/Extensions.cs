@@ -78,7 +78,7 @@ namespace Infrastructure.SharedResources {
 
     public static class BindingHelpers {
         public static void ManualBinding(object source, string sourcePropName, object target, string targetPropName,
-                                         object defaultValue = null, bool twoWay = true) {
+                                         object defaultValue = null, bool twoWay = true, Action callback = null) {
             var sProp = source.GetType().GetProperty(sourcePropName);
             var tProp = target.GetType().GetProperty(targetPropName);
             if(tProp != null && sProp != null) {
@@ -86,16 +86,24 @@ namespace Infrastructure.SharedResources {
                 if(sValue != null) tProp.SetValue(target, sValue);
                 else if(defaultValue != null) tProp.SetValue(target, defaultValue);
 
+                void UpdateSource() {
+                    sProp.SetValue(source, tProp.GetValue(target));
+                    callback?.Invoke();
+                }
+
                 if(tProp.GetValue(target) is INotifyPropertyChanged tPropChange)
-                    tPropChange.PropertyChanged += (_, _) => sProp.SetValue(source, tProp.GetValue(target));
+                    tPropChange.PropertyChanged += (_, _) => UpdateSource();
                 if(target is INotifyPropertyChanged tChange)
-                    tChange.PropertyChanged += (_, _) => {
-                        sProp.SetValue(source, tProp.GetValue(target));
-                    };
+                    tChange.PropertyChanged += (_, _) => UpdateSource();
+
+                void UpdateTarget() {
+                    tProp.SetValue(target, sProp.GetValue(source));
+                    callback?.Invoke();
+                }
 
                 if(twoWay) {
                     if(sProp.GetValue(source) is INotifyPropertyChanged sPropChange)
-                        sPropChange.PropertyChanged += (_, _) => tProp.SetValue(target, sProp.GetValue(source));
+                        sPropChange.PropertyChanged += (_, _) => UpdateTarget();
                     if(source is INotifyPropertyChanged sChange)
                         sChange.PropertyChanged += (_, _) => tProp.SetValue(target, sProp.GetValue(source));
                 }

@@ -27,7 +27,7 @@
 		           Margin="10, -5, 0, 2" />
 		<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 			<hc:FlexPanel JustifyContent="SpaceAround" FlexWrap="Wrap" AlignContent="SpaceAround">
-				<sr:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility (All):" Hint="Show/Hide all timers" />
+				<sr:ShortcutSetter x:Name="ToggleVisibilityShortcut" Label="Toggle Visibility (All):" Hint="Show/Hide all timers" />
 				<sr:ShortcutSetter Label="Keep On Top:" x:Name="KeepOnTopShortcut"
 				                   Hint="Show all timers and keep them above all other windows" />
 				<sr:ShortcutSetter Label="Move Behind:" x:Name="MoveBehindShortcut"

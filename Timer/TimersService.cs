@@ -27,7 +27,7 @@ namespace Timer {
             GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
             foreach(TimerConfig config in GeneralConfig.TimerConfigs) Timers.Add(new TimerModel(config));
 
-            RegisterShortcuts();
+            RegisterShortcuts(GeneralConfig);
             currVisState = GeneralConfig.DefaultVisibilityState;
 
             _autosaveTimer.Tick += (_,  _) => SaveSettings();
@@ -42,7 +42,7 @@ namespace Timer {
         public void SaveSettings() {
             GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();
             Settings.SaveSettings(GeneralConfig, ModuleNames.TIMER);
-            RegisterShortcuts();
+            RegisterShortcuts(GeneralConfig);
         }
 
         #region VisibilityHotkeyStuff
@@ -112,10 +112,10 @@ namespace Timer {
 
         #endregion
 
-        private void RegisterShortcuts() {
-            bool hideIsTop = Equals(GeneralConfig.ShowHideTimersShortcut, GeneralConfig.KeepTimersOnTopShortcut);
-            bool hideIsBottom = Equals(GeneralConfig.ShowHideTimersShortcut, GeneralConfig.MoveTimersBehindShortcut);
-            bool topIsBottom = Equals(GeneralConfig.MoveTimersBehindShortcut, GeneralConfig.KeepTimersOnTopShortcut);
+        public void RegisterShortcuts(TimersGeneralConfig config) {
+            bool hideIsTop = Equals(config.ToggleVisibilityShortcut, config.KeepTimersOnTopShortcut);
+            bool hideIsBottom = Equals(config.ToggleVisibilityShortcut, config.MoveTimersBehindShortcut);
+            bool topIsBottom = Equals(config.MoveTimersBehindShortcut, config.KeepTimersOnTopShortcut);
 
             int NextVisibilityState(int r) {
                 bool isHidden = currVisState == VisibilityState.Hidden;
@@ -136,23 +136,23 @@ namespace Timer {
                 return r; //otherwise, do the requested action
             }
 
-            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.ShowHideTimersShortcut), ShowHideAll,
+            HotkeyManager.RegisterHotkey(config, nameof(config.ToggleVisibilityShortcut), ShowHideAll,
                                          CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldHide,
                                          NextVisibilityState);
 
-            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.KeepTimersOnTopShortcut),
+            HotkeyManager.RegisterHotkey(config, nameof(config.KeepTimersOnTopShortcut),
                                          TopAll, CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldTop,
                                          NextVisibilityState);
 
-            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.MoveTimersBehindShortcut),
+            HotkeyManager.RegisterHotkey(config, nameof(config.MoveTimersBehindShortcut),
                                          BottomAll, CompatibilityType.Visibility, (int) VisibilityHotkeyState.ShouldBehind,
                                          NextVisibilityState);
 
 
             int NextTimerState(int r) => (int) (isStopAll ? TimerHotkeyState.ShouldStart : TimerHotkeyState.ShouldStop);
-            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.StopAllShortcut), StopAll,
+            HotkeyManager.RegisterHotkey(config, nameof(config.StopAllShortcut), StopAll,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
-            HotkeyManager.RegisterHotkey(GeneralConfig, nameof(GeneralConfig.ResumeAllShortcut), ResumeAll,
+            HotkeyManager.RegisterHotkey(config, nameof(config.ResumeAllShortcut), ResumeAll,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
         }
 
