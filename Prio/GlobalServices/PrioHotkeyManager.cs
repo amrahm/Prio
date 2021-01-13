@@ -12,17 +12,14 @@ using static Prio.GlobalServices.IPrioHotkeyManager;
 namespace Prio.GlobalServices {
     [UsedImplicitly]
     public class PrioHotkeyManager : IPrioHotkeyManager {
-        private static readonly Dictionary<ShortcutDefinition, HotkeyHolder> HotKeyRegistry =
-                new();
+        private static readonly Dictionary<ShortcutDefinition, HotkeyHolder> HotKeyRegistry = new();
 
-        private static readonly Dictionary<HotkeyRegistration, ShortcutDefinition> RegistrationToShortcut =
-                new();
+        private static readonly Dictionary<HotkeyRegistration, ShortcutDefinition> RegistrationToShortcut = new();
 
         private class HotkeyHolder {
             private EventHandler<HotkeyEventArgs> _handler;
 
-            private readonly Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>> _registrations =
-                    new();
+            private readonly Dictionary<HotkeyRegistration, EventHandler<HotkeyEventArgs>> _registrations = new();
 
             private readonly ShortcutDefinition _shortcut;
             private readonly Queue<Action> _actionQueue = new();
@@ -65,6 +62,7 @@ namespace Prio.GlobalServices {
                 _handler += handler;
                 _handler += CallActionQueue;
 
+                //TODO have to deal with hotkeys registered elsewhere
                 HotkeyManager.Current.AddOrReplace(_shortcut.ToString(), _shortcut.Key, _shortcut.Modifiers, _handler);
                 return true;
             }
@@ -102,8 +100,8 @@ namespace Prio.GlobalServices {
                 GetInstanceState = getInstanceState;
             }
 
-            public override bool Equals(object obj) =>
-                    obj is HotkeyRegistration other && InstanceId.Equals(other.InstanceId) && HotkeyName == other.HotkeyName;
+            public override bool Equals(object obj) => obj is HotkeyRegistration other &&
+                                                       InstanceId.Equals(other.InstanceId) && HotkeyName == other.HotkeyName;
 
             public override int GetHashCode() => HashCode.Combine(InstanceId, HotkeyName);
         }

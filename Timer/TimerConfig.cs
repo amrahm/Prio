@@ -34,6 +34,9 @@ namespace Timer {
         public SolidColorBrush NameBackgroundColor { get; set; } = new(FromHex("#7A90AC").ToMediaColor());
         public SolidColorBrush NameTextColor { get; set; } = new(FromHex("#BEF2DC").ToMediaColor());
         public SolidColorBrush DividerColor { get; set; } = new(FromHex("#f8f2d7").ToMediaColor());
+        public bool LockedPauseEnabled { get; set; } = true;
+        public bool InactivityPauseEnabled { get; set; } = true;
+        public double InactivityMinutes { get; set; } = 2;
 
 
         public TimerConfig() {

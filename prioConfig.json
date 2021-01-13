@@ -9,6 +9,14 @@
       "Key": 146,
       "Modifiers": 6
     },
+    "StopAllShortcut": {
+      "Key": 94,
+      "Modifiers": 6
+    },
+    "ResumeAllShortcut": {
+      "Key": 94,
+      "Modifiers": 6
+    },
     "DefaultVisibilityState": 0,
     "TimerConfigs": [
       {
@@ -19,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:17:54",
+        "TimeLeft": "01:10:14",
         "DesktopsVisible": [
           -1
         ],
@@ -83,7 +91,10 @@
         "TextColor": "#FFF26F63",
         "NameBackgroundColor": "#FF7A90AC",
         "NameTextColor": "#FFBEF2DC",
-        "DividerColor": "#FFF8F2D7"
+        "DividerColor": "#FFF8F2D7",
+        "LockedPauseEnabled": true,
+        "InactivityPauseEnabled": true,
+        "InactivityMinutes": 2.0
       },
       {
         "InstanceID": "ebe64c8b-6141-403c-ba69-367fd614ccdf",
@@ -149,7 +160,10 @@
         "TextColor": "#FFF26F63",
         "NameBackgroundColor": "#FF7A90AC",
         "NameTextColor": "#FFBEF2DC",
-        "DividerColor": "#FFF8F2D7"
+        "DividerColor": "#FFF8F2D7",
+        "LockedPauseEnabled": true,
+        "InactivityPauseEnabled": true,
+        "InactivityMinutes": 2.0
       },
       {
         "InstanceID": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
@@ -159,7 +173,7 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:03",
-        "TimeLeft": "-00:00:23",
+        "TimeLeft": "-00:00:04",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": {
@@ -195,7 +209,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1177,
+              "SecondsLeft": 1196,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -237,7 +251,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1777,
+                "SecondsLeft": 1796,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -298,7 +312,10 @@
         "TextColor": "#FFF6877F",
         "NameBackgroundColor": "#CD7AACA0",
         "NameTextColor": "#FF4F4BAB",
-        "DividerColor": "#FF79CE98"
+        "DividerColor": "#FF79CE98",
+        "LockedPauseEnabled": true,
+        "InactivityPauseEnabled": true,
+        "InactivityMinutes": 2.0
       }
     ]
   }

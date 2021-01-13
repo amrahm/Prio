@@ -15,6 +15,11 @@ namespace Timer {
                               nameof(KeepOnTopShortcut.Shortcut));
                 ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.MoveTimersBehindShortcut), MoveBehindShortcut,
                               nameof(MoveBehindShortcut.Shortcut));
+
+                ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.StopAllShortcut), StopAllShortcut,
+                              nameof(StopAllShortcut.Shortcut));
+                ManualBinding(vm.GeneralConfig, nameof(vm.GeneralConfig.ResumeAllShortcut), ResumeAllShortcut,
+                              nameof(ResumeAllShortcut.Shortcut));
             };
         }
     }

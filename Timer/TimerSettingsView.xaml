@@ -83,53 +83,55 @@
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBlock Text="(Items in same section can have the same shortcut)" Style="{StaticResource HintControlDark}"
+						<TextBlock Text="(Items in orange box can have the same shortcut)" Style="{StaticResource HintControlDark}"
 						           Margin="10, -5, 0, 2" />
-						<local:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
+						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
+							<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
+							<local:ShortcutSetter x:Name="ResetShortcut" Label="Reset:" Hint="Reset the timer back to its max duration" />
+						</hc:FlexPanel>
 						<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">
 							<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
 								<local:ShortcutSetter x:Name="StartShortcut" Label="Start:" Hint="Start the timer" />
 								<local:ShortcutSetter x:Name="StopShortcut" Label="Stop:" Hint="Stop the timer" />
 							</hc:FlexPanel>
 						</Border>
-						<local:ShortcutSetter x:Name="ShowHideShortcut" Label="Toggle Visibility:" Hint="Show/Hide the timer" />
 					</StackPanel>
-					<StackPanel Width="550" Background="{StaticResource LightBrush}">
-						<TextBlock Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
-						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
-							<StackPanel Orientation="Horizontal" Margin="5">
+					<DockPanel Width="550" Background="{StaticResource LightBrush}">
+						<TextBlock DockPanel.Dock="Top" Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
+						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround" AlignContent="SpaceAround">
+							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Background Color:" />
 								<Button Style="{StaticResource ColorPickerButton}"
 								        Background="{Binding Config.BackgroundColor, TargetNullValue={StaticResource MediumBrush}}"
 								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Background}" />
 							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5">
+							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Text Color:" />
 								<Button Style="{StaticResource ColorPickerButton}"
 								        Background="{Binding Config.TextColor, TargetNullValue={StaticResource LightAccentBrush}}"
 								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Text}" />
 							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5">
+							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Name Background Color:" />
 								<Button Style="{StaticResource ColorPickerButton}"
 								        Background="{Binding Config.NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush}}"
 								        Command="{Binding SelectColorCommand}"
 								        CommandParameter="{x:Static local:TimerColorZone.NameBackground}" />
 							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5">
+							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Name Text Color:" />
 								<Button Style="{StaticResource ColorPickerButton}"
 								        Background="{Binding Config.NameTextColor, TargetNullValue={StaticResource LightBrush}}"
 								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.NameText}" />
 							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5">
+							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Divider Color:" />
 								<Button Style="{StaticResource ColorPickerButton}"
 								        Background="{Binding Config.DividerColor, TargetNullValue={StaticResource Light2Brush}}"
 								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Divider}" />
 							</StackPanel>
 						</hc:FlexPanel>
-					</StackPanel>
+					</DockPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 
@@ -146,10 +148,16 @@
 							         Style="{StaticResource NormalTextBox}" />
 						</ContentControl>
 						<StackPanel Orientation="Horizontal">
-							<CheckBox Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Paused While Computer is Locked" />
+							<CheckBox Margin="5" IsChecked="{Binding Config.LockedPauseEnabled}" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Pause While Computer is Locked" />
 						</StackPanel>
-
+						<StackPanel Orientation="Horizontal">
+							<CheckBox Margin="5" IsChecked="{Binding Config.InactivityPauseEnabled}" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Pause after " />
+							<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50"
+							         Text="{Binding Config.InactivityMinutes}" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text=" Minutes of Inactivity" />
+						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
@@ -161,30 +169,6 @@
 							</hc:TimePicker>
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />
 						</StackPanel>
-					</StackPanel>
-					<StackPanel Width="550" Background="{StaticResource LightBrush}">
-						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
-						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
-						           Margin="10, -5, 0, 2" />
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AutoResetOnConditions}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
-						</StackPanel>
-						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
-						</StackPanel>
-						<ContentControl x:Name="RootResetCondition" />
-						<Button Height="40" HorizontalAlignment="Center" Margin="0, 5, 0, 8"
-						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
-							<Viewbox>
-								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
-							</Viewbox>
-						</Button>
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="When Timer is Done" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -240,6 +224,30 @@
 								</Button>
 							</StackPanel>
 						</StackPanel>
+					</StackPanel>
+					<StackPanel Width="550" Background="{StaticResource LightBrush}">
+						<TextBlock Text="Conditions to Reset" Style="{StaticResource SubHeaderLabelStyle}" />
+						<TextBlock Text="(Drag 'n' drop to reorder)" Style="{StaticResource HintControlDark}"
+						           Margin="10, -5, 0, 2" />
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AutoResetOnConditions}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Auto-Reset Once Conditions Met" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetOverride}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
+						</StackPanel>
+						<ContentControl x:Name="RootResetCondition" />
+						<Button Height="40" HorizontalAlignment="Center" Margin="0, 5, 0, 8"
+						        Style="{StaticResource IconButtonBordered}" Command="{Binding AddResetConditionCommand}">
+							<Viewbox>
+								<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
+							</Viewbox>
+						</Button>
 					</StackPanel>
 				</WrapPanel>
 			</ScrollViewer>

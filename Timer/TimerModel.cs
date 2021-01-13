@@ -207,7 +207,10 @@ namespace Timer {
         #endregion
 
         public void StartTimer() {
-            if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) _timer.Start();
+            if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) {
+                _timer.Start();
+                TimersService.Singleton.isStopAll = false;
+            }
         }
 
         public void StopTimer() => _timer.Stop();

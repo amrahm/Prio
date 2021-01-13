@@ -17,7 +17,7 @@ namespace Timer {
         public bool FlashColorEnabled { get; set; }
         public SolidColorBrush FlashColor { get; set; } = Brushes.Crimson;
         private SolidColorBrush TextFlashColor => new(FlashColor.Color.Rotate(180));
-        public double FlashColorSeconds { get; set; }
+        public double FlashColorSeconds { get; set; } = 3;
         public bool PlaySoundEnabled { get; set; }
         public string PlaySoundFile { get; set; }
         public bool ShowMessageEnabled { get; set; }
