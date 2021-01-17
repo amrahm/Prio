@@ -5,9 +5,11 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
+using Microsoft.Win32;
 using Prio.GlobalServices;
 using Prism.Services.Dialogs;
 using WeakEvent;
+using System.Runtime.InteropServices;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
@@ -49,6 +51,12 @@ namespace Timer {
         private Visibility _lastVisibility;
         private bool _finishedSet;
 
+        private bool _lockPauseActive;
+        private bool _inactivityPauseActive;
+        private readonly DispatcherTimer _activityCheckTimer = new() {Interval = TimeSpan.FromSeconds(5)};
+        private bool CanResume => !_lockPauseActive && !_inactivityPauseActive;
+        private bool IsOrWasRunning => _timer.IsEnabled || _lockPauseActive || _inactivityPauseActive;
+
         public bool IsRunning => _timer.IsEnabled;
 
         public TimerModel(TimerConfig config) {
@@ -60,6 +68,9 @@ namespace Timer {
             RegisterShortcuts(Config);
 
             VirtualDesktopManager.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
+
+            SystemEvents.SessionSwitch += SysEventsCheck;
+            _activityCheckTimer.Tick += ActivityCheckTimerOnTick;
         }
 
         public void CheckStart() {
@@ -69,6 +80,7 @@ namespace Timer {
         private void OnTimerOnTick(object o, EventArgs e) {
             Config.TimeLeft -= OneSecond;
             CheckTimerActions();
+            InactivityCheck();
         }
 
         private void TimerFinishedRaise() {
@@ -217,9 +229,12 @@ namespace Timer {
         #region Settings
 
         public async Task<ButtonResult> OpenSettings() {
+            bool wasRunning = IsRunning;
+            StopTimer();
             IDialogResult r = await Dialogs.ShowDialogAsync(nameof(TimerSettingsView),
                                                             new DialogParameters {{nameof(ITimer), this}});
             RegisterShortcuts(Config);
+            if(wasRunning && CanResume) StartTimer();
             return r.Result;
         }
 
@@ -232,7 +247,8 @@ namespace Timer {
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
         public void RegisterShortcuts(TimerConfig timerConfig) {
-            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ResetShortcut), RequestResetTimer,
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ResetShortcut),
+                                         RequestResetTimer,
                                          CompatibilityType.Reset);
 
             int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
@@ -241,7 +257,8 @@ namespace Timer {
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.StopShortcut), StopTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
 
-            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut), ShowHideTimer,
+            HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut),
+                                         ShowHideTimer,
                                          CompatibilityType.Visibility);
         }
 
@@ -250,5 +267,63 @@ namespace Timer {
         public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
         public override int GetHashCode() => Config.InstanceID.GetHashCode();
         public override string ToString() => Config.Name;
+
+        #region LockChecking
+
+        private void SysEventsCheck(object sender, SessionSwitchEventArgs e) {
+            if(!Config.LockedPauseEnabled) return;
+            switch(e.Reason) {
+                case SessionSwitchReason.SessionLock:
+                    if(!IsOrWasRunning) return;
+                    _lockPauseActive = true;
+                    StopTimer();
+                    break;
+                case SessionSwitchReason.SessionUnlock:
+                    if(!_lockPauseActive) return;
+                    _lockPauseActive = false;
+                    if(CanResume) StartTimer();
+                    break;
+            }
+        }
+
+        public void Dispose() => SystemEvents.SessionSwitch -= SysEventsCheck;
+
+        #endregion
+
+        #region InactivityChecking
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct LastInputInfo {
+            public uint cbSize;
+            public readonly uint dwTime;
+        }
+
+        [DllImport("user32.dll")] private static extern bool GetLastInputInfo(ref LastInputInfo plii);
+
+        private static double GetInactiveMinutes() {
+            LastInputInfo info = new();
+            info.cbSize = (uint) Marshal.SizeOf(info);
+            const double millisecondsToMinutes = 60000;
+            return GetLastInputInfo(ref info) ? (Environment.TickCount - info.dwTime) / millisecondsToMinutes : 0;
+        }
+
+        private void InactivityCheck() {
+            if(Config.InactivityPauseEnabled && GetInactiveMinutes() > Config.InactivityMinutes) {
+                if(!IsOrWasRunning) return;
+                _inactivityPauseActive = true;
+                StopTimer();
+                _activityCheckTimer.Start();
+            }
+        }
+
+        private void ActivityCheckTimerOnTick(object sender, EventArgs e) {
+            if(GetInactiveMinutes() > Config.InactivityMinutes) return;
+
+            _inactivityPauseActive = false;
+            if(CanResume) StartTimer();
+            _activityCheckTimer.Stop();
+        }
+
+        #endregion
     }
 }

@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 using Prism.Services.Dialogs;
 
 namespace Timer {
-    public interface ITimer : INotifyPropertyChanged {
+    public interface ITimer : INotifyPropertyChanged, IDisposable {
         TimerConfig Config { get; set; }
         void ShowTimer();
         void RequestResetTimer();

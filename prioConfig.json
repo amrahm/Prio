@@ -27,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "01:03:28",
+        "TimeLeft": "00:53:53",
         "DesktopsVisible": [
           -1
         ],
@@ -94,7 +94,7 @@
         "DividerColor": "#FFF8F2D7",
         "LockedPauseEnabled": true,
         "InactivityPauseEnabled": true,
-        "InactivityMinutes": 2.0
+        "InactivityMinutes": 1.0
       },
       {
         "InstanceID": "ebe64c8b-6141-403c-ba69-367fd614ccdf",
@@ -209,7 +209,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 999,
+              "SecondsLeft": 260,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -251,7 +251,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1599,
+                "SecondsLeft": 999,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,

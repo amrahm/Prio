@@ -36,7 +36,11 @@ namespace Timer {
         public SolidColorBrush DividerColor { get; set; } = new(FromHex("#f8f2d7").ToMediaColor());
         public bool LockedPauseEnabled { get; set; } = true;
         public bool InactivityPauseEnabled { get; set; } = true;
-        public double InactivityMinutes { get; set; } = 2;
+        private double _inactivityMinutes = 2;
+        public double InactivityMinutes {
+            get => _inactivityMinutes;
+            set => _inactivityMinutes = Math.Max(value, .1);
+        }
 
 
         public TimerConfig() {

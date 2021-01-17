@@ -104,17 +104,20 @@ namespace Timer {
 
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
-                Model.Config = Config.DeepCopy();
-                Model.SaveSettings();
+                ApplyConfig();
                 TimersService.Singleton.Timers.Add(Model);
                 TimersService.Singleton.SaveSettings();
                 Model.ShowTimer();
             });
             OkCommand = new DelegateCommand(() => {
-                Model.Config = Config.DeepCopy();
-                Model.SaveSettings();
+                ApplyConfig();
                 RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             });
+        }
+
+        private void ApplyConfig() {
+            Model.Config = Config.DeepCopy();
+            Model.SaveSettings();
         }
 
         public bool CanCloseDialog() => true;
