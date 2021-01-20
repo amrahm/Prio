@@ -169,7 +169,6 @@ namespace Infrastructure.SharedResources {
         }
     }
 
-
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
                 Screen.FromPoint(new Point((int) window.Left, (int) window.Top));

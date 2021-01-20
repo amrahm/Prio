@@ -160,10 +160,11 @@
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text=" Minutes of Inactivity" />
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
-							<CheckBox Margin="5" />
+							<CheckBox Margin="5" IsChecked="{Binding Config.DailyResetEnabled}" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Reset at" />
 							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}" Name="TimePicker"
-							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
+							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}"
+							               SelectedTime="{Binding Config.DailyResetTime}">
 								<hc:TimePicker.Clock>
 									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
 								</hc:TimePicker.Clock>

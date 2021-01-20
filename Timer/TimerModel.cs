@@ -10,6 +10,7 @@ using Prio.GlobalServices;
 using Prism.Services.Dialogs;
 using WeakEvent;
 using System.Runtime.InteropServices;
+using System.Threading;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
@@ -31,6 +32,7 @@ namespace Timer {
                 if(_config != null) {
                     _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
                     SetupTimerActions();
+                    CheckDailyReset();
                 }
             }
         }
@@ -217,6 +219,8 @@ namespace Timer {
 
         #endregion
 
+        #region StartStop
+
         public void StartTimer() {
             if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) {
                 _timer.Start();
@@ -225,6 +229,34 @@ namespace Timer {
         }
 
         public void StopTimer() => _timer.Stop();
+
+        #endregion
+
+        #region DailyReset
+
+        private AbsoluteTimer.AbsoluteTimer _dailyResetTimer;
+
+        private void CheckDailyReset(bool newConfig = true) {
+            if(!Config.DailyResetEnabled) {
+                _dailyResetTimer?.Dispose();
+                return;
+            }
+
+            DateTime now = DateTime.Now;
+            if(now > Config.DailyResetTime.AddSeconds(-10)) {
+                if(!newConfig) ResetTimer();
+
+                Config.DailyResetTime = DateTime.Today.AddMinutes(Config.DailyResetTime.TimeOfDay.TotalMinutes);
+
+                // If it's already past DailyResetTime (10s margin of error), wait until DailyResetTime tomorrow    
+                if(now > Config.DailyResetTime.AddSeconds(-10)) Config.DailyResetTime = Config.DailyResetTime.AddDays(1.0);
+            }
+
+            _dailyResetTimer?.Dispose();
+            _dailyResetTimer = new AbsoluteTimer.AbsoluteTimer(Config.DailyResetTime, _ => CheckDailyReset(false), null);
+        }
+
+        #endregion
 
         #region Settings
 
@@ -264,10 +296,6 @@ namespace Timer {
 
         #endregion
 
-        public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
-        public override int GetHashCode() => Config.InstanceID.GetHashCode();
-        public override string ToString() => Config.Name;
-
         #region LockChecking
 
         private void SysEventsCheck(object sender, SessionSwitchEventArgs e) {
@@ -285,8 +313,6 @@ namespace Timer {
                     break;
             }
         }
-
-        public void Dispose() => SystemEvents.SessionSwitch -= SysEventsCheck;
 
         #endregion
 
@@ -325,5 +351,20 @@ namespace Timer {
         }
 
         #endregion
+
+        public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
+        public override int GetHashCode() => Config.InstanceID.GetHashCode();
+        public override string ToString() => Config.Name;
+
+        // To detect redundant calls
+        private bool _disposed;
+        public void Dispose() {
+            if(_disposed) return;
+            SystemEvents.SessionSwitch -= SysEventsCheck;
+            _dailyResetTimer.Dispose();
+
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
     }
 }

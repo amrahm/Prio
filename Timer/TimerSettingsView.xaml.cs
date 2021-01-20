@@ -77,12 +77,12 @@ namespace Timer {
                     _window.SizeToContent = SizeToContent.WidthAndHeight;
                 }
 
-                _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
                 _window.MaxWidth = (screen.Width - SCREEN_MARGIN) / dpiWidthFactor;
+                _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
 
                 _window.WindowStartupLocation = WindowStartupLocation.Manual;
-                _window.Left =  (screen.Width / dpiWidthFactor - _window.ActualWidth) / 2 +  screen.Left;
-                _window.Top = (screen.Height / dpiHeightFactor -  _window.ActualHeight) / 2 + screen.Top;
+                _window.Left =  (screen.Width - _window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
+                _window.Top = (screen.Height - _window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
             };
 
             SizeChanged += (_, e) => {
@@ -106,9 +106,10 @@ namespace Timer {
                 }
             };
 
-            ScrollViewer.ScrollChanged += (_,  e) => {
-                if(ScrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible  ||
-                   Math.Abs(e.VerticalOffset + e.ViewportHeight - e.ExtentHeight) < 1)
+            ScrollViewer.ScrollChanged += (_,  _) => {
+                if(ScrollViewer.ComputedVerticalScrollBarVisibility != Visibility.Visible  ||
+                   Math.Abs(ScrollViewer.VerticalOffset + ScrollViewer.ViewportHeight -
+                            ScrollViewer.ExtentHeight) < 1)
                     OkBar.ClearValue(EffectProperty);
                 else
                     OkBar.Effect = new DropShadowEffect {

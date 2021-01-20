@@ -26,7 +26,7 @@ namespace Timer {
         public Guid DependencyTimerId { get; set; }
         private ITimer _dependencyTimer;
         [JsonIgnore] public ITimer DependencyTimer {
-            get => _dependencyTimer ??= TimersService.Singleton.GetTimer(DependencyTimerId);
+            get => _dependencyTimer ??= TimersService.Singleton?.GetTimer(DependencyTimerId);
             set {
                 _dependencyTimer = value;
                 if(_dependencyTimer != null) DependencyTimerId = _dependencyTimer.Config.InstanceID;
@@ -124,7 +124,7 @@ namespace Timer {
                 case ResetConditionType.Dependency:
                     SecondsLeft = (int) (MustRunForXMinutes * 60);
                     TimerFinished = false;
-                    DependencyTimer.Finished -= OnDependencyTimerOnFinished;
+                    if(DependencyTimer != null) DependencyTimer.Finished -= OnDependencyTimerOnFinished;
                     break;
             }
             _conditionTimer.Stop();

@@ -41,6 +41,8 @@ namespace Timer {
             get => _inactivityMinutes;
             set => _inactivityMinutes = Math.Max(value, .1);
         }
+        public bool DailyResetEnabled { get; set; }
+        public DateTime DailyResetTime { get; set; }
 
 
         public TimerConfig() {
