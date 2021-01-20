@@ -35,7 +35,7 @@ namespace Timer {
                 this.InitializeDraggable();
 
                 // Manual Bindings:
-                void Callback() => TimersService.Singleton.GetTimer(vm.Config.InstanceID).RegisterShortcuts(vm.Config);
+                void Callback() => TimersService.Singleton.GetTimer(vm.Config.InstanceID)?.RegisterShortcuts(vm.Config);
                 ManualBinding(vm.Config, nameof(vm.Config.ResetShortcut), ResetShortcut,
                               nameof(ResetShortcut.Shortcut), callback: Callback);
                 ManualBinding(vm.Config, nameof(vm.Config.StartShortcut), StartShortcut,

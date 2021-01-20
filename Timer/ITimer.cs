@@ -11,6 +11,7 @@ namespace Timer {
     public interface ITimer : INotifyPropertyChanged, IDisposable {
         TimerConfig Config { get; set; }
         void ShowTimer();
+        void ShowHideTimer();
         void RequestResetTimer();
         void StartTimer();
         void StopTimer();

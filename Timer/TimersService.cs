@@ -28,7 +28,7 @@ namespace Timer {
             foreach(TimerConfig config in GeneralConfig.TimerConfigs) Timers.Add(new TimerModel(config));
 
             RegisterShortcuts(GeneralConfig);
-            currVisState = GeneralConfig.DefaultVisibilityState;
+            CurrVisState = GeneralConfig.DefaultVisibilityState;
 
             _autosaveTimer.Tick += (_,  _) => SaveSettings();
             _autosaveTimer.Start();
@@ -47,11 +47,11 @@ namespace Timer {
 
         #region VisibilityHotkeyStuff
 
-        public VisibilityState currVisState;
+        public VisibilityState CurrVisState { get; private set; }
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
         public void ApplyVisState() {
-            switch(currVisState) {
+            switch(CurrVisState) {
                 case VisibilityState.KeepOnTop:
                     TopAll();
                     break;
@@ -66,12 +66,12 @@ namespace Timer {
 
         private void ShowHideAll() {
             Visibility target;
-            if(currVisState != VisibilityState.Hidden) {
+            if(CurrVisState != VisibilityState.Hidden) {
                 target = Visibility.Hidden;
-                currVisState = VisibilityState.Hidden;
+                CurrVisState = VisibilityState.Hidden;
             } else {
                 target = Visibility.Visible;
-                currVisState = _lastNonHiddenVisState;
+                CurrVisState = _lastNonHiddenVisState;
             }
             foreach(ITimer timer in Timers)
                 if(timer.TimerWindow != null) {
@@ -80,23 +80,25 @@ namespace Timer {
                 }
         }
 
-        private void TopAll() {
-            currVisState = VisibilityState.KeepOnTop;
+        private void TopAll() => TopAll(true);
+        public void TopAll(bool fromHotkey) {
+            CurrVisState = VisibilityState.KeepOnTop;
             _lastNonHiddenVisState = VisibilityState.KeepOnTop;
             foreach(ITimer timer in Timers) {
                 if(timer.TimerWindow != null) {
-                    timer.TimerWindow.Visibility = Visibility.Visible;
+                    if(fromHotkey) timer.TimerWindow.Visibility = Visibility.Visible;
                     timer.TimerWindow.Topmost = true;
                 }
             }
         }
 
-        private void BottomAll() {
-            currVisState = VisibilityState.MoveBehind;
+        private void BottomAll() => BottomAll(true);
+        public void BottomAll(bool fromHotkey) {
+            CurrVisState = VisibilityState.MoveBehind;
             _lastNonHiddenVisState = VisibilityState.MoveBehind;
             foreach(ITimer timer in Timers) {
                 if(timer.TimerWindow != null) {
-                    timer.TimerWindow.Visibility = Visibility.Visible;
+                    if(fromHotkey) timer.TimerWindow.Visibility = Visibility.Visible;
                     timer.TimerWindow.Topmost = false;
 
                     var hWnd = new WindowInteropHelper(timer.TimerWindow).Handle;
@@ -118,9 +120,9 @@ namespace Timer {
             bool topIsBottom = Equals(config.MoveTimersBehindShortcut, config.KeepTimersOnTopShortcut);
 
             int NextVisibilityState(int r) {
-                bool isHidden = currVisState == VisibilityState.Hidden;
-                bool isTop = currVisState == VisibilityState.KeepOnTop;
-                bool isBottom = currVisState == VisibilityState.MoveBehind;
+                bool isHidden = CurrVisState == VisibilityState.Hidden;
+                bool isTop = CurrVisState == VisibilityState.KeepOnTop;
+                bool isBottom = CurrVisState == VisibilityState.MoveBehind;
                 switch((VisibilityHotkeyState) r) { //Find all cases where we shouldn't do the requested action
                     // These set precedence so that we move in a triangle if needed
                     // They also check if we are requesting to do what we already are

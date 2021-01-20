@@ -42,17 +42,29 @@ namespace Timer {
         [DependsOnProperty(nameof(Timer))]
         public Brush TextColor => Timer.TempTextBrush ?? Config.TextColor;
 
+        public bool IsTopAll { get; private set; } = TimersService.Singleton.CurrVisState == VisibilityState.KeepOnTop;
+
+
         public DelegateCommand OpenTimerSettings { get; }
         public DelegateCommand OpenMainSettings { get; }
         public DelegateCommand StartStopTimer { get; }
         public DelegateCommand ResetTimer { get; }
         public DelegateCommand<object> AddMinutes { get; }
         public DelegateCommand SetTime { get; }
+        public DelegateCommand SetTopAll { get; }
+        public DelegateCommand HideTimer { get; }
+        public DelegateCommand DisableTimer { get; } //TODO
         public DelegateCommand ExitProgram { get; }
 
 
         public TimerViewModel(ITimer timerTimer) {
             Timer = timerTimer;
+
+            TimersService.Singleton.PropertyChanged += (_,  args) => {
+                if(args.PropertyName == nameof(TimersService.CurrVisState))
+                    IsTopAll = TimersService.Singleton.CurrVisState == VisibilityState.KeepOnTop;
+            };
+
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => Container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {
@@ -73,6 +85,11 @@ namespace Timer {
                     Timer.SetTime(r.Parameters.GetValue<TimeSpan>(nameof(ChangeTimeViewModel.Duration)));
                 if(wasRunning) Timer.StartTimer();
             });
+            SetTopAll = new DelegateCommand(() => {
+                if(IsTopAll) TimersService.Singleton.BottomAll(false);
+                else TimersService.Singleton.TopAll(false);
+            });
+            HideTimer = new DelegateCommand(() => Timer.ShowHideTimer());
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
     }

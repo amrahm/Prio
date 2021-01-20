@@ -2,13 +2,12 @@
 using System.Linq;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Timer;
 using Infrastructure.SharedResources;
 
 namespace TimersList {
-    public class TimersListViewModel : BindableBase {
+    public class TimersListViewModel : NotifyPropertyChanged {
         public ObservableCollection<TimersListItemView> Timers { get; } = new();
 
         public DelegateCommand AddTimerCommand { get; }

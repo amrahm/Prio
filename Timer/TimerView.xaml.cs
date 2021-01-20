@@ -22,6 +22,7 @@ namespace Timer {
             Loaded += (_, _) => {
                 _window = Window.GetWindow(this) as TimerWindow; // This ensures the timer is a floating window
                 if(_window != null) InitializeFloatingWindow();
+                TimerAspectRatioLimits();
             };
         }
 
@@ -70,7 +71,7 @@ namespace Timer {
             WindowHelpers.MoveWindowInBounds(_window);
         }
 
-        private void TimerAspectRatioLimits(object sender, SizeChangedEventArgs sizeChangedEventArgs) {
+        private void TimerAspectRatioLimits(object sender = null, SizeChangedEventArgs sizeChangedEventArgs = null) {
             double hToW = TimerText.ActualWidth / TimerText.ActualHeight;
             TimerViewbox.MaxHeight = TimerViewbox.ActualWidth / hToW * 1.5;
             TimerViewbox.MaxWidth = TimerViewbox.ActualHeight * hToW * 1.5;

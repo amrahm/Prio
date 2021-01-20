@@ -27,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "00:28:55",
+        "TimeLeft": "00:25:58",
         "DesktopsVisible": [
           -1
         ],
@@ -192,11 +192,14 @@
           "Key": 92,
           "Modifiers": 6
         },
-        "ToggleVisibilityShortcut": null,
+        "ToggleVisibilityShortcut": {
+          "Key": 101,
+          "Modifiers": 6
+        },
         "WindowPositions": {
           "2": {
-            "X": 1195.0,
-            "Y": 386.0,
+            "X": 1219.0,
+            "Y": 403.0,
             "Width": 140.0,
             "Height": 100.0
           },
@@ -213,7 +216,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1198,
+              "SecondsLeft": 1029,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -255,7 +258,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1798,
+                "SecondsLeft": 1629,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -325,3 +328,4 @@
       }
     ]
   }
+}

@@ -48,7 +48,7 @@ namespace Timer {
 
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly DispatcherTimer _timer = new() {Interval = OneSecond};
-        private bool _hidden;
+        public bool Hidden => TimerWindow?.Visibility == Visibility.Hidden;
         private Visibility _lastVisibility;
         private bool _finishedSet;
 
@@ -135,8 +135,8 @@ namespace Timer {
         private void HandleDesktopChanged(int newDesktop) {
             TimerWindow?.Dispatcher.Invoke(() => {
                 Config.DesktopsVisible ??= new HashSet<int>();
-                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !_hidden &&
-                   TimersService.Singleton.currVisState != VisibilityState.Hidden) {
+                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !Hidden &&
+                   TimersService.Singleton.CurrVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     VirtualDesktopManager.MoveToDesktop(TimerWindow, newDesktop);
                 } else if(Config.DesktopsVisible.Count > 0)  {
@@ -174,16 +174,15 @@ namespace Timer {
             HandleDesktopChanged(VirtualDesktopManager.CurrentDesktop());
         }
 
-        private void ShowHideTimer() {
+        public void ShowHideTimer() {
             if(TimerWindow == null) return;
-            if(_hidden) {
+            if(Hidden) {
                 TimerWindow.Visibility = _lastVisibility;
                 TimerWindow.Activate();
             } else {
                 _lastVisibility = TimerWindow.Visibility;
                 TimerWindow.Visibility = Visibility.Hidden;
             }
-            _hidden = !_hidden;
         }
 
         #endregion

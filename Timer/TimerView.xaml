@@ -68,10 +68,10 @@
 			<MenuItem Header="Add 30 Minutes" Command="{Binding AddMinutes}" CommandParameter="30"  />
 			<MenuItem Header="Set Current Time" Command="{Binding SetTime}" />
 			<Separator />
-			<MenuItem Header="Keep Timers On Top" IsChecked="True" />
+			<MenuItem Header="Keep Timers On Top" IsChecked="{Binding IsTopAll, Mode=OneWay}" Command="{Binding SetTopAll}"/>
 			<Separator />
-			<MenuItem Header="Hide Timer" />
-			<MenuItem Header="Exit (Disable) Timer" />
+			<MenuItem Header="Hide Timer" Command="{Binding HideTimer}" />
+			<MenuItem Header="Exit (Disable) Timer" Command="{Binding DisableTimer}" />
 			<MenuItem Header="Exit Program" Command="{Binding ExitProgram}" />
 		</ContextMenu>
 	</UserControl.ContextMenu>
