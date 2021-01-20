@@ -23,5 +23,6 @@ namespace Timer {
         event EventHandler<EventArgs> Finished;
         void CheckStart();
         void RegisterShortcuts(TimerConfig timerConfig);
+        void AddMinutes(int minutes);
     }
 }

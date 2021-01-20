@@ -10,7 +10,6 @@ using Prio.GlobalServices;
 using Prism.Services.Dialogs;
 using WeakEvent;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
@@ -292,6 +291,15 @@ namespace Timer {
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut),
                                          ShowHideTimer,
                                          CompatibilityType.Visibility);
+        }
+
+        public void AddMinutes(int minutes) {
+            var newTime = Config.TimeLeft + TimeSpan.FromMinutes(minutes);
+            if(_finishedSet) {
+                ResetTimer();
+            }
+            Config.TimeLeft = newTime;
+            SetupTimerActions();
         }
 
         #endregion

@@ -63,8 +63,9 @@
 			<Separator />
 			<MenuItem Header="Start/Stop Timer" Command="{Binding StartStopTimer}" />
 			<MenuItem Header="Reset Timer" Command="{Binding ResetTimer}" />
-			<MenuItem Header="Add 10 Minutes" />
-			<MenuItem Header="Add 30 Minutes" />
+			<MenuItem Header="Add 5 Minutes" Command="{Binding AddMinutes}" CommandParameter="5" />
+			<MenuItem Header="Add 10 Minutes" Command="{Binding AddMinutes}" CommandParameter="10" />
+			<MenuItem Header="Add 30 Minutes" Command="{Binding AddMinutes}" CommandParameter="30"  />
 			<MenuItem Header="Set Current Time" />
 			<Separator />
 			<MenuItem Header="Keep Timers On Top" IsChecked="True" />

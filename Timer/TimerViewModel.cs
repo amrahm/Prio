@@ -44,6 +44,7 @@ namespace Timer {
         public DelegateCommand OpenMainSettings { get; }
         public DelegateCommand StartStopTimer { get; }
         public DelegateCommand ResetTimer { get; }
+        public DelegateCommand<object> AddMinutes { get; }
         public DelegateCommand ExitProgram { get; }
 
 
@@ -57,6 +58,7 @@ namespace Timer {
                 else Timer.StartTimer();
             });
             ResetTimer = new DelegateCommand(() => Timer.RequestResetTimer());
+            AddMinutes = new DelegateCommand<object>(m => Timer.AddMinutes(int.Parse((string) m)));
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
     }
