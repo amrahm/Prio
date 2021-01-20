@@ -265,7 +265,7 @@ namespace Timer {
             IDialogResult r = await Dialogs.ShowDialogAsync(nameof(TimerSettingsView),
                                                             new DialogParameters {{nameof(ITimer), this}});
             RegisterShortcuts(Config);
-            if(wasRunning && CanResume) StartTimer();
+            if(wasRunning) StartTimer();
             return r.Result;
         }
 
@@ -293,12 +293,13 @@ namespace Timer {
                                          CompatibilityType.Visibility);
         }
 
-        public void AddMinutes(int minutes) {
-            var newTime = Config.TimeLeft + TimeSpan.FromMinutes(minutes);
-            if(_finishedSet) {
-                ResetTimer();
-            }
-            Config.TimeLeft = newTime;
+        #endregion
+
+        #region AdjustTime
+
+        public void SetTime(TimeSpan time) {
+            if(_finishedSet) ResetTimer();
+            Config.TimeLeft = time;
             SetupTimerActions();
         }
 

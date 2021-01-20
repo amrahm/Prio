@@ -1,27 +1,22 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
+using Infrastructure.SharedResources;
 using Color = System.Windows.Media.Color;
-using Window = System.Windows.Window;
 
-namespace Infrastructure.SharedResources {
-    /// <summary> Interaction logic for ShowMessageView.xaml </summary>
-    public partial class MessageBoxView {
+namespace Timer {
+    /// <summary> Interaction logic for ChangeTimeWindow.xaml </summary>
+    public partial class ChangeTimeView   {
         private Window _window;
-
-        public MessageBoxView() {
+        public ChangeTimeView() {
             InitializeComponent();
 
-            MessageBoxViewModel vm = (MessageBoxViewModel) DataContext;
+            ChangeTimeViewModel vm = (ChangeTimeViewModel) DataContext;
             vm.PropertyChanged += (_,  args) => {
-                if(args.PropertyName == nameof(vm.Message)) InlineExpression.SetInlineExpression(MessageBlock, vm.Message);
+                if(args.PropertyName == nameof(vm.Title)) InlineExpression.SetInlineExpression(TitleBlock, vm.Title);
             };
-
             Loaded += (_, _) => {
                 // Window Setup
                 _window = Window.GetWindow(this);
@@ -36,28 +31,19 @@ namespace Infrastructure.SharedResources {
                 double dpiWidthFactor = m.M11;
                 double dpiHeightFactor = m.M22;
 
-                Rectangle screen = vm.openOnScreen?.WorkingArea ?? _window.CurrentScreen().WorkingArea;
+                Rectangle screen = _window.CurrentScreen().WorkingArea;
                 _window.Left =  (screen.Width - _window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
                 _window.Top = (screen.Height -  _window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
                 WindowHelpers.MoveWindowInBounds(_window);
-
-
-                //Set the window style to noactivate.
-                if(!vm.getsFocus) {
-                    var helper = new WindowInteropHelper(_window);
-                    SetWindowLong(helper.Handle, GWL_EXSTYLE, GetWindowLong(helper.Handle, GWL_EXSTYLE) | WS_EX_NOACTIVATE);
-                }
             };
 
             MouseDown += (_, e) => {
-                if(e.ChangedButton == MouseButton.Left) _window.DragMove();
+                if(e.ChangedButton == MouseButton.Left) {
+                    DependencyObject scope = FocusManager.GetFocusScope(Root);
+                    FocusManager.SetFocusedElement(scope, _window);
+                    _window.DragMove();
+                }
             };
         }
-
-
-        private const int GWL_EXSTYLE = -20;
-        private const int WS_EX_NOACTIVATE = 0x08000000;
-        [DllImport("user32.dll")] private static extern IntPtr SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        [DllImport("user32.dll")] private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
     }
 }

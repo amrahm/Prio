@@ -27,34 +27,6 @@ namespace Timer {
 
         public ObservableCollection<OverflowActionView> OverflowActionViews { get; } = new();
 
-        [DependsOnProperty(nameof(Config))]
-        public int Hours {
-            get => (int) (Config?.Duration.TotalHours ?? 0);
-            set {
-                Config.Duration = new TimeSpan(value, Minutes, Seconds);
-                Config.TimeLeft = Config.Duration;
-                if(Math.Abs(Config.Duration.TotalHours) < 0.0001) Minutes = 1;
-            }
-        }
-
-        [DependsOnProperty(nameof(Config))]
-        public int Minutes {
-            get => Config?.Duration.Minutes ?? 0;
-            set {
-                Config.Duration = new TimeSpan(Hours, value, Seconds);
-                Config.TimeLeft = Config.Duration;
-            }
-        }
-
-        [DependsOnProperty(nameof(Config))]
-        public int Seconds {
-            get => Config?.Duration.Seconds ?? 0;
-            set {
-                Config.Duration = new TimeSpan(Hours, Minutes, value);
-                Config.TimeLeft = Config.Duration;
-            }
-        }
-
         public string ShowDesktopsConverter {
             get => DesktopSetToString(Config?.DesktopsVisible);
             set => Config.DesktopsVisible = DesktopStringToSet(value);

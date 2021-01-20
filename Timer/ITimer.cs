@@ -23,6 +23,7 @@ namespace Timer {
         event EventHandler<EventArgs> Finished;
         void CheckStart();
         void RegisterShortcuts(TimerConfig timerConfig);
-        void AddMinutes(int minutes);
+        void SetTime(TimeSpan time);
+        void AddMinutes(int minutes) => SetTime(Config.TimeLeft + TimeSpan.FromMinutes(minutes));
     }
 }

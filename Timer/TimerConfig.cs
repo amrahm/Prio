@@ -13,7 +13,14 @@ namespace Timer {
         public bool ShowHours { get; set; } = true;
         public bool ShowMinutes { get; set; } = true;
         public bool ShowSeconds { get; set; } = true;
-        public TimeSpan Duration { get; set; } = TimeSpan.FromHours(1);
+        private TimeSpan _duration = TimeSpan.FromHours(1);
+        public TimeSpan Duration {
+            get => _duration;
+            set {
+                _duration = value;
+                TimeLeft = value;
+            }
+        }
         public TimeSpan TimeLeft { get; set; } = TimeSpan.FromHours(1);
         public HashSet<int> DesktopsVisible { get; set; }
         public HashSet<int> DesktopsActive { get; set; }

@@ -66,21 +66,7 @@
 								<TextBlock Text="Show Seconds" Style="{StaticResource BaseControlStyle}" />
 							</StackPanel>
 						</st:AutoGrid>
-						<st:AutoGrid Columns="*, auto, *, auto, *" RowHeight="*"
-						             HorizontalAlignment="Stretch" Orientation="Vertical" ChildMargin="5">
-							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="##" Text="{Binding Hours, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="HoursBox" Style="{StaticResource BiggishBox}" />
-							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="##" Text="{Binding Minutes, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="MinutesBox" Style="{StaticResource BiggishBox}" />
-							<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-							<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5"
-							         hc:InfoElement.Placeholder="##" Text="{Binding Seconds, Mode=TwoWay, StringFormat=D2}"
-							         TextAlignment="Center" Name="SecondsBox" Style="{StaticResource BiggishBox}" />
-						</st:AutoGrid>
+						<local:DurationSetter Duration="{Binding Config.Duration, Mode=TwoWay}" />
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -263,9 +249,6 @@
 								<!-- Require the controls to be valid in order to press OK -->
 								<MultiDataTrigger>
 									<MultiDataTrigger.Conditions>
-										<Condition Binding="{Binding ElementName=HoursBox, Path=(Validation.HasError)}" Value="false" />
-										<Condition Binding="{Binding ElementName=MinutesBox, Path=(Validation.HasError)}" Value="false" />
-										<Condition Binding="{Binding ElementName=SecondsBox, Path=(Validation.HasError)}" Value="false" />
 										<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
 									</MultiDataTrigger.Conditions>
 									<Setter Property="IsEnabled" Value="true" />

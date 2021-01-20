@@ -6,8 +6,6 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace Infrastructure.SharedResources {
-
-
     public abstract class NotifyPropertyChanged : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -51,7 +49,8 @@ namespace Infrastructure.SharedResources {
             }
         }
 
-        public static void OnPropertyChanged(this INotifyPropertyWithDependencies inpwd, [CallerMemberName] string propertyName = null) {
+        public static void OnPropertyChanged(this INotifyPropertyWithDependencies inpwd,
+                                             [CallerMemberName] string propertyName = "") {
             PropertyChangedEventHandler handler = inpwd.GetPropertyChangedEventHandler;
             if(handler == null) return;
 

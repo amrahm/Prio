@@ -9,7 +9,6 @@ namespace Infrastructure.SharedResources {
         public string Title { get; } = "Color Picker";
         public event Action<IDialogResult> RequestClose;
         public bool CanCloseDialog() => true;
-
         public void OnDialogClosed() { }
 
         public void OnDialogOpened(IDialogParameters parameters) {
@@ -31,7 +30,8 @@ namespace Infrastructure.SharedResources {
     }
 
     public static class DialogServiceColorPickerExtension {
-        public static Task<IDialogResult> ShowColorPicker(this IDialogService dialogService, SolidColorBrush selectedBrush = null) {
+        public static Task<IDialogResult> ShowColorPicker(this IDialogService dialogService,
+                                                          SolidColorBrush selectedBrush = null) {
             return dialogService.ShowDialogAsync(nameof(ColorPickerView),
                                                  new DialogParameters {{nameof(ColorPicker.SelectedBrush), selectedBrush}});
         }

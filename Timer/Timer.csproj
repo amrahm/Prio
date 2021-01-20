@@ -69,5 +69,8 @@
     <Page Update="OverflowActions\OverflowActionView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="ChangeTimeView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 </Project>

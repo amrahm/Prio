@@ -11,7 +11,6 @@ namespace Infrastructure.SharedResources {
         public string Title { get; set; }
         public event Action<IDialogResult> RequestClose;
         public bool CanCloseDialog() => true;
-
         public void OnDialogClosed() { }
 
         public DelegateCommand OkCommand { get; }
