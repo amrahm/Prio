@@ -17,7 +17,7 @@ namespace Infrastructure.SharedResources {
                 Point mousePos = ColorPicker.PointToScreen(Mouse.GetPosition(ColorPicker));
                 window.Top = mousePos.Y - window.ActualHeight / 2;
                 window.Left = mousePos.X - window.ActualWidth / 2;
-                WindowHelpers.MoveWindowInBounds(window);
+                window.MoveWindowInBounds();
             };
         }
     }

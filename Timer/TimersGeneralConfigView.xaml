@@ -22,7 +22,7 @@
 	</UserControl.DataContext>
 
 	<StackPanel Background="{StaticResource LightBrush}">
-		<TextBlock Text="Timers" Style="{StaticResource SubHeaderLabelStyle}" />
+		<TextBlock Text="General Timers Settings" Style="{StaticResource SubHeaderLabelStyle}" />
 		<TextBlock Text="(Items in same box can have the same shortcut)" Style="{StaticResource HintControlDark}"
 		           Margin="10, -5, 0, 2" />
 		<Border BorderBrush="{StaticResource LightAccentBrush}" BorderThickness="2" Margin="5" Padding="2">

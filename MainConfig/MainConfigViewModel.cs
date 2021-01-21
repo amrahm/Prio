@@ -1,4 +1,6 @@
 ﻿using System;
+using Infrastructure.SharedResources;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
@@ -9,5 +11,12 @@ namespace MainConfig {
         public void OnDialogClosed() {  }
         public void OnDialogOpened(IDialogParameters parameters) {  }
         public event Action<IDialogResult> RequestClose;
+
+
+        public DelegateCommand ExitCommand { get; }
+
+        public MainConfigViewModel() {
+            ExitCommand = new DelegateCommand(() => UnityInstance.MainConfigService.CloseConfigWindow());
+        }
     }
 }

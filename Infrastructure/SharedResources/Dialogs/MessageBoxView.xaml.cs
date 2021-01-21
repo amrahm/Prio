@@ -29,17 +29,9 @@ namespace Infrastructure.SharedResources {
 
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
-                Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-                Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-                Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-                double dpiWidthFactor = m.M11;
-                double dpiHeightFactor = m.M22;
-
+                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
                 Rectangle screen = vm.openOnScreen?.WorkingArea ?? _window.CurrentScreen().WorkingArea;
-                _window.Left =  (screen.Width - _window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
-                _window.Top = (screen.Height -  _window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
-                WindowHelpers.MoveWindowInBounds(_window);
+                _window.CenterOnScreen(screen, dpiWidthFactor, dpiHeightFactor);
 
 
                 //Set the window style to noactivate.

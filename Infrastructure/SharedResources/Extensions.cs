@@ -174,13 +174,8 @@ namespace Infrastructure.SharedResources {
                 Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
 
 
-        public static void MoveWindowInBounds(Window window) {
-            PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(window);
-            Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-            Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-            Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-            double dpiWidthFactor = m.M11;
-            double dpiHeightFactor = m.M22;
+        public static void MoveWindowInBounds(this Window window) {
+            (double dpiWidthFactor, double dpiHeightFactor) = GetDpiFactors(window);
 
             Rectangle wA = window.CurrentScreen().WorkingArea;
 
@@ -188,6 +183,28 @@ namespace Infrastructure.SharedResources {
             window.Left += Math.Min(wA.Right / dpiWidthFactor - (window.Left + window.ActualWidth), 0);
             window.Top += Math.Max(wA.Top / dpiHeightFactor - window.Top, 0);
             window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (window.Top + window.ActualHeight), 0);
+        }
+
+
+        public static void CenterOnScreen(this Window window, double dpiWidthFactor,
+                                          double dpiHeightFactor) {
+            CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
+        }
+        public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor,
+                                          double dpiHeightFactor) {
+            window.WindowStartupLocation = WindowStartupLocation.Manual;
+            window.Left =  (screen.Width - window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
+            window.Top = (screen.Height -  window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
+        }
+
+        public static (double dpiWidthFactor, double dpiHeightFactor) GetDpiFactors(Window window) {
+            PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(window);
+            Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
+            Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
+            Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
+            double dpiWidthFactor = m.M11;
+            double dpiHeightFactor = m.M22;
+            return (dpiWidthFactor, dpiHeightFactor);
         }
     }
 

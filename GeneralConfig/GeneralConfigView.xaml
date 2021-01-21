@@ -23,18 +23,18 @@
 	</UserControl.DataContext>
 
 	<st:AutoGrid Rows="auto, *, auto" ColumnWidth="*" Background="{StaticResource LightBrush}">
-		<Label Content="General Config" Style="{StaticResource BigControlStyle}" />
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" x:Name="ScrollViewer">
+			<ContentControl Margin="0" Background="{StaticResource LightBrush}"
+			                prism:RegionManager.RegionName="{x:Static constants:RegionNames.GENERAL_CONFIG_TIMERS_REGION}" />
+		</ScrollViewer>
 
-		<ContentControl Margin="0" Background="{StaticResource LightBrush}"
-		                prism:RegionManager.RegionName="{x:Static constants:RegionNames.GENERAL_CONFIG_TIMERS_REGION}" />
-		<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0">
+		<DockPanel Background="{StaticResource LightBrush}" LastChildFill="False" Margin="0" x:Name="OkBar">
 			<Button DockPanel.Dock="Right" Content="OK" Style="{StaticResource NormalButtonDarkBordered}"
 			        Margin="5, 5, 10, 5" Padding="5, 5, 6, 5" Width="70" Command="{Binding OkCommand}" />
 			<Button DockPanel.Dock="Right" Content="APPLY" Width="70" Style="{StaticResource NormalButtonDarkBordered}"
 			        Command="{Binding ApplyCommand}" />
 			<Button DockPanel.Dock="Right" Content="CANCEL" Style="{StaticResource NormalButtonDarkBordered}" Width="70"
 			        Command="{Binding CancelCommand}" />
-
 		</DockPanel>
 	</st:AutoGrid>
 </UserControl>

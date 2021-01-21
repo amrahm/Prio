@@ -16,6 +16,7 @@ namespace Timer {
         public List<UIElement> ChildDraggables { get; } = new();
         private readonly ResetConditionTreeViewModel _vm;
         private readonly Storyboard _opacityStoryboard = new();
+        private static readonly Duration Duration = new(TimeSpan.FromMilliseconds(200));
         private  DispatcherTimer _unhighlightTimer;
         private  bool _isRoot;
 
@@ -170,7 +171,7 @@ namespace Timer {
 
         private void AnimateOpacity(double to) {
             var animation = new DoubleAnimation {
-                From = Opacity, To = to, Duration = new Duration(TimeSpan.FromMilliseconds(200))
+                From = Opacity, To = to, Duration = Duration
             };
             Storyboard.SetTargetName(animation, Root.Name);
             Storyboard.SetTargetProperty(animation, new PropertyPath(OpacityProperty));

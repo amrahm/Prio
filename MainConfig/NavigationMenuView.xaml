@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://www.codeplex.com/prism"
+             xmlns:local="clr-namespace:MainConfig"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="300">
+             d:DataContext="{d:DesignInstance local:NavigationMenuViewModel}"
+             d:DesignHeight="400"
+             Width="150">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -16,7 +20,7 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid x:Name="MainGrid">
 		<StackPanel Background="{StaticResource DarkBrush}"
 		            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource  AncestorType=UIElement}}">
 
@@ -24,8 +28,16 @@
 				<Style TargetType="Button" BasedOn="{StaticResource MediumButtonRed}" />
 			</StackPanel.Resources>
 
-			<Button Content="General" Command="{Binding GenConfigButton}" />
-			<Button Content="Timers" Command="{Binding TimersButton}" />
+			<Button Content="  General" Command="{Binding GenConfigButton}" x:Name="GenConfig" HorizontalAlignment="Right">
+				<Button.Effect>
+					<hc:ColorMatrixEffect M22="1" x:Name="GenEffect" />
+				</Button.Effect>
+			</Button>
+			<Button Content="  Timers" Command="{Binding TimersButton}" x:Name="Timers" HorizontalAlignment="Right">
+				<Button.Effect>
+					<hc:ColorMatrixEffect M22="1" x:Name="TimersEffect" />
+				</Button.Effect>
+			</Button>
 			<Button Content="Etc." />
 			<Button Content="About" />
 		</StackPanel>

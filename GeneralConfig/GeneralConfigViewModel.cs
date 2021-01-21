@@ -1,8 +1,6 @@
-﻿using Infrastructure.SharedResources;
-using MainConfig;
-using Prism.Commands;
-using Prism.Ioc;
+﻿using Prism.Commands;
 using Prism.Mvvm;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace GeneralConfig {
     class GeneralConfigViewModel : BindableBase {
@@ -11,12 +9,11 @@ namespace GeneralConfig {
         public DelegateCommand OkCommand { get; }
 
         public GeneralConfigViewModel() {
-            var mainConfigService = UnityInstance.Container.Resolve<IMainConfigService>();
-            CancelCommand = new DelegateCommand(() => mainConfigService.CloseConfigWindow());
-            ApplyCommand = new DelegateCommand(() => mainConfigService.InvokeApplySettings());
+            CancelCommand = new DelegateCommand(() => MainConfigService.CloseConfigWindow());
+            ApplyCommand = new DelegateCommand(() => MainConfigService.InvokeApplySettings());
             OkCommand = new DelegateCommand(() => {
-                mainConfigService.InvokeApplySettings();
-                mainConfigService.CloseConfigWindow();
+                MainConfigService.InvokeApplySettings();
+                MainConfigService.CloseConfigWindow();
             });
         }
     }

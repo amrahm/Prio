@@ -68,7 +68,7 @@ namespace Timer {
                 _window.Height = position.Height;
             }
 
-            WindowHelpers.MoveWindowInBounds(_window);
+            _window.MoveWindowInBounds();
         }
 
         private void TimerAspectRatioLimits(object sender = null, SizeChangedEventArgs sizeChangedEventArgs = null) {

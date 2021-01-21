@@ -62,12 +62,7 @@ namespace Timer {
                 _startHeight = _window.Height;
                 _window.SizeToContent = SizeToContent.Height;
 
-                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
-                Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-                Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-                Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-                double dpiWidthFactor = m.M11;
-                double dpiHeightFactor = m.M22;
+                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
 
                 Rectangle screen = _window.CurrentScreen().WorkingArea;
                 while(screen.Height - SCREEN_MARGIN < Root.ActualHeight * dpiHeightFactor &&
@@ -80,9 +75,7 @@ namespace Timer {
                 _window.MaxWidth = (screen.Width - SCREEN_MARGIN) / dpiWidthFactor;
                 _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
 
-                _window.WindowStartupLocation = WindowStartupLocation.Manual;
-                _window.Left =  (screen.Width - _window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
-                _window.Top = (screen.Height - _window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
+                _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
             };
 
             SizeChanged += (_, e) => {

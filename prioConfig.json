@@ -27,7 +27,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "00:25:58",
+        "TimeLeft": "00:22:24",
         "DesktopsVisible": [
           -1
         ],
@@ -87,7 +87,7 @@
           "Message": null
         },
         "OverflowActions": [],
-        "BackgroundColor": "#FF184A8C",
+        "BackgroundColor": "#BE184A8C",
         "TextColor": "#FFF26F63",
         "NameBackgroundColor": "#FF7A90AC",
         "NameTextColor": "#FFBEF2DC",
@@ -216,7 +216,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1029,
+              "SecondsLeft": 806,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -258,7 +258,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1629,
+                "SecondsLeft": 1416,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -324,7 +324,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-01-20T19:01:00"
+        "DailyResetTime": "2021-01-21T19:01:00-06:00"
       }
     ]
   }

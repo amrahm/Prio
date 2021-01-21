@@ -21,20 +21,10 @@ namespace Timer {
                 // Window Setup
                 _window = Window.GetWindow(this);
                 Debug.Assert(_window != null, nameof(_window) + " != null");
-
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-                PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(_window);
-                Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-                Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-                Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-                double dpiWidthFactor = m.M11;
-                double dpiHeightFactor = m.M22;
-
-                Rectangle screen = _window.CurrentScreen().WorkingArea;
-                _window.Left =  (screen.Width - _window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
-                _window.Top = (screen.Height -  _window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
-                WindowHelpers.MoveWindowInBounds(_window);
+                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
+                _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
             };
 
             MouseDown += (_, e) => {
