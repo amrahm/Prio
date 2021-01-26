@@ -25,15 +25,14 @@
 		<ContentControl prism:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
 
 		<st:AutoGrid Rows="*, *, *" ChildMargin="0" ColumnWidth="*" Margin="5, 0">
-			<Button Command="{Binding OpenTimerSettings}" Style="{StaticResource IconButton}" Margin="0">
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding OpenTimerSettings}">
 				<Image Source="/Infrastructure;component/SharedResources/images/settings.png"
 				       RenderOptions.BitmapScalingMode="Fant" />
 			</Button>
-			<Button Style="{StaticResource IconButton}" Margin="0">
-				<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/visible.png"
-				       RenderOptions.BitmapScalingMode="Fant" />
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding ToggleVisState}">
+				<Image Source="{Binding VisImagePath}" RenderOptions.BitmapScalingMode="Fant" />
 			</Button>
-			<Button Style="{StaticResource IconButton}" Margin="0">
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding DeleteTimer}">
 				<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/delete.png"
 				       RenderOptions.BitmapScalingMode="Fant" />
 			</Button>

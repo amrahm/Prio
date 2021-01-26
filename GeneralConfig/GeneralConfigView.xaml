@@ -22,7 +22,7 @@
 		<local:GeneralConfigViewModel />
 	</UserControl.DataContext>
 
-	<st:AutoGrid Rows="auto, *, auto" ColumnWidth="*" Background="{StaticResource LightBrush}">
+	<st:AutoGrid Rows="*, auto" ColumnWidth="*" Background="{StaticResource LightBrush}">
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" x:Name="ScrollViewer">
 			<ContentControl Margin="0" Background="{StaticResource LightBrush}"
 			                prism:RegionManager.RegionName="{x:Static constants:RegionNames.GENERAL_CONFIG_TIMERS_REGION}" />

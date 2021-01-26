@@ -31,7 +31,7 @@ namespace Infrastructure.SharedResources {
         /// Bubble up changes from within the object, e.g.: <para />
         /// public TimerConfig Config {
         ///     get => _config;
-        ///     set => NotificationBubbler.BubbleSetter(ref _config, value, (o, e) => this.OnPropertyChanged());
+        ///     set => NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
         /// }
         /// </summary>
         /// <param name="obj"> object to be set </param>
@@ -186,15 +186,14 @@ namespace Infrastructure.SharedResources {
         }
 
 
-        public static void CenterOnScreen(this Window window, double dpiWidthFactor,
-                                          double dpiHeightFactor) {
-            CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
-        }
+        public static void CenterOnScreen(this Window window, double dpiWidthFactor, double dpiHeightFactor) =>
+                CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
         public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor,
                                           double dpiHeightFactor) {
             window.WindowStartupLocation = WindowStartupLocation.Manual;
-            window.Left =  (screen.Width - window.ActualWidth * dpiWidthFactor) / 2 +  screen.Left;
-            window.Top = (screen.Height -  window.ActualHeight * dpiHeightFactor) / 2 + screen.Top;
+            //TODO double check below for 2nd monitor plugged in vs not
+            window.Left = (screen.Width / dpiWidthFactor - window.ActualWidth) / 2 + screen.Left;
+            window.Top = (screen.Height / dpiHeightFactor - window.ActualHeight) / 2 + screen.Top;
         }
 
         public static (double dpiWidthFactor, double dpiHeightFactor) GetDpiFactors(Window window) {

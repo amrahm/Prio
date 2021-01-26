@@ -10,7 +10,7 @@ using Infrastructure.SharedResources;
 using Prism.Regions;
 
 namespace MainConfig {
-    /// <summary> Interaction logic for ShellView.xaml </summary>
+    /// <summary> Interaction logic for MainConfigView.xaml </summary>
     public partial class MainConfigView : IRegionManagerAware {
         private Window _window;
         public MainConfigView() {

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
@@ -35,7 +32,7 @@ namespace Timer {
         }
 
         public void ShowTimers() => Timers.ForEach(t => {
-            t.ShowTimer();
+            t.ShowTimer(true);
             t.CheckStart();
         });
 
@@ -50,65 +47,22 @@ namespace Timer {
         public VisibilityState CurrVisState { get; private set; }
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
-        public void ApplyVisState() {
-            switch(CurrVisState) {
-                case VisibilityState.KeepOnTop:
-                    TopAll();
-                    break;
-                case VisibilityState.MoveBehind:
-                    BottomAll();
-                    break;
-                case VisibilityState.Hidden:
-                    ShowHideAll();
-                    break;
-            }
-        }
-
         private void ShowHideAll() {
-            Visibility target;
-            if(CurrVisState != VisibilityState.Hidden) {
-                target = Visibility.Hidden;
-                CurrVisState = VisibilityState.Hidden;
-            } else {
-                target = Visibility.Visible;
-                CurrVisState = _lastNonHiddenVisState;
-            }
-            foreach(ITimer timer in Timers)
-                if(timer.TimerWindow != null) {
-                    timer.TimerWindow.Visibility = target;
-                    if(target == Visibility.Visible) timer.TimerWindow.Activate();
-                }
+            CurrVisState = CurrVisState != VisibilityState.Hidden ? VisibilityState.Hidden : _lastNonHiddenVisState;
+            foreach(ITimer timer in Timers) timer.SetVisibility(CurrVisState != VisibilityState.Hidden);
         }
 
-        private void TopAll() => TopAll(true);
-        public void TopAll(bool fromHotkey) {
+        public void TopAll() {
             CurrVisState = VisibilityState.KeepOnTop;
             _lastNonHiddenVisState = VisibilityState.KeepOnTop;
-            foreach(ITimer timer in Timers) {
-                if(timer.TimerWindow != null) {
-                    if(fromHotkey) timer.TimerWindow.Visibility = Visibility.Visible;
-                    timer.TimerWindow.Topmost = true;
-                }
-            }
+            foreach(ITimer timer in Timers) timer.SetTopmost();
         }
 
-        private void BottomAll() => BottomAll(true);
-        public void BottomAll(bool fromHotkey) {
+        public void BottomAll() {
             CurrVisState = VisibilityState.MoveBehind;
             _lastNonHiddenVisState = VisibilityState.MoveBehind;
-            foreach(ITimer timer in Timers) {
-                if(timer.TimerWindow != null) {
-                    if(fromHotkey) timer.TimerWindow.Visibility = Visibility.Visible;
-                    timer.TimerWindow.Topmost = false;
-
-                    var hWnd = new WindowInteropHelper(timer.TimerWindow).Handle;
-                    SetWindowPos(hWnd, new IntPtr(1), 0, 0, 0, 0, 19U);
-                }
-            }
+            foreach(ITimer timer in Timers) timer.SetBottommost();
         }
-
-        [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y,
-                                                                          int cx, int cy, uint uFlags);
 
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
@@ -162,7 +116,7 @@ namespace Timer {
             isStopAll = true;
             _stoppedTimers.Clear();
             foreach(ITimer timer in Timers) {
-                if(timer.IsRunning) {
+                if(timer.Running) {
                     timer.StopTimer();
                     _stoppedTimers.Push(timer);
                 }

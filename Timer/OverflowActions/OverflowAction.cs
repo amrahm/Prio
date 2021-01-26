@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using static Infrastructure.SharedResources.UnityInstance;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace Timer {
     [Serializable]
@@ -58,9 +61,11 @@ namespace Timer {
                 _mediaPlayer.Play();
             }
 
-            if(ShowMessageEnabled)
+            if(ShowMessageEnabled) {
+                var pos = Timer.Config.WindowPositions[Screen.AllScreens.Length];
                 Dialogs.ShowNotification(Message, Timer.Config.Name, true, false, false,
-                                               Timer.TimerWindow?.CurrentScreen());
+                                         Screen.FromPoint(new Point((int) pos.X, (int) pos.Y)));
+            }
         }
     }
 }

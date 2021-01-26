@@ -18,6 +18,7 @@
 			<Setter Property="MinHeight" Value="100" />
 			<Setter Property="MinWidth" Value="470" />
 			<Setter Property="ShowInTaskbar" Value="True" />
+			<Setter Property="Topmost" Value="True" />
 			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/settings.png" />
 		</Style>
 	</prism:Dialog.WindowStyle>

@@ -11,7 +11,6 @@ using static Infrastructure.SharedResources.UnityInstance;
 namespace Timer {
     public class TimerViewModel : NotifyPropertyWithDependencies {
         private readonly ITimer _timer;
-
         public ITimer Timer {
             get => _timer;
             init => NotificationBubbler.BubbleSetter(ref _timer, value, (_, _) => this.OnPropertyChanged());
@@ -53,7 +52,7 @@ namespace Timer {
         public DelegateCommand SetTime { get; }
         public DelegateCommand SetTopAll { get; }
         public DelegateCommand HideTimer { get; }
-        public DelegateCommand DisableTimer { get; } //TODO
+        public DelegateCommand DisableTimer { get; }
         public DelegateCommand ExitProgram { get; }
 
 
@@ -68,13 +67,13 @@ namespace Timer {
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             OpenMainSettings = new DelegateCommand(() => Container.Resolve<IMainConfigService>().ShowConfigWindow());
             StartStopTimer = new DelegateCommand(() => {
-                if(Timer.IsRunning) Timer.StopTimer();
+                if(Timer.Running) Timer.StopTimer();
                 else Timer.StartTimer();
             });
             ResetTimer = new DelegateCommand(() => Timer.RequestResetTimer());
             AddMinutes = new DelegateCommand<object>(m => Timer.AddMinutes(int.Parse((string) m)));
             SetTime = new DelegateCommand(async () => {
-                bool wasRunning = Timer.IsRunning;
+                bool wasRunning = Timer.Running;
                 Timer.StopTimer();
                 var r = await Dialogs.ShowDialogAsync(nameof(ChangeTimeView),
                                                       new DialogParameters {
@@ -86,10 +85,11 @@ namespace Timer {
                 if(wasRunning) Timer.StartTimer();
             });
             SetTopAll = new DelegateCommand(() => {
-                if(IsTopAll) TimersService.Singleton.BottomAll(false);
-                else TimersService.Singleton.TopAll(false);
+                if(IsTopAll) TimersService.Singleton.BottomAll();
+                else TimersService.Singleton.TopAll();
             });
-            HideTimer = new DelegateCommand(() => Timer.ShowHideTimer());
+            HideTimer = new DelegateCommand(() => Timer.ToggleVisibility());
+            DisableTimer = new DelegateCommand(() => Timer.ToggleEnabled());
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());
         }
     }

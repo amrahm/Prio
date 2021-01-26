@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -10,6 +11,7 @@ using Prio.GlobalServices;
 using Prism.Services.Dialogs;
 using WeakEvent;
 using System.Runtime.InteropServices;
+using System.Windows.Interop;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
@@ -19,22 +21,25 @@ namespace Timer {
         public TimerConfig Config {
             get => _config;
             set {
-                void ResetConditionsOnSatisfied(object sender, EventArgs e) {
-                    if(Config.AutoResetOnConditions) {
-                        ResetTimer();
-                        StartStopForDesktopsActive(VirtualDesktopManager.CurrentDesktop());
-                    }
+                if(_config != null) {
+                    _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
+                    SystemEvents.SessionSwitch -= SysEventsCheck;
+                    UnregisterShortcuts();
                 }
 
-                if(_config != null) _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
                 NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
-                if(_config != null) {
+
+                if(_config != null && !_config.Disabled) {
+                    RegisterShortcuts();
                     _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
                     SetupTimerActions();
                     CheckDailyReset();
+                    if(_config.LockedPauseEnabled) SystemEvents.SessionSwitch += SysEventsCheck;
                 }
             }
         }
+
+        #region OtherFields
 
         public Window TimerWindow { get; private set; }
         public Brush TempBackgroundBrush { get; set; }
@@ -48,8 +53,6 @@ namespace Timer {
 
         private static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         private readonly DispatcherTimer _timer = new() {Interval = OneSecond};
-        public bool Hidden => TimerWindow?.Visibility == Visibility.Hidden;
-        private Visibility _lastVisibility;
         private bool _finishedSet;
 
         private bool _lockPauseActive;
@@ -58,20 +61,17 @@ namespace Timer {
         private bool CanResume => !_lockPauseActive && !_inactivityPauseActive;
         private bool IsOrWasRunning => _timer.IsEnabled || _lockPauseActive || _inactivityPauseActive;
 
-        public bool IsRunning => _timer.IsEnabled;
+        public bool Running => _timer.IsEnabled;
+
+        #endregion
 
         public TimerModel(TimerConfig config) {
             Config = config;
 
-            SetupTimerActions();
             _timer.Tick += OnTimerOnTick;
-
-            RegisterShortcuts(Config);
+            _activityCheckTimer.Tick += ActivityCheckTimerOnTick;
 
             VirtualDesktopManager.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
-
-            SystemEvents.SessionSwitch += SysEventsCheck;
-            _activityCheckTimer.Tick += ActivityCheckTimerOnTick;
         }
 
         public void CheckStart() {
@@ -108,6 +108,7 @@ namespace Timer {
         private readonly List<TimerAction> _timerActions = new();
         private int _timerActionsPointer;
 
+        /// <summary> Add all timer actions and move pointer to right place. Idempotent. </summary>
         private void SetupTimerActions() {
             _timerActions.Clear();
             _timerActions.Add(new TimerAction(TimeSpan.Zero, TimerFinishedRaise));
@@ -133,9 +134,10 @@ namespace Timer {
         #region VirtualDesktops
 
         private void HandleDesktopChanged(int newDesktop) {
+            if(Config.Disabled) return;
             TimerWindow?.Dispatcher.Invoke(() => {
                 Config.DesktopsVisible ??= new HashSet<int>();
-                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && !Hidden &&
+                if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
                    TimersService.Singleton.CurrVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     VirtualDesktopManager.MoveToDesktop(TimerWindow, newDesktop);
@@ -155,11 +157,12 @@ namespace Timer {
 
         #endregion
 
-        #region ShowHide
+        #region VisibilityStuff
 
-        public void ShowTimer() {
+        public void ShowTimer(bool shouldActivate = false) {
+            if(Config.Disabled) return;
             if(TimerWindow != null) {
-                TimerWindow.Activate();
+                if(shouldActivate) TimerWindow.Activate();
                 return;
             }
 
@@ -170,18 +173,60 @@ namespace Timer {
                 TimerWindow = null;
             };
 
-            TimersService.Singleton.ApplyVisState();
+            switch(TimersService.Singleton.CurrVisState) {
+                case VisibilityState.MoveBehind:
+                    SetBottommost();
+                    break;
+                default:
+                    SetTopmost();
+                    break;
+            }
             HandleDesktopChanged(VirtualDesktopManager.CurrentDesktop());
         }
 
-        public void ShowHideTimer() {
-            if(TimerWindow == null) return;
-            if(Hidden) {
-                TimerWindow.Visibility = _lastVisibility;
-                TimerWindow.Activate();
+        public void SetVisibility(bool vis) {
+            if(Config.Disabled) return;
+            Config.Visible = vis;
+            if(Config.Visible) ShowTimer();
+            else TimerWindow?.Close();
+        }
+        public void ToggleVisibility() => SetVisibility(!Config.Visible);
+
+
+        public void SetTopmost() {
+            if(Config.Disabled) return;
+            TimerWindow.Topmost = true;
+        }
+        public void SetBottommost() {
+            if(Config.Disabled) return;
+            TimerWindow.Topmost = false;
+
+            var hWnd = new WindowInteropHelper(TimerWindow).Handle;
+            SetWindowPos(hWnd, new IntPtr(1), 0, 0, 0, 0, 19U);
+        }
+
+        [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y,
+                                                                          int cx, int cy, uint uFlags);
+
+        #endregion
+
+        #region Disable
+
+        public void ToggleEnabled() {
+            Config.Disabled = !Config.Disabled;
+            if(Config.Disabled) {
+                StopTimer();
+                UnregisterShortcuts();
+                _activityCheckTimer.Stop();
+                _inactivityPauseActive = false;
+                _config.ResetConditions.Satisfied -= ResetConditionsOnSatisfied;
+                SystemEvents.SessionSwitch -= SysEventsCheck;
+                _dailyResetTimer?.Dispose();
+                TimerWindow?.Close();
             } else {
-                _lastVisibility = TimerWindow.Visibility;
-                TimerWindow.Visibility = Visibility.Hidden;
+                Config = _config; //resubscribe to whatever is needed
+                if(Config.Visible) ShowTimer();
+                Debug.Assert(TimerWindow != null, nameof(TimerWindow) + " != null");
             }
         }
 
@@ -197,6 +242,7 @@ namespace Timer {
         }
 
         public void RequestResetTimer() {
+            if(Config.Disabled) return;
             if(_finishedSet && Config.ResetConditions.IsSat() || !_finishedSet && Config.AllowResetWhileRunning) {
                 ResetTimer();
                 return;
@@ -215,11 +261,19 @@ namespace Timer {
             }
         }
 
+        private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
+            if(Config.AutoResetOnConditions) {
+                ResetTimer();
+                StartStopForDesktopsActive(VirtualDesktopManager.CurrentDesktop());
+            }
+        }
+
         #endregion
 
         #region StartStop
 
         public void StartTimer() {
+            if(Config.Disabled) return;
             if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) {
                 _timer.Start();
                 TimersService.Singleton.isStopAll = false;
@@ -242,7 +296,7 @@ namespace Timer {
 
             DateTime now = DateTime.Now;
             if(now > Config.DailyResetTime.AddSeconds(-10)) {
-                if(!newConfig) ResetTimer();
+                if(!newConfig || now > Config.DailyResetTime.AddDays(1)) ResetTimer();
 
                 Config.DailyResetTime = DateTime.Today.AddMinutes(Config.DailyResetTime.TimeOfDay.TotalMinutes);
 
@@ -259,11 +313,10 @@ namespace Timer {
         #region Settings
 
         public async Task<ButtonResult> OpenSettings() {
-            bool wasRunning = IsRunning;
+            bool wasRunning = Running;
             StopTimer();
             IDialogResult r = await Dialogs.ShowDialogAsync(nameof(TimerSettingsView),
                                                             new DialogParameters {{nameof(ITimer), this}});
-            RegisterShortcuts(Config);
             if(wasRunning) StartTimer();
             return r.Result;
         }
@@ -276,20 +329,25 @@ namespace Timer {
 
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
+        public void RegisterShortcuts() { RegisterShortcuts(Config); }
         public void RegisterShortcuts(TimerConfig timerConfig) {
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ResetShortcut),
-                                         RequestResetTimer,
-                                         CompatibilityType.Reset);
+                                         RequestResetTimer, CompatibilityType.Reset);
 
-            int NextTimerState(int r) => (int) (IsRunning ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
+            int NextTimerState(int r) => (int) (Running ? TimerHotkeyState.ShouldStop : TimerHotkeyState.ShouldStart);
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.StartShortcut), StartTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStart, NextTimerState);
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.StopShortcut), StopTimer,
                                          CompatibilityType.StartStop, (int) TimerHotkeyState.ShouldStop, NextTimerState);
 
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut),
-                                         ShowHideTimer,
-                                         CompatibilityType.Visibility);
+                                         ToggleVisibility, CompatibilityType.Visibility);
+        }
+        private void UnregisterShortcuts() {
+            HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut));
+            HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.StartShortcut));
+            HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.StopShortcut));
+            HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.ToggleVisibilityShortcut));
         }
 
         #endregion
@@ -307,7 +365,6 @@ namespace Timer {
         #region LockChecking
 
         private void SysEventsCheck(object sender, SessionSwitchEventArgs e) {
-            if(!Config.LockedPauseEnabled) return;
             switch(e.Reason) {
                 case SessionSwitchReason.SessionLock:
                     if(!IsOrWasRunning) return;
@@ -343,7 +400,6 @@ namespace Timer {
 
         private void InactivityCheck() {
             if(Config.InactivityPauseEnabled && GetInactiveMinutes() > Config.InactivityMinutes) {
-                if(!IsOrWasRunning) return;
                 _inactivityPauseActive = true;
                 StopTimer();
                 _activityCheckTimer.Start();

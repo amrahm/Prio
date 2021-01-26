@@ -9,6 +9,8 @@ namespace Timer {
     public class TimerConfig : NotifyPropertyChanged {
         public Guid InstanceID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
+        public bool Visible { get; set; } = true;
+        public bool Disabled { get; set; }
         public bool ShowName { get; set; } = true;
         public bool ShowHours { get; set; } = true;
         public bool ShowMinutes { get; set; } = true;

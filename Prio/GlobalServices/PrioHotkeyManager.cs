@@ -45,14 +45,13 @@ namespace Prio.GlobalServices {
                     RegistrationToShortcut[registration] = registration.Shortcut;
                     return true;
                 }
-                UnregisterHotkey(registration);
 
                 PropertyInfo sProp = source.GetType().GetProperty(sourcePropName);
                 Debug.Assert(sProp != null, nameof(sProp) + " != null");
                 sProp.SetValue(source, null);
 
-                Dialogs.ShowNotification($"Unable to register '{registration.HotkeyName}'\n" +
-                                         $"The shortcut '{registration.Shortcut}' is already registered elsewhere",
+                Dialogs.ShowNotification($"Unable to register <italic>{registration.HotkeyName}</italic>\n" +
+                                         $"The shortcut <italic>{registration.Shortcut}</italic> is already registered elsewhere",
                                          "Unable to Set Shortcut");
                 return false;
             }

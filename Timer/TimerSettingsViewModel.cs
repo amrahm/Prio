@@ -10,7 +10,7 @@ using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
 namespace Timer {
     public class TimerSettingsViewModel : NotifyPropertyWithDependencies, IDialogAware {
-        private ITimer Model { get; set; }
+        private ITimer Timer { get; set; }
         public string Title { get; } = "Timer Settings";
         public event Action<IDialogResult> RequestClose;
 
@@ -64,7 +64,7 @@ namespace Timer {
 
         public TimerSettingsViewModel() {
             AddResetConditionCommand =
-                    new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Model)));
+                    new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Timer)));
             AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction(Config.InstanceID)));
 
             SelectColorCommand = new DelegateCommand<object>(zone => {
@@ -77,9 +77,9 @@ namespace Timer {
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
                 ApplyConfig();
-                TimersService.Singleton.Timers.Add(Model);
+                TimersService.Singleton.Timers.Add(Timer);
                 TimersService.Singleton.SaveSettings();
-                Model.ShowTimer();
+                Timer.ShowTimer();
             });
             OkCommand = new DelegateCommand(() => {
                 ApplyConfig();
@@ -88,16 +88,16 @@ namespace Timer {
         }
 
         private void ApplyConfig() {
-            Model.Config = Config.DeepCopy();
-            Model.SaveSettings();
+            Timer.Config = Config.DeepCopy();
+            Timer.SaveSettings();
         }
 
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
 
         public void OnDialogOpened(IDialogParameters parameters) {
-            Model = parameters.GetValue<ITimer>(nameof(ITimer));
-            Config = Model.Config.DeepCopy();
+            Timer = parameters.GetValue<ITimer>(nameof(ITimer));
+            Config = Timer.Config.DeepCopy();
         }
     }
 }

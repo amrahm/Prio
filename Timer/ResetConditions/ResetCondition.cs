@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Newtonsoft.Json;
-using Prio.GlobalServices;
-using Prism.Ioc;
 using WeakEvent;
 using static Infrastructure.SharedResources.UnityInstance;
 
@@ -86,7 +84,7 @@ namespace Timer {
                         SecondsLeft -= 1;
                     break;
                 case ResetConditionType.Dependency:
-                    if(MustRunForXEnabled && DependencyTimer.IsRunning)
+                    if(MustRunForXEnabled && DependencyTimer.Running)
                         SecondsLeft -= 1;
                     break;
             }
