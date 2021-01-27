@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using JetBrains.Annotations;
 using PropertyChanged;
 using static Infrastructure.SharedResources.ShortcutDefinition;
 
 namespace Infrastructure.SharedResources {
     /// <summary> Interaction logic for ShortcutSetter.xaml </summary>
     public partial class ShortcutSetter : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
+        [UsedImplicitly] public event PropertyChangedEventHandler PropertyChanged;
 
         #region Label DP
 
@@ -21,7 +22,7 @@ namespace Infrastructure.SharedResources {
 
         /// <summary> Identifies the Label dependency property </summary>
         public static readonly DependencyProperty LabelProperty =
-            DependencyProperty.Register(nameof(Label), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
+                DependencyProperty.Register(nameof(Label), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
 
         #endregion
 
@@ -35,7 +36,7 @@ namespace Infrastructure.SharedResources {
 
         /// <summary> Identifies the Hint dependency property </summary>
         public static readonly DependencyProperty HintProperty =
-            DependencyProperty.Register(nameof(Hint), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
+                DependencyProperty.Register(nameof(Hint), typeof(string), typeof(ShortcutSetter), new PropertyMetadata(""));
 
         #endregion
 

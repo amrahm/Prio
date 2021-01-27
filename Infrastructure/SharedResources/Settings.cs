@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -8,7 +9,12 @@ namespace Infrastructure.SharedResources {
     public static class Settings {
         private const string PATH = "./prioConfig.json";
 
-        public static bool DoSettingsExists() => File.Exists(PATH) && File.ReadAllText(PATH).Trim().Length > 5;
+        private static readonly List<string> BakAdditions = new() {"", ".bak0", ".bak1", ".bak2"};
+
+        public static bool SettingsExists() => BakAdditions.Any(addition => _SettingsExists($"{PATH}{addition}"));
+
+        private static bool _SettingsExists(string path = PATH) =>
+                File.Exists(path) && File.ReadAllText(path).Trim().Length > 5;
 
         /// <summary> Save settings for a module, or a specific instance of a module if an instanceID is supplied </summary>
         /// <typeparam name="T"> Settings class for the module </typeparam>
@@ -19,7 +25,7 @@ namespace Infrastructure.SharedResources {
                 return !File.Exists(path) || File.GetLastWriteTime(path) <= DateTime.Now.AddHours(-hours);
             }
 
-            if(!DoSettingsExists()) {
+            if(!_SettingsExists()) {
                 File.WriteAllText(PATH, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
             } else if(FileOlderOrNull($"{PATH}.bak0", 1)) {
                 // w/ constant saves, bak0 would be [0, 1) hours old
@@ -41,10 +47,22 @@ namespace Infrastructure.SharedResources {
         /// <typeparam name="T"> Settings class for the module </typeparam>
         /// <param name="moduleName"> Name of the module to load </param>
         public static T LoadSettings<T>(string moduleName) where T : class {
-            if(!DoSettingsExists()) return null; //TODO write code to check for .bak files first
+            T setting = null;
 
-            var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(PATH));
-            return fullConfig.TryGetValue(moduleName, out object mDictObj) ? ((JObject) mDictObj).ToObject<T>() : null;
+            foreach(string addition in BakAdditions) {
+                try {
+                    string path = $"{PATH}{addition}";
+                    if(!_SettingsExists(path)) continue;
+
+                    var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path));
+                    setting = (fullConfig.GetValueOrDefault(moduleName, null) as JObject)?.ToObject<T>();
+                    if(setting != null) break;
+                } catch(Exception) {
+                    // ignored
+                }
+            }
+
+            return setting;
         }
     }
 

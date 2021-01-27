@@ -15,7 +15,7 @@ namespace MainConfig {
         }
 
         public void OnInitialized(IContainerProvider containerProvider) {
-            if(!Settings.DoSettingsExists())
+            if(!Settings.SettingsExists())
                 containerProvider.Resolve<IMainConfigService>().ShowConfigWindow();
         }
     }
