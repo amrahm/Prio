@@ -14,7 +14,7 @@ namespace TimersList {
 
         public enum VisEnableState { Visible, Invisible, Disabled }
 
-        private VisEnableState VisEnable => Timer.Config.Disabled ?
+        private VisEnableState VisEnable => !Timer.Config.Enabled ?
                 VisEnableState.Disabled :
                 Timer.Config.Visible ? VisEnableState.Visible : VisEnableState.Invisible;
 
@@ -34,14 +34,14 @@ namespace TimersList {
             Timer = timer;
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
             ToggleVisState = new DelegateCommand(() => {
-                if(Timer.Config.Disabled) {
-                    Timer.Config.Disabled = false;
+                if(!Timer.Config.Enabled) {
+                    Timer.Config.Enabled = true;
                     Timer.SetVisibility(true);
                 } else if(Timer.Config.Visible) Timer.ToggleVisibility();
                 else Timer.ToggleEnabled();
             });
             DeleteTimer = new DelegateCommand(() => {
-                //TODO 
+                TimersService.Singleton.DeleteTimer(Timer.Config.InstanceID);
             });
         }
     }

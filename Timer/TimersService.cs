@@ -6,6 +6,7 @@ using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prio.GlobalServices;
+using Prism.Services.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
@@ -40,6 +41,20 @@ namespace Timer {
             GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();
             Settings.SaveSettings(GeneralConfig, ModuleNames.TIMER);
             RegisterShortcuts(GeneralConfig);
+        }
+
+        public void DeleteTimer(Guid id) {
+            ITimer timer = GetTimer(id);
+            var r = Dialogs.ShowNotification("Are you sure you want to delete this timer?\n\nThis cannot be undone.",
+                                             $"Deleting {timer.Config.Name}", hasCancel: true, customOk: "YES",
+                                             customCancel: "NO").Result;
+
+            if(r.Result == ButtonResult.OK) {
+                Timers.Remove(timer);
+                GeneralConfig.TimerConfigs.Remove(timer.Config);
+                timer.Dispose();
+                SaveSettings();
+            }
         }
 
         #region VisibilityHotkeyStuff

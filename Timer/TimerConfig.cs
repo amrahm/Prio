@@ -7,10 +7,10 @@ using static Infrastructure.SharedResources.ColorUtil;
 namespace Timer {
     [Serializable]
     public class TimerConfig : NotifyPropertyChanged {
-        public Guid InstanceID { get; set; } = Guid.NewGuid();
+        public Guid InstanceID { get; init; } = Guid.NewGuid();
         public string Name { get; set; }
         public bool Visible { get; set; } = true;
-        public bool Disabled { get; set; }
+        public bool Enabled { get; set; } = true;
         public bool ShowName { get; set; } = true;
         public bool ShowHours { get; set; } = true;
         public bool ShowMinutes { get; set; } = true;
@@ -90,6 +90,9 @@ namespace Timer {
                 _ => throw new ArgumentOutOfRangeException(nameof(zone), zone, null)
             };
         }
+
+        public override bool Equals(object obj) => this == obj || obj is TimerConfig o && InstanceID.Equals(o.InstanceID);
+        public override int GetHashCode() => InstanceID.GetHashCode();
     }
 
     public enum TimerColorZone { Background, Text, NameBackground, NameText, Divider }

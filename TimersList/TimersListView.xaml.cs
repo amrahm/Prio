@@ -29,16 +29,16 @@ namespace TimersList {
                 switch(e.Action) {
                     case NotifyCollectionChangedAction.Add: {
                         Debug.Assert(e.NewItems != null, "e.NewItems != null");
-                        foreach(TimersListItemView newItem in e.NewItems) {
-                            region.AddToRegionScopedRMAware(newItem);
+                        foreach(TimersListItemView item in e.NewItems) {
+                            region.AddToRegionScopedRMAware(item);
                             SizeChangedEventHandler();
                         }
                         break;
                     }
                     case NotifyCollectionChangedAction.Remove: {
-                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
-                        foreach(TimersListItemView newItem in e.NewItems) {
-                            region.Remove(newItem);
+                        Debug.Assert(e.OldItems != null, "e.OldItems != null");
+                        foreach(TimersListItemView item in e.OldItems) {
+                            region.Remove(item);
                             SizeChangedEventHandler();
                         }
                         break;

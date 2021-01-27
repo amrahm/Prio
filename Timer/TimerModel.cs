@@ -29,7 +29,7 @@ namespace Timer {
 
                 NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
 
-                if(_config != null && !_config.Disabled) {
+                if(_config != null && _config.Enabled) {
                     RegisterShortcuts();
                     _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
                     SetupTimerActions();
@@ -134,7 +134,7 @@ namespace Timer {
         #region VirtualDesktops
 
         private void HandleDesktopChanged(int newDesktop) {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             TimerWindow?.Dispatcher.Invoke(() => {
                 Config.DesktopsVisible ??= new HashSet<int>();
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
@@ -160,7 +160,7 @@ namespace Timer {
         #region VisibilityStuff
 
         public void ShowTimer(bool shouldActivate = false) {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             if(TimerWindow != null) {
                 if(shouldActivate) TimerWindow.Activate();
                 return;
@@ -185,7 +185,7 @@ namespace Timer {
         }
 
         public void SetVisibility(bool vis) {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             Config.Visible = vis;
             if(Config.Visible) ShowTimer();
             else TimerWindow?.Close();
@@ -194,11 +194,11 @@ namespace Timer {
 
 
         public void SetTopmost() {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             TimerWindow.Topmost = true;
         }
         public void SetBottommost() {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             TimerWindow.Topmost = false;
 
             var hWnd = new WindowInteropHelper(TimerWindow).Handle;
@@ -212,9 +212,13 @@ namespace Timer {
 
         #region Disable
 
-        public void ToggleEnabled() {
-            Config.Disabled = !Config.Disabled;
-            if(Config.Disabled) {
+        private void SetEnabled(bool set) {
+            Config.Enabled = set;
+            if(Config.Enabled) {
+                Config = _config; //resubscribe to whatever is needed
+                if(Config.Visible) ShowTimer();
+                Debug.Assert(TimerWindow != null, nameof(TimerWindow) + " != null");
+            } else {
                 StopTimer();
                 UnregisterShortcuts();
                 _activityCheckTimer.Stop();
@@ -223,12 +227,9 @@ namespace Timer {
                 SystemEvents.SessionSwitch -= SysEventsCheck;
                 _dailyResetTimer?.Dispose();
                 TimerWindow?.Close();
-            } else {
-                Config = _config; //resubscribe to whatever is needed
-                if(Config.Visible) ShowTimer();
-                Debug.Assert(TimerWindow != null, nameof(TimerWindow) + " != null");
             }
         }
+        public void ToggleEnabled() => SetEnabled(!Config.Enabled);
 
         #endregion
 
@@ -242,7 +243,7 @@ namespace Timer {
         }
 
         public void RequestResetTimer() {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             if(_finishedSet && Config.ResetConditions.IsSat() || !_finishedSet && Config.AllowResetWhileRunning) {
                 ResetTimer();
                 return;
@@ -273,7 +274,7 @@ namespace Timer {
         #region StartStop
 
         public void StartTimer() {
-            if(Config.Disabled) return;
+            if(!Config.Enabled) return;
             if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) {
                 _timer.Start();
                 TimersService.Singleton.isStopAll = false;
@@ -424,8 +425,7 @@ namespace Timer {
         private bool _disposed;
         public void Dispose() {
             if(_disposed) return;
-            SystemEvents.SessionSwitch -= SysEventsCheck;
-            _dailyResetTimer.Dispose();
+            SetEnabled(false);
 
             _disposed = true;
             GC.SuppressFinalize(this);

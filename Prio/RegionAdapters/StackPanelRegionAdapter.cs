@@ -22,8 +22,8 @@ namespace Prio.RegionAdapters {
                         break;
                     }
                     case NotifyCollectionChangedAction.Remove: {
-                        Debug.Assert(e.NewItems != null, "e.NewItems != null");
-                        foreach(FrameworkElement element in e.NewItems) {
+                        Debug.Assert(e.OldItems != null, "e.OldItems != null");
+                        foreach(FrameworkElement element in e.OldItems) {
                             regionTarget.Children.Remove(element);
                         }
                         break;
