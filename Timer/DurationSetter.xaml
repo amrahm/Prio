@@ -6,6 +6,7 @@
              xmlns:st="http://schemas.spicytaco.io/"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:calc="clr-namespace:CalcBinding;assembly=CalcBinding"
+             xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              mc:Ignorable="d"
              x:Name="Root">
 
@@ -25,18 +26,23 @@
 			</Style>
 		</Grid.Resources>
 		<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5" TextAlignment="Center"
-		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##"
+		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##" sr:TextBoxExtensions.EnforceInt="True"
 		         Text="{Binding ElementName=Root, Path=Hours, Mode=TwoWay, StringFormat=D2}" />
-		<TextBlock Text="h" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}" Margin="0, 5, 10, 5" />
-		<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{calc:Binding !ShowHms, ElementName=Root}" />
+		<TextBlock Text="h" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}"
+		           Margin="0, 5, 10, 5" />
+		<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center"
+		           Visibility="{calc:Binding !ShowHms, ElementName=Root}" />
 		<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5" TextAlignment="Center"
-		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##"
+		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##" sr:TextBoxExtensions.EnforceInt="True"
 		         Text="{Binding ElementName=Root, Path=Minutes, Mode=TwoWay, StringFormat=D2}" />
-		<TextBlock Text="m" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}" Margin="0, 5, 10, 5" />
-		<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{calc:Binding !ShowHms, ElementName=Root}" />
+		<TextBlock Text="m" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}"
+		           Margin="0, 5, 10, 5" />
+		<TextBlock Text=":" HorizontalAlignment="Center" VerticalAlignment="Center"
+		           Visibility="{calc:Binding !ShowHms, ElementName=Root}" />
 		<TextBox MinWidth="60" HorizontalAlignment="Stretch" Margin="5" TextAlignment="Center"
-		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##"
+		         Style="{StaticResource BiggishBox}" hc:InfoElement.Placeholder="##" sr:TextBoxExtensions.EnforceInt="True"
 		         Text="{Binding ElementName=Root, Path=Seconds, Mode=TwoWay, StringFormat=D2}" />
-		<TextBlock Text="s" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}" Margin="0, 5, 10, 5" />
+		<TextBlock Text="s" VerticalAlignment="Bottom" Visibility="{calc:Binding ShowHms, ElementName=Root}"
+		           Margin="0, 5, 10, 5" />
 	</st:AutoGrid>
 </UserControl>

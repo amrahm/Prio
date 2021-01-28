@@ -122,22 +122,6 @@ namespace Infrastructure.SharedResources {
         /// <summary> Turns the 0-indexed Set of numbers into a 1-indexed string </summary>
         public static string DesktopSetToString(IEnumerable<int> set) =>
                 string.Join(", ", set?.Select(x => x + 1) ?? new HashSet<int>());
-
-
-        private static readonly Regex Rx = new(@"[^\d,\s]|((?<=,\s),\s?)|(?<!\d),|(?<!,)\s|(?<=\d{2})\d",
-                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        public static void EnforceIntList(TextBox textBox) {
-            textBox.TextChanged += (_,  _) => {
-                int oldIndex = textBox.CaretIndex;
-                string oldValue = textBox.Text;
-                string validInput = Rx.Replace(textBox.Text, "");
-                textBox.Text = validInput;
-
-                if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
-            };
-            textBox.LostFocus += (_,  _) => textBox.Text = textBox.Text.Trim().Trim(',');
-        }
     }
 
     public static class EnumerableExtensions {

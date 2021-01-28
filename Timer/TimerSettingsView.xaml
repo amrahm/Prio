@@ -68,7 +68,7 @@
 								<TextBlock Text="Show Seconds" Style="{StaticResource BaseControlStyle}" />
 							</StackPanel>
 						</st:AutoGrid>
-						<local:DurationSetter Duration="{Binding Config.Duration, Mode=TwoWay}" />
+						<local:DurationSetter x:Name="DurationSetter" Duration="{Binding Config.Duration, Mode=TwoWay}" />
 					</StackPanel>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Hotkeys" Style="{StaticResource SubHeaderLabelStyle}" />
@@ -125,16 +125,16 @@
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 
 						<ContentControl MinWidth="220" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
-							<TextBox Margin="5, 2" Name="ShowDesktops" Text="{Binding ShowDesktopsConverter}"
+							<TextBox Margin="5, 2" Text="{Binding ShowDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' to show on all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Show on desktops:"
-							         Style="{StaticResource NormalTextBox}" />
+							         Style="{StaticResource NormalTextBox}" sr:TextBoxExtensions.EnforceIntList="True" />
 						</ContentControl>
 						<ContentControl MinWidth="270" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch">
-							<TextBox Margin="5, 2, 5, 10" Name="ActiveDesktops" Text="{Binding ActiveDesktopsConverter}"
+							<TextBox Margin="5, 2, 5, 10" Text="{Binding ActiveDesktopsConverter}"
 							         hc:InfoElement.TitleWidth="Auto" hc:InfoElement.Placeholder="e.g. '2, 3' or '0' for all"
 							         hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="Auto-activate on desktops:"
-							         Style="{StaticResource NormalTextBox}" />
+							         Style="{StaticResource NormalTextBox}" sr:TextBoxExtensions.EnforceIntList="True" />
 						</ContentControl>
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" IsChecked="{Binding Config.LockedPauseEnabled}" />
@@ -143,8 +143,8 @@
 						<StackPanel Orientation="Horizontal">
 							<CheckBox Margin="5" IsChecked="{Binding Config.InactivityPauseEnabled}" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Pause after " />
-							<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50"
-							         Text="{Binding Config.InactivityMinutes}" />
+							<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Config.InactivityMinutes}"
+							         sr:TextBoxExtensions.EnforceDouble="True" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text=" Minutes of Inactivity" />
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
@@ -251,6 +251,7 @@
 								<!-- Require the controls to be valid in order to press OK -->
 								<MultiDataTrigger>
 									<MultiDataTrigger.Conditions>
+										<Condition Binding="{Binding ElementName=DurationSetter, Path=(Validation.HasError)}" Value="false" />
 										<Condition Binding="{Binding ElementName=TimePicker, Path=(Validation.HasError)}" Value="false" />
 									</MultiDataTrigger.Conditions>
 									<Setter Property="IsEnabled" Value="true" />

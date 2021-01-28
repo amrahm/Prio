@@ -9,7 +9,11 @@ namespace Infrastructure.SharedResources {
     public static class Settings {
         private const string PATH = "./prioConfig.json";
 
-        private static readonly List<string> BakAdditions = new() {"", ".bak0", ".bak1", ".bak2"};
+        private static readonly List<string> BakAdditions = new() {""};
+
+        static Settings() {
+            for(int i = 0; i <= 5; i++) BakAdditions.Add($".bak{i}");
+        }
 
         public static bool SettingsExists() => BakAdditions.Any(addition => _SettingsExists($"{PATH}{addition}"));
 
@@ -29,10 +33,12 @@ namespace Infrastructure.SharedResources {
                 File.WriteAllText(PATH, JsonConvert.SerializeObject(new Dictionary<string, object>(), Formatting.Indented));
             } else if(FileOlderOrNull($"{PATH}.bak0", 1)) {
                 // w/ constant saves, bak0 would be [0, 1) hours old
-                // bak1 would be [1, 24) hours old, and bak2 would be [24, 48) hours old.
+                // bak1 would be [1, 24) hours old, and bak2 would be [24, 48) hours old, etc.
                 if(FileOlderOrNull($"{PATH}.bak1", 24)) {
-                    if(File.Exists($"{PATH}.bak1")) File.Copy($"{PATH}.bak1", $"{PATH}.bak2", true);
-                    if(File.Exists($"{PATH}.bak0")) File.Copy($"{PATH}.bak0", $"{PATH}.bak1", true);
+                    for(int i = BakAdditions.Count - 2; i >= 0; i--) {
+                        (string ext, string next) = (BakAdditions[i], BakAdditions[i + 1]);
+                        if(File.Exists($"{PATH}{ext}")) File.Copy($"{PATH}{ext}", $"{PATH}{next}", true);
+                    }
                 }
                 File.Copy(PATH, $"{PATH}.bak0", true);
             }

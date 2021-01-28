@@ -36,7 +36,8 @@
 			<hc:FlexPanel x:Name="CooldownOptions" FlexWrap="Wrap" JustifyContent="SpaceAround">
 				<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Wait for" />
-					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.WaitForMinutes}" />
+					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.WaitForMinutes}"
+					         sr:TextBoxExtensions.EnforceDouble="True" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 				</StackPanel>
 				<ContentControl Template="{StaticResource HintAdorner}" Tag="e.g. '2, 3' or '0' for all"
@@ -44,8 +45,8 @@
 					<StackPanel Orientation="Horizontal" Margin="10, 5, 5, 5">
 						<CheckBox IsChecked="{Binding Model.OffDesktopsEnabled}" />
 						<TextBlock Style="{StaticResource BaseControlStyle}" Text="While off of desktops" />
-						<TextBox x:Name="OffDesktops" Style="{StaticResource NormalTextBox}" MinWidth="60"
-						         Text="{Binding OffDesktopsConverter}" />
+						<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding OffDesktopsConverter}"
+						         sr:TextBoxExtensions.EnforceIntList="True" />
 					</StackPanel>
 				</ContentControl>
 			</hc:FlexPanel>
@@ -56,13 +57,14 @@
 				          ItemsSource="{Binding Timers, FallbackValue=null}" sr:ComboBoxAutoWidthBehavior.ComboBoxAutoWidth="True"
 				          SelectedValue="{Binding Model.DependencyTimer}" />
 				<StackPanel Orientation="Horizontal" Margin="10, 5">
-					<CheckBox IsChecked="{Binding Model.MustRunForXEnabled}" />
+					<CheckBox IsChecked="{Binding MustRunForXEnabled}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must run for" />
-					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.MustRunForXMinutes}" />
+					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.MustRunForXMinutes}"
+					         sr:TextBoxExtensions.EnforceDouble="True" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" Margin="10, 5, 5, 5">
-					<CheckBox IsChecked="{Binding Model.MustBeFinished}" />
+					<CheckBox IsChecked="{Binding MustBeFinished}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must be finished" />
 				</StackPanel>
 			</hc:FlexPanel>

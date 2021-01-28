@@ -28,9 +28,6 @@ namespace Timer {
 
             var vm = (TimerSettingsViewModel) DataContext;
 
-            VirtualDesktopExtensions.EnforceIntList(ShowDesktops);
-            VirtualDesktopExtensions.EnforceIntList(ActiveDesktops);
-
             Loaded += (_, _) => {
                 this.InitializeDraggable();
 

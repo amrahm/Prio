@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Timer"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="http://schemas.spicytaco.io/"
+			 xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              mc:Ignorable="d" d:DesignWidth="550"
              d:DataContext="{d:DesignInstance local:OverflowActionViewModel}">
 
@@ -23,7 +24,8 @@
 		<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
 			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Trigger after" />
-				<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.AfterMinutes}" />
+				<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.AfterMinutes}" 
+				         sr:TextBoxExtensions.EnforceDouble="True"/>
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 			</StackPanel>
 			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">

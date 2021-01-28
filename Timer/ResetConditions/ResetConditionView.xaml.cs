@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using Infrastructure.SharedResources;
 
 namespace Timer {
     /// <summary> Interaction logic for ResetConditionView.xaml </summary>
@@ -8,8 +7,6 @@ namespace Timer {
         public ResetConditionView(ResetConditionViewModel vm) {
             DataContext = vm;
             InitializeComponent();
-
-            VirtualDesktopExtensions.EnforceIntList(OffDesktops);
 
             void ToggleOptions(ResetCondition resetConditionModel) {
                 switch(resetConditionModel.Type) {

@@ -31,9 +31,9 @@ namespace Timer {
             }
         }
 
-        public bool MustRunForXEnabled { get; set; } //TODO validation to ensure this or MustBeFinished is true, but not both
+        public bool MustRunForXEnabled { get; set; }
         public double MustRunForXMinutes { get; set; }
-        public bool MustBeFinished { get; set; }
+        public bool MustBeFinished { get; set; } = true;
         public bool TimerFinished { get; set; }
 
         public string UnmetString() {
@@ -46,8 +46,11 @@ namespace Timer {
                     break;
                 case ResetConditionType.Dependency:
                     st += $"<italic>{DependencyTimer.Config.Name}</italic> must";
-                    if(MustBeFinished) st += " be finished";
-                    else if(MustRunForXEnabled) st += $" run for {SecondsLeft / 60} minutes";
+                    if(MustBeFinished) {
+                        st += " be finished";
+                        if(MustRunForXEnabled) st += " or";
+                    }
+                    if(MustRunForXEnabled) st += $" run for {SecondsLeft / 60} minutes";
                     break;
             }
             return st;
@@ -98,8 +101,7 @@ namespace Timer {
         public bool IsSatisfied() {
             return Type switch {
                 ResetConditionType.Cooldown => SecondsLeft <= 0,
-                ResetConditionType.Dependency => (!MustRunForXEnabled || SecondsLeft <= 0) &&
-                                                 (!MustBeFinished || TimerFinished),
+                ResetConditionType.Dependency => MustRunForXEnabled && SecondsLeft <= 0 || MustBeFinished && TimerFinished,
                 _ => true
             };
         }

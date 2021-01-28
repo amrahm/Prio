@@ -29,7 +29,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:30:00",
-        "TimeLeft": "00:10:39",
+        "TimeLeft": "00:07:16",
         "DesktopsVisible": [
           -1
         ],
@@ -330,7 +330,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-01-27T19:01:00-06:00"
+        "DailyResetTime": "2021-01-28T19:01:00-06:00"
       }
     ]
   }
