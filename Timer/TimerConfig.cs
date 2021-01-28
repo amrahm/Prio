@@ -90,9 +90,6 @@ namespace Timer {
                 _ => throw new ArgumentOutOfRangeException(nameof(zone), zone, null)
             };
         }
-
-        public override bool Equals(object obj) => this == obj || obj is TimerConfig o && InstanceID.Equals(o.InstanceID);
-        public override int GetHashCode() => InstanceID.GetHashCode();
     }
 
     public enum TimerColorZone { Background, Text, NameBackground, NameText, Divider }
