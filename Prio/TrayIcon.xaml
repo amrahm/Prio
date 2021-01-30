@@ -8,7 +8,7 @@
                 mc:Ignorable="d"
                 d:DesignHeight="450" d:DesignWidth="800"
                 IconSource="/Infrastructure;component/SharedResources/images/prio.ico"
-                ToolTipText="hello world"
+                ToolTipText="Click to bring timers to front. Double click to open settings."
                 LeftClickCommand="{Binding ShowWindows}"
                 DoubleClickCommand="{Binding OpenMainSettings}">
 

@@ -27,6 +27,8 @@ namespace TimersList {
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        //TODO change context menu for timers shown to have these commands as well as a duplicate button
+
         public DelegateCommand OpenTimerSettings { [UsedImplicitly] get; }
         public DelegateCommand ToggleVisState { [UsedImplicitly] get; }
         public DelegateCommand DeleteTimer { [UsedImplicitly] get; }
