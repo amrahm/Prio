@@ -175,7 +175,6 @@ namespace Infrastructure.SharedResources {
         public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor,
                                           double dpiHeightFactor) {
             window.WindowStartupLocation = WindowStartupLocation.Manual;
-            //TODO double check below for 2nd monitor plugged in vs not
             window.Left = (screen.Width / dpiWidthFactor - window.ActualWidth) / 2 + screen.Left;
             window.Top = (screen.Height / dpiHeightFactor - window.ActualHeight) / 2 + screen.Top;
         }

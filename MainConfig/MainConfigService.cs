@@ -2,17 +2,16 @@
 using Infrastructure.Prism;
 using JetBrains.Annotations;
 using Prism.Regions;
-using Unity;
+using Prism.Ioc;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace MainConfig {
     [UsedImplicitly]
     public class MainConfigService : IMainConfigService {
         private MainConfigView _configView;
-        private readonly IUnityContainer _container;
         private readonly IRegionManager _regionManager;
 
-        public MainConfigService(IUnityContainer container, IRegionManager regionManager) {
-            _container = container;
+        public MainConfigService(IRegionManager regionManager) {
             _regionManager = regionManager;
         }
 
@@ -22,7 +21,7 @@ namespace MainConfig {
                 return;
             }
 
-            _configView = _container.Resolve<MainConfigView>();
+            _configView = Container.Resolve<MainConfigView>();
             _configView.Closed += (_,  _) => {
                 _configView = null;
             };
