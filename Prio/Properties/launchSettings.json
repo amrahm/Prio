@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Prio": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\alt\\Drive\\TheDodgeballs\\Prio\\Prio\\bin\\Release\\net5.0-windows\\publish\\Prio.exe"
+    }
+  }
+}
