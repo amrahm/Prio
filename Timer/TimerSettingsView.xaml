@@ -85,8 +85,8 @@
 							</hc:FlexPanel>
 						</Border>
 					</StackPanel>
-					<DockPanel Width="550" Background="{StaticResource LightBrush}">
-						<TextBlock DockPanel.Dock="Top" Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
+					<st:AutoGrid Rows="auto, *, auto" ColumnWidth="*" Width="550" Background="{StaticResource LightBrush}">
+						<TextBlock Text="Appearance" Style="{StaticResource SubHeaderLabelStyle}" />
 						<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround" AlignContent="SpaceAround">
 							<StackPanel Orientation="Horizontal" Margin="10, 5">
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Background Color:" />
@@ -120,7 +120,18 @@
 								        Command="{Binding SelectColorCommand}" CommandParameter="{x:Static local:TimerColorZone.Divider}" />
 							</StackPanel>
 						</hc:FlexPanel>
-					</DockPanel>
+
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<CheckBox Margin="5" x:Name="RunningColorCheckbox"
+							          IsChecked="{Binding Config.DifferentRunningBackgroundEnabled}" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Change Color When Running" />
+							<Button Style="{StaticResource ColorPickerButton}"
+							        Background="{Binding Config.RunningBackgroundColor, TargetNullValue={StaticResource MediumBrush}}"
+							        Command="{Binding SelectColorCommand}"
+							        CommandParameter="{x:Static local:TimerColorZone.RunningBackground}"
+							        Visibility="{Binding IsChecked, ElementName=RunningColorCheckbox, Converter={StaticResource B2V}}" />
+						</StackPanel>
+					</st:AutoGrid>
 					<StackPanel Width="550" Background="{StaticResource LightBrush}">
 						<TextBlock Text="Misc" Style="{StaticResource SubHeaderLabelStyle}" />
 

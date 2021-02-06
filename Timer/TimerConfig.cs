@@ -43,6 +43,8 @@ namespace Timer {
         public SolidColorBrush NameBackgroundColor { get; set; } = new(FromHex("#7A90AC").ToMediaColor());
         public SolidColorBrush NameTextColor { get; set; } = new(FromHex("#BEF2DC").ToMediaColor());
         public SolidColorBrush DividerColor { get; set; } = new(FromHex("#f8f2d7").ToMediaColor());
+        public bool DifferentRunningBackgroundEnabled { get; set; }
+        public SolidColorBrush RunningBackgroundColor { get; set; } = new(FromHex("#184A8C").ToMediaColor());
         public bool LockedPauseEnabled { get; set; } = true;
         public bool InactivityPauseEnabled { get; set; } = true;
         private double _inactivityMinutes = 2;
@@ -62,6 +64,7 @@ namespace Timer {
             switch(zone) {
                 case TimerColorZone.Background:
                     BackgroundColor = color;
+                    if(!DifferentRunningBackgroundEnabled) RunningBackgroundColor = color;
                     break;
                 case TimerColorZone.Text:
                     TextColor = color;
@@ -75,6 +78,9 @@ namespace Timer {
                 case TimerColorZone.Divider:
                     DividerColor = color;
                     break;
+                case TimerColorZone.RunningBackground:
+                    RunningBackgroundColor = color;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
             }
@@ -87,12 +93,13 @@ namespace Timer {
                 TimerColorZone.NameBackground => NameBackgroundColor,
                 TimerColorZone.NameText => NameTextColor,
                 TimerColorZone.Divider => DividerColor,
+                TimerColorZone.RunningBackground => RunningBackgroundColor,
                 _ => throw new ArgumentOutOfRangeException(nameof(zone), zone, null)
             };
         }
     }
 
-    public enum TimerColorZone { Background, Text, NameBackground, NameText, Divider }
+    public enum TimerColorZone { Background, Text, NameBackground, NameText, Divider, RunningBackground }
 
     public readonly struct WindowPosition {
         public double X { get; }

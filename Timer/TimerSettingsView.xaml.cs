@@ -13,7 +13,6 @@ using static Infrastructure.SharedResources.BindingHelpers;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
-    //TODO add option to change background color when running
     /// <summary> Interaction logic for TimerSettingsView.xaml </summary>
     public partial class TimerSettingsView : IDraggable {
         public List<UIElement> ChildDraggables { get; protected internal set; } = new();
