@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prio.GlobalServices;
 using Prism.Services.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
@@ -15,7 +15,7 @@ namespace Timer {
 
         public TimersGeneralConfig GeneralConfig { get; set; }
 
-        public ObservableHashSet<ITimer> Timers { get; } = new();
+        public ObservableCollection<ITimer> Timers { get; } = new();
         public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
 
 
@@ -33,7 +33,7 @@ namespace Timer {
         }
 
         public void ShowTimers() => Timers.ForEach(t => {
-            t.ShowTimer(true);
+            if(t.Config.Visible) t.ShowTimer(true);
             t.CheckStart();
         });
 
@@ -68,14 +68,12 @@ namespace Timer {
         }
 
         public void TopAll() {
-            CurrVisState = VisibilityState.KeepOnTop;
-            _lastNonHiddenVisState = VisibilityState.KeepOnTop;
+            CurrVisState = _lastNonHiddenVisState = VisibilityState.KeepOnTop;
             foreach(ITimer timer in Timers) timer.SetTopmost();
         }
 
         public void BottomAll() {
-            CurrVisState = VisibilityState.MoveBehind;
-            _lastNonHiddenVisState = VisibilityState.MoveBehind;
+            CurrVisState = _lastNonHiddenVisState = VisibilityState.MoveBehind;
             foreach(ITimer timer in Timers) timer.SetBottommost();
         }
 

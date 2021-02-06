@@ -7,7 +7,7 @@ using static Infrastructure.SharedResources.ColorUtil;
 namespace Timer {
     [Serializable]
     public class TimerConfig : NotifyPropertyChanged {
-        public Guid InstanceID { get; init; } = Guid.NewGuid();
+        public Guid InstanceID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public bool Visible { get; set; } = true;
         public bool Enabled { get; set; } = true;

@@ -22,7 +22,10 @@
 
 	<st:AutoGrid Columns="*, Auto" RowHeight="*">
 
-		<ContentControl prism:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
+		<Grid>
+			<ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
+			<Rectangle Grid.Row="0" Fill="#00000000" />
+		</Grid>
 
 		<st:AutoGrid Rows="*, *, *" ChildMargin="0" ColumnWidth="*" Margin="5, 0">
 			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding OpenTimerSettings}">
@@ -38,4 +41,33 @@
 			</Button>
 		</st:AutoGrid>
 	</st:AutoGrid>
+
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Edit Timer" Command="{Binding OpenTimerSettings}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/settings.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Toggle Visibility" Command="{Binding ToggleVisState}">
+				<MenuItem.Icon>
+					<Image Source="{Binding VisImagePath}" RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete Timer" Command="{Binding DeleteTimer}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/delete.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<Separator />
+			<MenuItem Header="Duplicate Timer" Command="{Binding DuplicateTimer}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/duplicate.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+		</ContextMenu>
+	</UserControl.ContextMenu>
 </UserControl>

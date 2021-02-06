@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -75,6 +74,7 @@ namespace Timer {
         }
 
         public void CheckStart() {
+            if(!Config.Enabled) return;
             if(Config.TimeLeft.TotalSeconds <= 0.01) TimerFinishedRaise();
         }
 
@@ -194,11 +194,11 @@ namespace Timer {
 
 
         public void SetTopmost() {
-            if(!Config.Enabled) return;
+            if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = true;
         }
         public void SetBottommost() {
-            if(!Config.Enabled) return;
+            if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = false;
 
             var hWnd = new WindowInteropHelper(TimerWindow).Handle;
@@ -216,8 +216,8 @@ namespace Timer {
             Config.Enabled = set;
             if(Config.Enabled) {
                 Config = _config; //resubscribe to whatever is needed
+                CheckStart();
                 if(Config.Visible) ShowTimer();
-                Debug.Assert(TimerWindow != null, nameof(TimerWindow) + " != null");
             } else {
                 StopTimer();
                 UnregisterShortcuts();
@@ -274,14 +274,16 @@ namespace Timer {
         #region StartStop
 
         public void StartTimer() {
-            if(!Config.Enabled) return;
-            if(Config.OverflowEnabled || Config.TimeLeft.TotalSeconds > 0) {
-                _timer.Start();
-                TimersService.Singleton.isStopAll = false;
-            }
+            if(!Config.Enabled || Config.TimeLeft.TotalSeconds <= 0 && !Config.OverflowEnabled) return;
+            _timer.Start();
+            this.OnPropertyChanged(); // Notify the viewmodel to change the background if needed
+            TimersService.Singleton.isStopAll = false;
         }
 
-        public void StopTimer() => _timer.Stop();
+        public void StopTimer() {
+            _timer.Stop();
+            this.OnPropertyChanged(); // Notify the viewmodel to change the background if needed
+        }
 
         #endregion
 
@@ -417,7 +419,7 @@ namespace Timer {
 
         #endregion
 
-        public override bool Equals(object obj) => obj is TimerModel other && other.Config.InstanceID == Config.InstanceID;
+        public override bool Equals(object obj) => obj is ITimer other && other.Config.InstanceID.Equals(Config.InstanceID);
         public override int GetHashCode() => Config.InstanceID.GetHashCode();
         public override string ToString() => Config.Name;
 

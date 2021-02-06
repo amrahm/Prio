@@ -1,8 +1,10 @@
 ﻿using System;
 using Infrastructure.SharedResources;
 using JetBrains.Annotations;
+using Prism.Ioc;
 using Prism.Commands;
 using Timer;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace TimersList {
     public class TimersListItemViewModel : NotifyPropertyWithDependencies {
@@ -27,11 +29,10 @@ namespace TimersList {
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        //TODO change context menu for timers shown to have these commands as well as a duplicate button
-
         public DelegateCommand OpenTimerSettings { [UsedImplicitly] get; }
         public DelegateCommand ToggleVisState { [UsedImplicitly] get; }
         public DelegateCommand DeleteTimer { [UsedImplicitly] get; }
+        public DelegateCommand DuplicateTimer { [UsedImplicitly] get; }
         public TimersListItemViewModel(ITimer timer) {
             Timer = timer;
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
@@ -42,8 +43,14 @@ namespace TimersList {
                 } else if(Timer.Config.Visible) Timer.ToggleVisibility();
                 else Timer.ToggleEnabled();
             });
-            DeleteTimer = new DelegateCommand(() => {
-                TimersService.Singleton.DeleteTimer(Timer.Config.InstanceID);
+            DeleteTimer = new DelegateCommand(() => TimersService.Singleton.DeleteTimer(Timer.Config.InstanceID));
+            DuplicateTimer = new DelegateCommand(() => {
+                ITimer copy = Container.Resolve<ITimer>();
+                copy.Config = Timer.Config.DeepCopy();
+                copy.Config.InstanceID = Guid.NewGuid();
+                TimersService.Singleton.Timers.Add(copy);
+                TimersService.Singleton.SaveSettings();
+                copy.ShowTimer();
             });
         }
     }

@@ -92,17 +92,20 @@ namespace Timer {
                     break;
             }
 
-            if(IsSatisfied()) {
+            bool? isSatisfied = IsSatisfied();
+            if(isSatisfied != null && (bool) isSatisfied) {
                 _satisfied.Raise(this, EventArgs.Empty);
                 _conditionTimer.Stop();
             }
         }
 
-        public bool IsSatisfied() {
+        public bool? IsSatisfied() {
             return Type switch {
                 ResetConditionType.Cooldown => SecondsLeft <= 0,
-                ResetConditionType.Dependency => MustRunForXEnabled && SecondsLeft <= 0 || MustBeFinished && TimerFinished,
-                _ => true
+                ResetConditionType.Dependency => DependencyTimer.Config.Enabled ?
+                        MustRunForXEnabled && SecondsLeft <= 0 || MustBeFinished && TimerFinished :
+                        null,
+                _ => null
             };
         }
 

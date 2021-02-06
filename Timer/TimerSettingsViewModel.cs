@@ -77,7 +77,7 @@ namespace Timer {
             CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
             ApplyCommand = new DelegateCommand(() => {
                 ApplyConfig();
-                TimersService.Singleton.Timers.Add(Timer);
+                if(TimersService.Singleton.GetTimer(Config.InstanceID) == null) TimersService.Singleton.Timers.Add(Timer);
                 TimersService.Singleton.SaveSettings();
                 Timer.ShowTimer();
             });

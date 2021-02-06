@@ -52,12 +52,14 @@
 		<ContextMenu>
 			<MenuItem Header="Edit Timer" Command="{Binding OpenTimerSettings}">
 				<MenuItem.Icon>
-					<Image Source="/Infrastructure;component/SharedResources/images/settings.png" />
+					<Image Source="/Infrastructure;component/SharedResources/images/settings.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Prio Settings" Command="{Binding OpenMainSettings}">
 				<MenuItem.Icon>
-					<Image Source="/Infrastructure;component/SharedResources/images/prio.ico" />
+					<Image Source="/Infrastructure;component/SharedResources/images/prio.ico" 
+					       RenderOptions.BitmapScalingMode="Fant" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<Separator />
@@ -65,10 +67,10 @@
 			<MenuItem Header="Reset Timer" Command="{Binding ResetTimer}" />
 			<MenuItem Header="Add 5 Minutes" Command="{Binding AddMinutes}" CommandParameter="5" />
 			<MenuItem Header="Add 10 Minutes" Command="{Binding AddMinutes}" CommandParameter="10" />
-			<MenuItem Header="Add 30 Minutes" Command="{Binding AddMinutes}" CommandParameter="30"  />
+			<MenuItem Header="Add 30 Minutes" Command="{Binding AddMinutes}" CommandParameter="30" />
 			<MenuItem Header="Set Current Time" Command="{Binding SetTime}" />
 			<Separator />
-			<MenuItem Header="Keep Timers On Top" IsChecked="{Binding IsTopAll, Mode=OneWay}" Command="{Binding SetTopAll}"/>
+			<MenuItem Header="Keep Timers On Top" IsChecked="{Binding IsTopAll, Mode=OneWay}" Command="{Binding SetTopAll}" />
 			<Separator />
 			<MenuItem Header="Hide Timer" Command="{Binding HideTimer}" />
 			<MenuItem Header="Exit (Disable) Timer" Command="{Binding DisableTimer}" />

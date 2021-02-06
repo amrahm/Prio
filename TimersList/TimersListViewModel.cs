@@ -5,6 +5,7 @@ using Prism.Ioc;
 using Prism.Services.Dialogs;
 using Timer;
 using Infrastructure.SharedResources;
+using static Infrastructure.SharedResources.UnityInstance;
 
 namespace TimersList {
     public class TimersListViewModel : NotifyPropertyChanged {
@@ -13,8 +14,6 @@ namespace TimersList {
         public DelegateCommand AddTimerCommand { get; }
 
         public TimersListViewModel() {
-            IContainerProvider container = UnityInstance.Container;
-
             // Load existing timers
             foreach(ITimer timer in TimersService.Singleton.Timers)
                 Timers.Add(new TimersListItemView(new TimersListItemViewModel(timer)));
@@ -31,7 +30,7 @@ namespace TimersList {
 
             // Add new timer on button press
             AddTimerCommand = new DelegateCommand(() => {
-                ITimer timer = container.Resolve<ITimer>();
+                ITimer timer = Container.Resolve<ITimer>();
                 if(timer.OpenSettings().Result == ButtonResult.OK) {
                     TimersService.Singleton.Timers.Add(timer);
                     TimersService.Singleton.SaveSettings();

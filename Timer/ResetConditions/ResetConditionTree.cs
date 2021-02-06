@@ -70,8 +70,11 @@ namespace Timer {
         [JsonIgnore] private bool IsLeaf => Condition != null;
         [JsonIgnore] public bool IsBranch => Left != null;
 
-        public bool IsSat() => Condition?.IsSatisfied() ??
-                               !IsBranch || (IsAnd ? _left.IsSat() && _right.IsSat() : _left.IsSat() || _right.IsSat());
+        public bool IsSat() {
+            if(IsLeaf) return Condition.IsSatisfied() ?? _parent == null || _parent.IsAnd;
+            if(IsBranch) return IsAnd ? _left.IsSat() && _right.IsSat() : _left.IsSat() || _right.IsSat();
+            return true;
+        }
 
         public void StartConditions() {
             if(IsLeaf) Condition.Start();
