@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using Infrastructure.SharedResources;
 
 namespace Timer {
@@ -49,10 +47,7 @@ namespace Timer {
         [DependsOnProperty(nameof(Duration))]
         public int Hours {
             get => (int) Duration.TotalHours;
-            set {
-                Duration = new TimeSpan(value, Minutes, Seconds);
-                if(Math.Abs(Duration.TotalHours) < 0.0001) Minutes = 1;
-            }
+            set => Duration = new TimeSpan(value, Minutes, Seconds);
         }
 
         [DependsOnProperty(nameof(Duration))]
