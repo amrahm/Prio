@@ -44,6 +44,7 @@
       <PrivateAssets>all</PrivateAssets>
       <Version>3.3.1</Version>
     </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="SpicyTaco.AutoGrid">
       <Version>1.2.29</Version>
     </PackageReference>

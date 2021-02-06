@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +16,6 @@ using Newtonsoft.Json;
 using Prism.Services.Dialogs;
 using Panel = System.Windows.Controls.Panel;
 using Point = System.Drawing.Point;
-using TextBox = System.Windows.Controls.TextBox;
 using Color = System.Drawing.Color;
 using MColor = System.Windows.Media.Color;
 using Screen = System.Windows.Forms.Screen;
@@ -385,10 +383,8 @@ namespace Infrastructure.SharedResources {
     }
 
     // ReSharper disable once UnusedType.Global
-    public static class Log {
-        public static void Write(object o) {
-            Debug.WriteLine(o?.ToString());
-        }
+    public static class D {
+        public static void Log(object o) => Debug.WriteLine(o?.ToString());
     }
 
     public static class ComboBoxAutoWidthBehavior {
