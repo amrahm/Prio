@@ -22,14 +22,15 @@ namespace Timer {
             get {
                 TimeSpan timeLeft = Config.TimeLeft;
                 if(Config.ShowHours) {
-                    return  $"{timeLeft.TotalHours:00}" +
+                    return  $"{Math.Floor(timeLeft.TotalHours):00}" +
                             $"{(Config.ShowMinutes ? $":{Math.Abs(timeLeft.Minutes):00}" : "")}" +
                             $"{(Config.ShowSeconds ? $":{Math.Abs(timeLeft.Seconds):00}" : "")}";
                 }
                 if(Config.ShowMinutes) {
-                    return  $"{timeLeft.TotalMinutes:00}{(Config.ShowSeconds ? $":{Math.Abs(timeLeft.Seconds):00}" : "")}";
+                    return $"{Math.Floor(timeLeft.TotalMinutes):00}" +
+                           $"{(Config.ShowSeconds ? $":{Math.Abs(timeLeft.Seconds):00}" : "")}";
                 }
-                return Config.ShowSeconds ? $"{timeLeft.TotalSeconds:00}" : timeLeft.ToString();
+                return Config.ShowSeconds ? $"{Math.Floor(timeLeft.TotalSeconds):00}" : timeLeft.ToString();
             }
         }
 
@@ -45,7 +46,8 @@ namespace Timer {
         [DependsOnProperty(nameof(Timer))]
         public Brush TextColor => Timer.TempTextBrush ?? Config.TextColor;
 
-        public bool IsTopAll { get; private set; } = TimersService.Singleton.CurrVisState == VisibilityState.KeepOnTop;
+        public bool IsTopAll { get; private set; } =
+            TimersService.Config.CurrVisState == VisibilityState.KeepOnTop;
 
 
         public DelegateCommand OpenTimerSettings { get; }
@@ -64,8 +66,8 @@ namespace Timer {
             Timer = timerTimer;
 
             TimersService.Singleton.PropertyChanged += (_,  args) => {
-                if(args.PropertyName == nameof(TimersService.CurrVisState))
-                    IsTopAll = TimersService.Singleton.CurrVisState == VisibilityState.KeepOnTop;
+                if(args.PropertyName == nameof(TimersGeneralConfig.CurrVisState))
+                    IsTopAll = TimersService.Config.CurrVisState == VisibilityState.KeepOnTop;
             };
 
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());

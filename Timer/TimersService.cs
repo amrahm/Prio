@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
@@ -12,8 +13,9 @@ using static Infrastructure.SharedResources.UnityInstance;
 namespace Timer {
     public class TimersService : NotifyPropertyChanged {
         public static readonly TimersService Singleton = new();
+        public static TimersGeneralConfig Config => Singleton.Conf;
 
-        public TimersGeneralConfig GeneralConfig { get; set; }
+        public TimersGeneralConfig Conf { get; set; }
 
         public ObservableCollection<ITimer> Timers { get; } = new();
         public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
@@ -22,25 +24,30 @@ namespace Timer {
         private readonly DispatcherTimer _autosaveTimer = new() {Interval = TimeSpan.FromMinutes(5)};
 
         private TimersService() {
-            GeneralConfig = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
-            foreach(TimerConfig config in GeneralConfig.TimerConfigs) Timers.Add(new TimerModel(config));
+            Conf = Settings.LoadSettings<TimersGeneralConfig>(ModuleNames.TIMER) ?? new TimersGeneralConfig();
+            foreach(TimerConfig config in Conf.TimerConfigs) Timers.Add(new TimerModel(config));
 
-            RegisterShortcuts(GeneralConfig);
-            CurrVisState = GeneralConfig.DefaultVisibilityState;
+            RegisterShortcuts(Conf);
 
             _autosaveTimer.Tick += (_,  _) => SaveSettings();
             _autosaveTimer.Start();
+
+            Application.Current.Exit += (_,  _) => SaveSettings();
         }
 
-        public void ShowTimers() => Timers.ForEach(t => {
-            if(t.Config.Visible) t.ShowTimer(true);
-            t.CheckStart();
-        });
+        public void ShowTimersAtStartup() {
+            // This temp stuff is needed in case visibililty is set to hidden
+            // Since for some reason that crashes the virtual desktop package
+            var actualVis = Conf.CurrVisState;
+            ApplyVisState(VisibilityState.KeepOnTop);
+            ApplyVisState(actualVis);
+            Timers.ForEach(t => t.CheckStart());
+        }
 
         public void SaveSettings() {
-            GeneralConfig.TimerConfigs = Timers.Select(t => t.Config).ToList();
-            Settings.SaveSettings(GeneralConfig, ModuleNames.TIMER);
-            RegisterShortcuts(GeneralConfig);
+            Conf.TimerConfigs = Timers.Select(t => t.Config).ToList();
+            Settings.SaveSettings(Conf, ModuleNames.TIMER);
+            RegisterShortcuts(Conf);
         }
 
         public void DeleteTimer(Guid id) {
@@ -51,7 +58,7 @@ namespace Timer {
 
             if(r.Result == ButtonResult.OK) {
                 Timers.Remove(timer);
-                GeneralConfig.TimerConfigs.Remove(timer.Config);
+                Conf.TimerConfigs.Remove(timer.Config);
                 timer.Dispose();
                 SaveSettings();
             }
@@ -59,22 +66,45 @@ namespace Timer {
 
         #region VisibilityHotkeyStuff
 
-        public VisibilityState CurrVisState { get; private set; }
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
-        private void ShowHideAll() {
-            CurrVisState = CurrVisState != VisibilityState.Hidden ? VisibilityState.Hidden : _lastNonHiddenVisState;
-            foreach(ITimer timer in Timers) timer.SetVisibility(CurrVisState != VisibilityState.Hidden);
+        private void SetShowHide(bool show) {
+            Conf.CurrVisState = show ? _lastNonHiddenVisState : VisibilityState.Hidden;
+            foreach(ITimer timer in Timers) timer.SetVisibility(Conf.CurrVisState != VisibilityState.Hidden);
         }
+        private void ShowHideAll() => SetShowHide(Conf.CurrVisState == VisibilityState.Hidden);
 
         public void TopAll() {
-            CurrVisState = _lastNonHiddenVisState = VisibilityState.KeepOnTop;
-            foreach(ITimer timer in Timers) timer.SetTopmost();
+            Conf.CurrVisState = _lastNonHiddenVisState = VisibilityState.KeepOnTop;
+            foreach(ITimer timer in Timers) {
+                timer.SetVisibility(true);
+                timer.SetTopmost();
+            }
         }
 
         public void BottomAll() {
-            CurrVisState = _lastNonHiddenVisState = VisibilityState.MoveBehind;
-            foreach(ITimer timer in Timers) timer.SetBottommost();
+            Conf.CurrVisState = _lastNonHiddenVisState = VisibilityState.MoveBehind;
+            foreach(ITimer timer in Timers) {
+                timer.SetVisibility(true);
+                timer.SetBottommost();
+            }
+        }
+
+        public void ApplyVisState(VisibilityState? visState = null) {
+            if(visState.HasValue) Conf.CurrVisState = visState.Value;
+            switch(Conf.CurrVisState) {
+                case VisibilityState.KeepOnTop:
+                    TopAll();
+                    break;
+                case VisibilityState.MoveBehind:
+                    BottomAll();
+                    break;
+                case VisibilityState.Hidden:
+                    SetShowHide(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
@@ -87,9 +117,9 @@ namespace Timer {
             bool topIsBottom = Equals(config.MoveTimersBehindShortcut, config.KeepTimersOnTopShortcut);
 
             int NextVisibilityState(int r) {
-                bool isHidden = CurrVisState == VisibilityState.Hidden;
-                bool isTop = CurrVisState == VisibilityState.KeepOnTop;
-                bool isBottom = CurrVisState == VisibilityState.MoveBehind;
+                bool isHidden = Conf.CurrVisState == VisibilityState.Hidden;
+                bool isTop = Conf.CurrVisState == VisibilityState.KeepOnTop;
+                bool isBottom = Conf.CurrVisState == VisibilityState.MoveBehind;
                 switch((VisibilityHotkeyState) r) { //Find all cases where we shouldn't do the requested action
                     // These set precedence so that we move in a triangle if needed
                     // They also check if we are requesting to do what we already are

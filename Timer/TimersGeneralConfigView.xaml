@@ -42,8 +42,8 @@
 			</hc:FlexPanel>
 		</Border>
 		<StackPanel Orientation="Horizontal">
-			<TextBlock Text="Default Visibility: " Style="{StaticResource BaseControlStyle}" />
-			<ComboBox SelectedItem="{Binding GeneralConfig.DefaultVisibilityState}"
+			<TextBlock Text="Current Visibility: " Style="{StaticResource BaseControlStyle}" />
+			<ComboBox SelectedItem="{Binding GeneralConfig.CurrVisState}"
 			          ItemsSource="{Binding VisibilityStateTypeValues}" />
 		</StackPanel>
 	</StackPanel>

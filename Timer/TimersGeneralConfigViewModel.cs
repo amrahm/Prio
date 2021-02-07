@@ -6,26 +6,27 @@ using MainConfig;
 using Prism.Ioc;
 
 namespace Timer {
-    public class TimersGeneralConfigViewModel : NotifyPropertyChanged {
+    public class TimersGeneralConfigViewModel : NotifyPropertyWithDependencies {
         private readonly TimersGeneralConfig _config;
 
         public TimersGeneralConfig GeneralConfig {
             get => _config;
-            private init => NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => OnPropertyChanged());
+            private init => NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
         }
 
         public IEnumerable<VisibilityState> VisibilityStateTypeValues =>
                 Enum.GetValues(typeof(VisibilityState)).Cast<VisibilityState>();
 
         public TimersGeneralConfigViewModel() {
-            GeneralConfig = TimersService.Singleton.GeneralConfig.DeepCopy();
+            GeneralConfig = TimersService.Config.DeepCopy();
             var mainConfigService = UnityInstance.Container.Resolve<IMainConfigService>();
             mainConfigService.ApplySettingsPress += SaveSettings;
         }
 
         private void SaveSettings() {
-            TimersService.Singleton.GeneralConfig = GeneralConfig;
+            TimersService.Singleton.Conf = GeneralConfig;
             TimersService.Singleton.SaveSettings();
+            TimersService.Singleton.ApplyVisState();
         }
     }
 }

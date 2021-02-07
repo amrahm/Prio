@@ -27,7 +27,7 @@ namespace Timer {
         }
 
         private void InitializeFloatingWindow() {
-            WindowChrome windowChrome = new()  {CaptionHeight = 0};
+            WindowChrome windowChrome = new()  {CaptionHeight = 0, ResizeBorderThickness = new Thickness(6)};
             WindowChrome.SetWindowChrome(_window, windowChrome);
             _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 

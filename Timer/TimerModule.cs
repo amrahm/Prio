@@ -20,6 +20,6 @@ namespace Timer {
             containerRegistry.Register<ITimer, TimerModel>();
         }
 
-        public void OnInitialized(IContainerProvider containerProvider) => TimersService.Singleton.ShowTimers();
+        public void OnInitialized(IContainerProvider containerProvider) => TimersService.Singleton.ShowTimersAtStartup();
     }
 }

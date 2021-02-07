@@ -83,7 +83,7 @@ namespace Timer {
         private void OnTimerOnTick(object sender, EventArgs e) {
             switch(Type) {
                 case ResetConditionType.Cooldown:
-                    if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(VirtualDesktopManager.CurrentDesktop()))
+                    if(!OffDesktopsEnabled || !OffDesktopsSet.Contains(VDM.CurrentDesktop()))
                         SecondsLeft -= 1;
                     break;
                 case ResetConditionType.Dependency:

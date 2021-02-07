@@ -7,18 +7,17 @@ using WeakEvent;
 namespace Prio.GlobalServices {
     [UsedImplicitly]
     internal class VirtualDesktopManager : IVirtualDesktopManager {
-        private readonly WeakEventSource<DesktopChangedEventArgs> _desktopChanged =
+        private readonly WeakEventSource<EventArgs> _desktopChanged =
                 new();
 
-        public event EventHandler<DesktopChangedEventArgs> DesktopChanged {
+        public event EventHandler<EventArgs> DesktopChanged {
             add => _desktopChanged.Subscribe(value);
             remove => _desktopChanged.Unsubscribe(value);
         }
 
         public VirtualDesktopManager() {
             VirtualDesktopProvider.Default.Initialize().Wait();
-            VirtualDesktop.CurrentChanged += (o,  e) =>
-                    _desktopChanged.Raise(o, new DesktopChangedEventArgs(e.OldDesktop.Index(), e.NewDesktop.Index()));
+            VirtualDesktop.CurrentChanged += (o,  _) => _desktopChanged.Raise(o, EventArgs.Empty);
         }
 
         public void MoveToDesktop(Window window, int desktopNum) =>

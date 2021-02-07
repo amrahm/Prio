@@ -10,7 +10,7 @@ namespace Timer {
         public ShortcutDefinition MoveTimersBehindShortcut { get; set; }
         public ShortcutDefinition StopAllShortcut { get; set; }
         public ShortcutDefinition ResumeAllShortcut { get; set; }
-        public VisibilityState DefaultVisibilityState { get; set; }
+        public VisibilityState CurrVisState { get; set; }
         public IList<TimerConfig> TimerConfigs { get; set; } = new List<TimerConfig>();
     }
 

@@ -70,7 +70,7 @@ namespace Timer {
             _timer.Tick += OnTimerOnTick;
             _activityCheckTimer.Tick += ActivityCheckTimerOnTick;
 
-            VirtualDesktopManager.DesktopChanged += (_, e) => HandleDesktopChanged(e.NewDesktop);
+            VDM.DesktopChanged += (_, _) => HandleDesktopChanged();
         }
 
         public void CheckStart() {
@@ -133,14 +133,15 @@ namespace Timer {
 
         #region VirtualDesktops
 
-        private void HandleDesktopChanged(int newDesktop) {
+        private void HandleDesktopChanged() {
             if(!Config.Enabled) return;
+            int newDesktop = VDM.CurrentDesktop();
             TimerWindow?.Dispatcher.Invoke(() => {
-                Config.DesktopsVisible ??= new HashSet<int>();
+                Config.DesktopsVisible ??= new HashSet<int> {-1};
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
-                   TimersService.Singleton.CurrVisState != VisibilityState.Hidden) {
+                   TimersService.Config.CurrVisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
-                    VirtualDesktopManager.MoveToDesktop(TimerWindow, newDesktop);
+                    VDM.MoveToDesktop(TimerWindow, newDesktop);
                 } else if(Config.DesktopsVisible.Count > 0)  {
                     TimerWindow.Visibility = Visibility.Hidden;
                 }
@@ -173,7 +174,7 @@ namespace Timer {
                 TimerWindow = null;
             };
 
-            switch(TimersService.Singleton.CurrVisState) {
+            switch(TimersService.Config.CurrVisState) {
                 case VisibilityState.MoveBehind:
                     SetBottommost();
                     break;
@@ -181,7 +182,7 @@ namespace Timer {
                     SetTopmost();
                     break;
             }
-            HandleDesktopChanged(VirtualDesktopManager.CurrentDesktop());
+            HandleDesktopChanged();
         }
 
         public void SetVisibility(bool vis) {
@@ -192,7 +193,7 @@ namespace Timer {
         }
         public void ToggleVisibility() => SetVisibility(!Config.Visible);
 
-
+        //TODO save this per desktop setup
         public void SetTopmost() {
             if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = true;
@@ -265,7 +266,7 @@ namespace Timer {
         private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
             if(Config.AutoResetOnConditions) {
                 ResetTimer();
-                StartStopForDesktopsActive(VirtualDesktopManager.CurrentDesktop());
+                StartStopForDesktopsActive(VDM.CurrentDesktop());
             }
         }
 

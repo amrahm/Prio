@@ -17,7 +17,7 @@
       "Key": 94,
       "Modifiers": 6
     },
-    "DefaultVisibilityState": 0,
+    "CurrVisState": 0,
     "TimerConfigs": [
       {
         "InstanceID": "12866e1e-d5fe-4ed7-ba62-9f116ca15ca2",
@@ -28,8 +28,8 @@
         "ShowHours": true,
         "ShowMinutes": true,
         "ShowSeconds": true,
-        "Duration": "02:30:00",
-        "TimeLeft": "00:07:16",
+        "Duration": "02:00:00",
+        "TimeLeft": "01:59:55",
         "DesktopsVisible": [
           -1
         ],
@@ -74,7 +74,7 @@
           "IsAnd": false
         },
         "AutoResetOnConditions": false,
-        "AllowResetOverride": false,
+        "AllowResetOverride": true,
         "AllowResetWhileRunning": false,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
@@ -94,6 +94,8 @@
         "NameBackgroundColor": "#FF7A90AC",
         "NameTextColor": "#FFBEF2DC",
         "DividerColor": "#FFF8F2D7",
+        "DifferentRunningBackgroundEnabled": false,
+        "RunningBackgroundColor": "#FF184A8C",
         "LockedPauseEnabled": true,
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 1.0,
@@ -110,7 +112,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "00:00:03",
+        "TimeLeft": "00:00:02",
         "DesktopsVisible": [
           1,
           2,
@@ -167,6 +169,8 @@
         "NameBackgroundColor": "#FF7A90AC",
         "NameTextColor": "#FFBEF2DC",
         "DividerColor": "#FFF8F2D7",
+        "DifferentRunningBackgroundEnabled": false,
+        "RunningBackgroundColor": "#FF184A8C",
         "LockedPauseEnabled": true,
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
@@ -176,7 +180,7 @@
       {
         "InstanceID": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
         "Name": "desk1test",
-        "Visible": false,
+        "Visible": true,
         "Enabled": true,
         "ShowName": true,
         "ShowHours": false,
@@ -326,11 +330,13 @@
         "NameBackgroundColor": "#CD7AACA0",
         "NameTextColor": "#FF4F4BAB",
         "DividerColor": "#FF79CE98",
+        "DifferentRunningBackgroundEnabled": false,
+        "RunningBackgroundColor": "#FF184A8C",
         "LockedPauseEnabled": true,
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-01-28T19:01:00-06:00"
+        "DailyResetTime": "2021-02-07T19:01:00-06:00"
       }
     ]
   }
