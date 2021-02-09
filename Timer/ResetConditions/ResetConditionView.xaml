@@ -37,7 +37,7 @@
 				<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Wait for" />
 					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.WaitForMinutes}"
-					         sr:TextBoxExtensions.EnforceDouble="True" />
+					         sr:TextBoxExtensions.EnforcePositiveDouble="True" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 				</StackPanel>
 				<ContentControl Template="{StaticResource HintAdorner}" Tag="e.g. '2, 3' or '0' for all"
@@ -60,7 +60,7 @@
 					<CheckBox IsChecked="{Binding MustRunForXEnabled}" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Must run for" />
 					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="60" Text="{Binding Model.MustRunForXMinutes}"
-					         sr:TextBoxExtensions.EnforceDouble="True" />
+					         sr:TextBoxExtensions.EnforcePositiveDouble="True" />
 					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" Margin="10, 5, 5, 5">

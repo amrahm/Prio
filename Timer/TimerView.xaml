@@ -7,7 +7,8 @@
              xmlns:local="clr-namespace:Timer"
              mc:Ignorable="d"
              x:Name="Root" d:DesignWidth="200"
-             d:DataContext="{d:DesignInstance local:TimerViewModel}">
+             d:DataContext="{d:DesignInstance local:TimerViewModel}"
+             MouseDoubleClick="TimerView_OnMouseDoubleClick">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -24,7 +25,7 @@
 								 FallbackValue={StaticResource MediumBrush}}">
 			<st:AutoGrid Columns="Auto, *" Visibility="{Binding ShowName}">
 				<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
-					<Border Margin="5" Style="{StaticResource BorderClip}">
+					<Border Margin="5, 5, 5, 0" Style="{StaticResource BorderClip}">
 						<Label Margin="0" Padding="10, 5" Content="{Binding Timer.Config.Name, FallbackValue=TimerName}"
 						       Style="{StaticResource BaseControlStyle}"
 						       Background="{Binding Timer.Config.NameBackgroundColor, TargetNullValue={StaticResource DarkHintBrush},
@@ -38,7 +39,7 @@
 								FallbackValue={StaticResource Light2Brush}}" />
 			</st:AutoGrid>
 			<Viewbox HorizontalAlignment="Stretch" Stretch="Fill" StretchDirection="Both" x:Name="TimerViewbox"
-			         st:AutoGrid.ColumnSpan="2">
+			         st:AutoGrid.ColumnSpan="2" Margin="0, 6, 0, -2">
 				<Label Content="{Binding TimeLeftVm, FallbackValue=00:00}" HorizontalContentAlignment="Center"
 				       Foreground="{Binding TextColor, TargetNullValue={StaticResource LightAccentBrush},
 								   FallbackValue={StaticResource LightAccentBrush}}"

@@ -168,7 +168,7 @@ namespace Timer {
 
         private void ResumeAll() {
             isStopAll = false;
-            while(_stoppedTimers.Count > 0) _stoppedTimers.Pop().StartTimer();
+            while(_stoppedTimers.Count > 0) _stoppedTimers.Pop().StartStopForDesktopsActive();
         }
 
         private enum TimerHotkeyState { ShouldStart, ShouldStop }

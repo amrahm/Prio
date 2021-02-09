@@ -155,7 +155,7 @@
 							<CheckBox Margin="5" IsChecked="{Binding Config.InactivityPauseEnabled}" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Pause after " />
 							<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Config.InactivityMinutes}"
-							         sr:TextBoxExtensions.EnforceDouble="True" />
+							         sr:TextBoxExtensions.EnforcePositiveDouble="True" />
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text=" Minutes of Inactivity" />
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">

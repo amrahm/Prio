@@ -27,5 +27,6 @@ namespace Timer {
         void RegisterShortcuts(TimerConfig timerConfig);
         void SetTime(TimeSpan time);
         void AddMinutes(int minutes) => SetTime(Config.TimeLeft + TimeSpan.FromMinutes(minutes));
+        void StartStopForDesktopsActive();
     }
 }

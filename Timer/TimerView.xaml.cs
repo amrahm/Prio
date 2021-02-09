@@ -76,5 +76,6 @@ namespace Timer {
             TimerViewbox.MaxHeight = TimerViewbox.ActualWidth / hToW * 1.5;
             TimerViewbox.MaxWidth = TimerViewbox.ActualHeight * hToW * 1.5;
         }
+        private void TimerView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => _vm.StartStopTimer.Execute();
     }
 }

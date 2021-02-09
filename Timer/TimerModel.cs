@@ -147,12 +147,12 @@ namespace Timer {
                 }
             });
 
-            StartStopForDesktopsActive(newDesktop);
+            StartStopForDesktopsActive();
         }
 
-        private void StartStopForDesktopsActive(int newDesktop) {
+        public void StartStopForDesktopsActive() {
             Config.DesktopsActive ??= new HashSet<int>();
-            if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(newDesktop)) StartTimer();
+            if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(VDM.CurrentDesktop())) StartTimer();
             else if(Config.DesktopsVisible.Count > 0) StopTimer();
         }
 
@@ -266,7 +266,7 @@ namespace Timer {
         private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
             if(Config.AutoResetOnConditions) {
                 ResetTimer();
-                StartStopForDesktopsActive(VDM.CurrentDesktop());
+                StartStopForDesktopsActive();
             }
         }
 

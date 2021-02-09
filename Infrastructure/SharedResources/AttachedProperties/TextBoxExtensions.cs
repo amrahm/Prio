@@ -80,6 +80,32 @@ namespace Infrastructure.SharedResources {
 
         #endregion
 
+        #region EnforcePositiveDouble
+
+        public static bool GetEnforcePositiveDouble(DependencyObject obj) => (bool) obj.GetValue(EnforcePositiveDoubleProperty);
+        public static void SetEnforcePositiveDouble(DependencyObject obj, bool value) => obj.SetValue(EnforcePositiveDoubleProperty, value);
+
+        public static readonly DependencyProperty EnforcePositiveDoubleProperty =
+                DependencyProperty.RegisterAttached(nameof(EnforcePositiveDouble), typeof(bool), typeof(TextBoxExtensions),
+                                                    new PropertyMetadata(false, EnforcePositiveDouble));
+
+        private static readonly Regex PositiveDoubleRx = new(@"[^\d.]|(?<=\d*\.\d*)\.",
+                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static void EnforcePositiveDouble(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if(d is not TextBox textBox) return;
+            textBox.TextChanged += (_,  _) => {
+                int oldIndex = textBox.CaretIndex;
+                string oldValue = textBox.Text;
+                string validInput = PositiveDoubleRx.Replace(textBox.Text, "");
+                textBox.Text = validInput;
+
+                if(!oldValue.Equals(validInput)) textBox.CaretIndex = oldIndex == 0 ? 0 : oldIndex - 1;
+            };
+        }
+
+        #endregion
+
         #region EnforceDouble
 
         public static bool GetEnforceDouble(DependencyObject obj) => (bool) obj.GetValue(EnforceDoubleProperty);
@@ -89,7 +115,7 @@ namespace Infrastructure.SharedResources {
                 DependencyProperty.RegisterAttached(nameof(EnforceDouble), typeof(bool), typeof(TextBoxExtensions),
                                                     new PropertyMetadata(false, EnforceDouble));
 
-        private static readonly Regex DoubleRx = new(@"[^\d.]|(?=<\d*\.\d*)\.",
+        private static readonly Regex DoubleRx = new(@"[^\d.-]|(?<=\d*\.\d*)\.|(?<=\d)-|(?<=\.)-",
                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static void EnforceDouble(DependencyObject d, DependencyPropertyChangedEventArgs e) {
