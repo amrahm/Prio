@@ -72,6 +72,16 @@ namespace Timer {
 
             VDM.DesktopChanged += (_, _) => HandleDesktopChanged();
         }
+        public ITimer Duplicate() {
+            var copyconfig = Config.DeepCopy();
+            copyconfig.InstanceID = Guid.NewGuid();
+            copyconfig.ZeroOverflowAction.TimerId = copyconfig.InstanceID;
+            foreach(OverflowAction a in copyconfig.OverflowActions) a.TimerId = copyconfig.InstanceID;
+            foreach(ResetCondition c in copyconfig.ResetConditions) c.TimerId = copyconfig.InstanceID;
+
+            return new TimerModel(copyconfig);
+        }
+
 
         public void CheckStart() {
             if(!Config.Enabled) return;
@@ -193,7 +203,6 @@ namespace Timer {
         }
         public void ToggleVisibility() => SetVisibility(!Config.Visible);
 
-        //TODO save this per desktop setup
         public void SetTopmost() {
             if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = true;

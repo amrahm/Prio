@@ -13,7 +13,14 @@ namespace Timer {
     public class OverflowAction : NotifyPropertyChanged {
         private const double FLASH_COLOR_TICK_RATE = 0.3;
 
-        public Guid TimerId { get; set; }
+        private Guid _timerId;
+        public Guid TimerId {
+            get => _timerId;
+            set {
+                _timerId = value;
+                _timer = null;
+            }
+        }
         private ITimer _timer;
         private ITimer Timer => _timer ??= TimersService.Singleton.GetTimer(TimerId);
         public double AfterMinutes { get; set; }
@@ -64,6 +71,7 @@ namespace Timer {
 
             if(ShowMessageEnabled) {
                 var pos = Timer.Config.WindowPositions[Screen.AllScreens.Count()];
+                //FIXME this is crashing in published, possibly only after unplugging monitor?
                 Dialogs.ShowNotification(Message, Timer.Config.Name, true, false, false,
                                          Screen.FromPoint(new Point((int) pos.X, (int) pos.Y)));
             }

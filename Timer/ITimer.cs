@@ -28,5 +28,8 @@ namespace Timer {
         void SetTime(TimeSpan time);
         void AddMinutes(int minutes) => SetTime(Config.TimeLeft + TimeSpan.FromMinutes(minutes));
         void StartStopForDesktopsActive();
+
+        /// <summary> Create a copy of this timer, but with a new instance ID </summary>
+        ITimer Duplicate();
     }
 }

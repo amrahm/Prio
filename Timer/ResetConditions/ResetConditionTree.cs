@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Infrastructure.SharedResources;
 using Newtonsoft.Json;
@@ -214,5 +216,13 @@ namespace Timer {
         }
 
         public override string ToString() => _PrintPretty();
+
+        public IEnumerator<ResetCondition> GetEnumerator() {
+            if(IsLeaf) yield return Condition;
+            if(IsBranch) {
+                foreach(ResetCondition condition in _left) yield return condition;
+                foreach(ResetCondition condition in _right) yield return condition;
+            }
+        }
     }
 }

@@ -87,7 +87,7 @@ namespace Prio {
 
         private static void LogException(ILogger log, Exception exception) {
             string exceptionMessage = exception?.Message ?? "An unmanaged exception occured.";
-            log.Error(exception, exceptionMessage);
+            log.Error(exception, exceptionMessage); //TODO not making a file??
             MessageBox.Show(exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 

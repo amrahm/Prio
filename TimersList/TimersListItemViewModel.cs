@@ -45,9 +45,7 @@ namespace TimersList {
             });
             DeleteTimer = new DelegateCommand(() => TimersService.Singleton.DeleteTimer(Timer.Config.InstanceID));
             DuplicateTimer = new DelegateCommand(() => {
-                ITimer copy = Container.Resolve<ITimer>();
-                copy.Config = Timer.Config.DeepCopy();
-                copy.Config.InstanceID = Guid.NewGuid();
+                ITimer copy = Timer.Duplicate();
                 TimersService.Singleton.Timers.Add(copy);
                 TimersService.Singleton.SaveSettings();
                 copy.ShowTimer();
