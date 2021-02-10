@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Infrastructure.Prism;
 using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 using Prio.GlobalServices;
 using Prio.RegionAdapters;
 using Prism.Ioc;
@@ -16,6 +18,23 @@ using ILogger = Serilog.ILogger;
 namespace Prio {
     /// <summary> Interaction logic for App.xaml </summary>
     public partial class App {
+        [UsedImplicitly] private static Mutex _mutex;
+        protected override void OnStartup(StartupEventArgs e) {
+            string appName = $"{nameof(Prio)}{(Debugger.IsAttached ? "_DEBUG" : "")}";
+
+            _mutex = new Mutex(true, appName, out bool createdNew);
+
+            if(!createdNew) {
+                MessageBox.Show($"{nameof(Prio)} is already running!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //app is already running! Exiting the application  
+                Current.Shutdown();
+                return;
+            }
+
+            base.OnStartup(e);
+        }
+
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterSingleton<IPrioHotkeyManager, PrioHotkeyManager>();
             containerRegistry.RegisterSingleton<IVirtualDesktopManager, VirtualDesktopManager>();
