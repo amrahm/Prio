@@ -1,9 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Forms;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
 using Infrastructure.SharedResources;
+using WpfScreenHelper;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
@@ -32,6 +33,7 @@ namespace Timer {
             _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
             LoadWindowPosition();
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += (_,  _) => LoadWindowPosition();
 
             MouseDown += DragMoveWindow;
             SizeChanged += (_, _) => SaveWindowPosition();
@@ -51,17 +53,16 @@ namespace Timer {
 
         private void SaveWindowPosition() {
             if(_window == null) return;
-            WindowPosition newPos = new(_window.Left, _window.Top,
-                                        _window.ActualWidth, _window.ActualHeight);
-            if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition configPos) ||
+            WindowPosition newPos = new(_window.Left, _window.Top, _window.ActualWidth, _window.ActualHeight);
+            if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Count(), out WindowPosition configPos) ||
                configPos != newPos) {
-                _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
+                _vm.Timer.Config.WindowPositions[Screen.AllScreens.Count()] = newPos;
                 _vm.Timer.SaveSettings();
             }
         }
 
         private void LoadWindowPosition() {
-            if(_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition position)) {
+            if(_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Count(), out WindowPosition position)) {
                 _window.Left = position.X;
                 _window.Top = position.Y;
                 _window.Width = position.Width;

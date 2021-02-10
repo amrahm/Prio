@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
+using WpfScreenHelper;
 using static Infrastructure.SharedResources.UnityInstance;
 using Brushes = System.Windows.Media.Brushes;
 
@@ -62,7 +63,7 @@ namespace Timer {
             }
 
             if(ShowMessageEnabled) {
-                var pos = Timer.Config.WindowPositions[Screen.AllScreens.Length];
+                var pos = Timer.Config.WindowPositions[Screen.AllScreens.Count()];
                 Dialogs.ShowNotification(Message, Timer.Config.Name, true, false, false,
                                          Screen.FromPoint(new Point((int) pos.X, (int) pos.Y)));
             }

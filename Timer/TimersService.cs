@@ -1,21 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Services.Dialogs;
+using WpfScreenHelper;
 using static Infrastructure.SharedResources.UnityInstance;
+using Application = System.Windows.Application;
 
 namespace Timer {
     public class TimersService : NotifyPropertyChanged {
         public static readonly TimersService Singleton = new();
-        public static TimersGeneralConfig Config => Singleton.Conf;
+        public static TimersGeneralConfig Config {
+            get => Singleton.Conf;
+            set => Singleton.Conf = value;
+        }
+        public static VisibilityState VisState {
+            get => Config.VisState;
+            set {
+                Config.VisState = value;
+                Singleton.SaveSettings();
+            }
+        }
 
-        public TimersGeneralConfig Conf { get; set; }
+        private TimersGeneralConfig Conf { get; set; }
 
         public ObservableCollection<ITimer> Timers { get; } = new();
         public ITimer GetTimer(Guid id) => Timers.FirstOrDefault(x => x.Config.InstanceID == id);
@@ -28,6 +38,7 @@ namespace Timer {
             foreach(TimerConfig config in Conf.TimerConfigs) Timers.Add(new TimerModel(config));
 
             RegisterShortcuts(Conf);
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += (_,  _) => LoadVisStatePerDesktopProfile();
 
             _autosaveTimer.Tick += (_,  _) => SaveSettings();
             _autosaveTimer.Start();
@@ -36,11 +47,14 @@ namespace Timer {
         }
 
         public void ShowTimersAtStartup() {
+            LoadVisStatePerDesktopProfile();
+
             // This temp stuff is needed in case visibililty is set to hidden
             // Since for some reason that crashes the virtual desktop package
-            var actualVis = Conf.CurrVisState;
+            var actualVis = VisState;
             ApplyVisState(VisibilityState.KeepOnTop);
             ApplyVisState(actualVis);
+
             Timers.ForEach(t => t.CheckStart());
         }
 
@@ -69,13 +83,13 @@ namespace Timer {
         private VisibilityState _lastNonHiddenVisState = VisibilityState.KeepOnTop;
 
         private void SetShowHide(bool show) {
-            Conf.CurrVisState = show ? _lastNonHiddenVisState : VisibilityState.Hidden;
-            foreach(ITimer timer in Timers) timer.SetVisibility(Conf.CurrVisState != VisibilityState.Hidden);
+            VisState = show ? _lastNonHiddenVisState : VisibilityState.Hidden;
+            foreach(ITimer timer in Timers) timer.SetVisibility(VisState != VisibilityState.Hidden);
         }
-        private void ShowHideAll() => SetShowHide(Conf.CurrVisState == VisibilityState.Hidden);
+        private void ShowHideAll() => SetShowHide(VisState == VisibilityState.Hidden);
 
         public void TopAll() {
-            Conf.CurrVisState = _lastNonHiddenVisState = VisibilityState.KeepOnTop;
+            VisState = _lastNonHiddenVisState = VisibilityState.KeepOnTop;
             foreach(ITimer timer in Timers) {
                 timer.SetVisibility(true);
                 timer.SetTopmost();
@@ -83,7 +97,7 @@ namespace Timer {
         }
 
         public void BottomAll() {
-            Conf.CurrVisState = _lastNonHiddenVisState = VisibilityState.MoveBehind;
+            VisState = _lastNonHiddenVisState = VisibilityState.MoveBehind;
             foreach(ITimer timer in Timers) {
                 timer.SetVisibility(true);
                 timer.SetBottommost();
@@ -91,8 +105,8 @@ namespace Timer {
         }
 
         public void ApplyVisState(VisibilityState? visState = null) {
-            if(visState.HasValue) Conf.CurrVisState = visState.Value;
-            switch(Conf.CurrVisState) {
+            if(visState.HasValue) VisState = visState.Value;
+            switch(VisState) {
                 case VisibilityState.KeepOnTop:
                     TopAll();
                     break;
@@ -109,6 +123,11 @@ namespace Timer {
 
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
+        private void LoadVisStatePerDesktopProfile() {
+            if(Conf.VisStatePerDesktopProfile.TryGetValue(Screen.AllScreens.Count(), out VisibilityState state))
+                ApplyVisState(state);
+        }
+
         #endregion
 
         public void RegisterShortcuts(TimersGeneralConfig config) {
@@ -117,9 +136,9 @@ namespace Timer {
             bool topIsBottom = Equals(config.MoveTimersBehindShortcut, config.KeepTimersOnTopShortcut);
 
             int NextVisibilityState(int r) {
-                bool isHidden = Conf.CurrVisState == VisibilityState.Hidden;
-                bool isTop = Conf.CurrVisState == VisibilityState.KeepOnTop;
-                bool isBottom = Conf.CurrVisState == VisibilityState.MoveBehind;
+                bool isHidden = VisState == VisibilityState.Hidden;
+                bool isTop = VisState == VisibilityState.KeepOnTop;
+                bool isBottom = VisState == VisibilityState.MoveBehind;
                 switch((VisibilityHotkeyState) r) { //Find all cases where we shouldn't do the requested action
                     // These set precedence so that we move in a triangle if needed
                     // They also check if we are requesting to do what we already are
@@ -157,23 +176,16 @@ namespace Timer {
 
         private void StopAll() {
             isStopAll = true;
-            _stoppedTimers.Clear();
-            foreach(ITimer timer in Timers) {
-                if(timer.Running) {
-                    timer.StopTimer();
-                    _stoppedTimers.Push(timer);
-                }
-            }
+            foreach(ITimer timer in Timers) timer.StopTimer();
         }
 
         private void ResumeAll() {
             isStopAll = false;
-            while(_stoppedTimers.Count > 0) _stoppedTimers.Pop().StartStopForDesktopsActive();
+            foreach(ITimer timer in Timers) timer.StartStopForDesktopsActive();
         }
 
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
         public bool isStopAll;
-        private readonly Stack<ITimer> _stoppedTimers = new();
     }
 }

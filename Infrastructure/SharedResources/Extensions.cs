@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,11 +13,11 @@ using System.Windows.Media;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Prism.Services.Dialogs;
+using WpfScreenHelper;
 using Panel = System.Windows.Controls.Panel;
-using Point = System.Drawing.Point;
 using Color = System.Drawing.Color;
 using MColor = System.Windows.Media.Color;
-using Screen = System.Windows.Forms.Screen;
+using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
 // ReSharper disable UnusedMember.Global
@@ -159,7 +158,7 @@ namespace Infrastructure.SharedResources {
         public static void MoveWindowInBounds(this Window window) {
             (double dpiWidthFactor, double dpiHeightFactor) = GetDpiFactors(window);
 
-            Rectangle wA = window.CurrentScreen().WorkingArea;
+            Rect wA = window.CurrentScreen().WorkingArea;
 
             window.Left += Math.Max(wA.Left / dpiWidthFactor - window.Left, 0);
             window.Left += Math.Min(wA.Right / dpiWidthFactor - (window.Left + window.ActualWidth), 0);
@@ -170,21 +169,17 @@ namespace Infrastructure.SharedResources {
 
         public static void CenterOnScreen(this Window window, double dpiWidthFactor, double dpiHeightFactor) =>
                 CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
-        public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor,
-                                          double dpiHeightFactor) {
+        public static void CenterOnScreen(this Window window, Rect screen, double dpiWidthFactor, double dpiHeightFactor) {
             window.WindowStartupLocation = WindowStartupLocation.Manual;
             window.Left = (screen.Width / dpiWidthFactor - window.ActualWidth) / 2 + screen.Left;
             window.Top = (screen.Height / dpiHeightFactor - window.ActualHeight) / 2 + screen.Top;
         }
 
         public static (double dpiWidthFactor, double dpiHeightFactor) GetDpiFactors(Window window) {
-            PresentationSource mainWindowPresentationSource = PresentationSource.FromVisual(window);
-            Debug.Assert(mainWindowPresentationSource != null, nameof(mainWindowPresentationSource) + " != null");
-            Debug.Assert(mainWindowPresentationSource.CompositionTarget != null, "CompositionTarget != null");
-            Matrix m = mainWindowPresentationSource.CompositionTarget.TransformToDevice;
-            double dpiWidthFactor = m.M11;
-            double dpiHeightFactor = m.M22;
-            return (dpiWidthFactor, dpiHeightFactor);
+            PresentationSource presentationSource = PresentationSource.FromVisual(window);
+            Debug.Assert(presentationSource?.CompositionTarget != null, nameof(presentationSource) + " != null");
+            Matrix m = presentationSource.CompositionTarget.TransformToDevice;
+            return (m.M11, m.M22);
         }
     }
 
@@ -212,8 +207,8 @@ namespace Infrastructure.SharedResources {
         }
 
         /// <summary> Checks if a point (that is specified relative to this element) is contained within </summary>
-        public static bool ContainsRelativePoint(this FrameworkElement element, System.Windows.Point point) =>
-                point.X > 0 && point.Y > 0 && point.X < element.ActualWidth && point.Y < element.ActualHeight;
+        public static bool ContainsRelativePoint(this FrameworkElement element, Point point) => point.X > 0 && point.Y > 0 &&
+                point.X < element.ActualWidth && point.Y < element.ActualHeight;
 
         /// <summary> Checks if the mouse is contained within </summary>
         public static bool ContainsMouse(this FrameworkElement element) =>

@@ -84,6 +84,7 @@ namespace Prio.GlobalServices {
                     HotkeyManager.Current.AddOrReplace(_shortcut.ToString(), _shortcut.Key, _shortcut.Modifiers, _handler);
                     return true;
                 } catch(HotkeyAlreadyRegisteredException) {
+                    _registrations.Remove(registration);
                     return false;
                 }
             }

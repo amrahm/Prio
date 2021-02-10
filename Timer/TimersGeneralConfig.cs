@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Infrastructure.SharedResources;
+using WpfScreenHelper;
 
 namespace Timer {
     [Serializable]
@@ -10,7 +12,11 @@ namespace Timer {
         public ShortcutDefinition MoveTimersBehindShortcut { get; set; }
         public ShortcutDefinition StopAllShortcut { get; set; }
         public ShortcutDefinition ResumeAllShortcut { get; set; }
-        public VisibilityState CurrVisState { get; set; }
+        public Dictionary<int, VisibilityState> VisStatePerDesktopProfile { get; set; } = new();
+        public VisibilityState VisState {
+            get => VisStatePerDesktopProfile.GetValueOrDefault(Screen.AllScreens.Count(), VisibilityState.KeepOnTop);
+            set => VisStatePerDesktopProfile[Screen.AllScreens.Count()] = value;
+        }
         public IList<TimerConfig> TimerConfigs { get; set; } = new List<TimerConfig>();
     }
 

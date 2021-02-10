@@ -3,11 +3,11 @@
     "ToggleVisibilityShortcut": null,
     "KeepTimersOnTopShortcut": {
       "Key": 146,
-      "Modifiers": 6
+      "Modifiers": 7
     },
     "MoveTimersBehindShortcut": {
       "Key": 146,
-      "Modifiers": 6
+      "Modifiers": 7
     },
     "StopAllShortcut": {
       "Key": 94,
@@ -17,7 +17,11 @@
       "Key": 94,
       "Modifiers": 6
     },
-    "CurrVisState": 0,
+    "VisStatePerDesktopProfile": {
+      "2": 0,
+      "1": 1
+    },
+    "VisState": 0,
     "TimerConfigs": [
       {
         "InstanceID": "12866e1e-d5fe-4ed7-ba62-9f116ca15ca2",
@@ -29,7 +33,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:00:00",
-        "TimeLeft": "01:59:55",
+        "TimeLeft": "01:48:13",
         "DesktopsVisible": [
           -1
         ],
@@ -44,14 +48,8 @@
           "Key": 91,
           "Modifiers": 6
         },
-        "StartShortcut": {
-          "Key": 90,
-          "Modifiers": 6
-        },
-        "StopShortcut": {
-          "Key": 90,
-          "Modifiers": 6
-        },
+        "StartShortcut": null,
+        "StopShortcut": null,
         "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "1": {
@@ -130,9 +128,9 @@
         "ToggleVisibilityShortcut": null,
         "WindowPositions": {
           "1": {
-            "X": 1401.6,
-            "Y": 633.6,
-            "Width": 134.4,
+            "X": 1402.0,
+            "Y": 634.0,
+            "Width": 134.0,
             "Height": 100.0
           },
           "2": {
@@ -208,15 +206,15 @@
         },
         "WindowPositions": {
           "2": {
-            "X": 1227.0,
-            "Y": 407.0,
+            "X": 1034.0,
+            "Y": 509.0,
             "Width": 140.0,
             "Height": 100.0
           },
           "1": {
-            "X": 1402.4,
-            "Y": 533.6,
-            "Width": 133.6,
+            "X": 1402.0,
+            "Y": 534.0,
+            "Width": 134.0,
             "Height": 100.0
           }
         },
@@ -336,7 +334,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-02-07T19:01:00-06:00"
+        "DailyResetTime": "2021-02-10T19:01:00-06:00"
       }
     ]
   }

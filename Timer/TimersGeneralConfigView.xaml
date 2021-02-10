@@ -43,7 +43,7 @@
 		</Border>
 		<StackPanel Orientation="Horizontal">
 			<TextBlock Text="Current Visibility: " Style="{StaticResource BaseControlStyle}" />
-			<ComboBox SelectedItem="{Binding GeneralConfig.CurrVisState}"
+			<ComboBox SelectedItem="{Binding GeneralConfig.VisState}"
 			          ItemsSource="{Binding VisibilityStateTypeValues}" />
 		</StackPanel>
 	</StackPanel>

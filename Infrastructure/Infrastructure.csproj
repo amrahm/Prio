@@ -37,6 +37,7 @@
       <Version>1.2.29</Version>
     </PackageReference>
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
+    <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="SharedResources\Dialogs\MessageBoxView.xaml.cs">

@@ -24,7 +24,7 @@ namespace Timer {
         }
 
         private void SaveSettings() {
-            TimersService.Singleton.Conf = GeneralConfig;
+            TimersService.Config = GeneralConfig;
             TimersService.Singleton.SaveSettings();
             TimersService.Singleton.ApplyVisState();
         }

@@ -139,7 +139,7 @@ namespace Timer {
             TimerWindow?.Dispatcher.Invoke(() => {
                 Config.DesktopsVisible ??= new HashSet<int> {-1};
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
-                   TimersService.Config.CurrVisState != VisibilityState.Hidden) {
+                   TimersService.VisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     VDM.MoveToDesktop(TimerWindow, newDesktop);
                 } else if(Config.DesktopsVisible.Count > 0)  {
@@ -174,7 +174,7 @@ namespace Timer {
                 TimerWindow = null;
             };
 
-            switch(TimersService.Config.CurrVisState) {
+            switch(TimersService.VisState) {
                 case VisibilityState.MoveBehind:
                     SetBottommost();
                     break;

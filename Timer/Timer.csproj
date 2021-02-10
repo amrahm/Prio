@@ -40,6 +40,7 @@
       <Version>4.5.4</Version>
     </PackageReference>
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
+    <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="OverflowActions\OverflowActionView.xaml">
