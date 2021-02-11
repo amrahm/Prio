@@ -10,6 +10,9 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="prio.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GeneralConfig\GeneralConfig.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\MainConfig\MainConfig.csproj" />

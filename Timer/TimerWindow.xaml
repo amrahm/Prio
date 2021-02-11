@@ -9,5 +9,5 @@
         Height="100" Width="200" 
         WindowStyle="None" AllowsTransparency="True"
         Background="Transparent"
-        Icon="/Infrastructure;component/SharedResources/images/prio.ico">
+        Icon="/Infrastructure;component/SharedResources/images/icons-assets/prio.png">
 </Window>

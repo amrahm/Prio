@@ -59,7 +59,7 @@
 			</MenuItem>
 			<MenuItem Header="Prio Settings" Command="{Binding OpenMainSettings}">
 				<MenuItem.Icon>
-					<Image Source="/Infrastructure;component/SharedResources/images/prio.ico" 
+					<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/prio.png"
 					       RenderOptions.BitmapScalingMode="Fant" />
 				</MenuItem.Icon>
 			</MenuItem>

@@ -28,9 +28,13 @@
 			<st:AutoGrid Columns="Auto, *, Auto" Background="{StaticResource MediumBrush}">
 				<Viewbox Stretch="Uniform" StretchDirection="DownOnly">
 					<Border Margin="5" Style="{StaticResource BorderClip}">
-						<TextBlock Margin="0" Padding="10, 5" Text="{Binding Title, FallbackValue=MessageTitle}"
-						           Background="{StaticResource SemiLightBrush}"
-						           Foreground="{StaticResource MediumBrush}" Style="{StaticResource BaseControlStyle}" />
+						<StackPanel Orientation="Horizontal"
+						            Background="{StaticResource SemiLightBrush}">
+							<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/prio.png"
+							       RenderOptions.BitmapScalingMode="Fant" Height="25" Margin="10, 0, 0, 0" />
+							<TextBlock Margin="0" Padding="5, 5, 10, 5" Text="{Binding Title, FallbackValue=MainConfig}"
+							           Foreground="{StaticResource MediumBrush}" Style="{StaticResource BaseControlStyle}" />
+						</StackPanel>
 					</Border>
 				</Viewbox>
 				<Separator Background="{StaticResource MediumAccentBrush}" />
