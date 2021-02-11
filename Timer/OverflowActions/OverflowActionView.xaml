@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Timer"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:st="http://schemas.spicytaco.io/"
-			 xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
+             xmlns:sr="clr-namespace:Infrastructure.SharedResources;assembly=Infrastructure"
              mc:Ignorable="d" d:DesignWidth="550"
              d:DataContext="{d:DesignInstance local:OverflowActionViewModel}">
 
@@ -24,9 +24,20 @@
 		<hc:FlexPanel FlexWrap="Wrap" JustifyContent="SpaceAround">
 			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Trigger after" />
-				<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.AfterMinutes}" 
-				         sr:TextBoxExtensions.EnforceDouble="True"/>
+				<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.AfterMinutes}"
+				         sr:TextBoxExtensions.EnforceDouble="True" />
 				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
+			</StackPanel>
+			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
+				<CheckBox Margin="5" x:Name="RepeatCheckbox" IsChecked="{Binding Model.RepeatEnabled}" />
+				<TextBlock Style="{StaticResource BaseControlStyle}" Text="Repeat" Margin="5, 5, 0, 5" />
+				<StackPanel Orientation="Horizontal" Margin="0"
+				            Visibility="{Binding IsChecked, ElementName=RepeatCheckbox, Converter={StaticResource B2V}}">
+					<TextBlock Style="{StaticResource BaseControlStyle}" Text=" every" Margin="0, 5, 5, 5" />
+					<TextBox Style="{StaticResource NormalTextBox}" MinWidth="50" Text="{Binding Model.RepeatMinutes}"
+					         sr:TextBoxExtensions.EnforcePositiveDouble="True" />
+					<TextBlock Style="{StaticResource BaseControlStyle}" Text="Minutes" />
+				</StackPanel>
 			</StackPanel>
 			<StackPanel Orientation="Horizontal" Margin="5, 5, 10, 5">
 				<CheckBox Margin="5" x:Name="FlashColorCheckbox" IsChecked="{Binding Model.FlashColorEnabled}" />

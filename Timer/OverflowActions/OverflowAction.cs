@@ -24,6 +24,8 @@ namespace Timer {
         private ITimer _timer;
         private ITimer Timer => _timer ??= TimersService.Singleton.GetTimer(TimerId);
         public double AfterMinutes { get; set; }
+        public bool RepeatEnabled { get; set; }
+        public double RepeatMinutes { get; set; }
         public bool FlashColorEnabled { get; set; }
         public SolidColorBrush FlashColor { get; set; } = Brushes.Crimson;
         private SolidColorBrush TextFlashColor => new(FlashColor.Color.Rotate(180));
@@ -71,10 +73,13 @@ namespace Timer {
 
             if(ShowMessageEnabled) {
                 var pos = Timer.Config.WindowPositions[Screen.AllScreens.Count()];
-                //FIXME this is crashing in published, possibly only after unplugging monitor?
                 Dialogs.ShowNotification(Message, Timer.Config.Name, true, false, false,
                                          Screen.FromPoint(new Point((int) pos.X, (int) pos.Y)));
             }
+
+            if(RepeatEnabled)
+                Timer.AddTimerAction(new TimerAction(Timer.Config.TimeLeft - TimeSpan.FromMinutes(RepeatMinutes), DoAction),
+                                     true);
         }
     }
 }

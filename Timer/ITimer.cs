@@ -25,11 +25,24 @@ namespace Timer {
         event EventHandler<EventArgs> Finished;
         void CheckStart();
         void RegisterShortcuts(TimerConfig timerConfig);
+        void AddTimerAction(TimerAction action, bool isInsideAction);
         void SetTime(TimeSpan time);
         void AddMinutes(int minutes) => SetTime(Config.TimeLeft + TimeSpan.FromMinutes(minutes));
         void StartStopForDesktopsActive();
 
         /// <summary> Create a copy of this timer, but with a new instance ID </summary>
         ITimer Duplicate();
+    }
+
+    public class TimerAction : IComparable<TimerAction> {
+        public TimeSpan TriggerTime { get; }
+        public Action Action { get; }
+
+        public TimerAction(TimeSpan triggerTime, Action action) {
+            TriggerTime = triggerTime;
+            Action = action;
+        }
+
+        public int CompareTo(TimerAction other) => -TriggerTime.CompareTo(other.TriggerTime);
     }
 }

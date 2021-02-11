@@ -33,7 +33,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:00:00",
-        "TimeLeft": "01:45:14",
+        "TimeLeft": "01:41:38",
         "DesktopsVisible": [
           -1
         ],
@@ -78,6 +78,8 @@
         "ZeroOverflowAction": {
           "TimerId": "67c804a4-7e2f-4f1b-82d2-d8710c442b4a",
           "AfterMinutes": 0.0,
+          "RepeatEnabled": false,
+          "RepeatMinutes": 0.0,
           "FlashColorEnabled": false,
           "FlashColor": "#FFFFFFFF",
           "FlashColorSeconds": 0.0,
@@ -153,6 +155,8 @@
         "ZeroOverflowAction": {
           "TimerId": "2b87ac9e-304e-4169-86e0-a79d52805ee8",
           "AfterMinutes": 0.0,
+          "RepeatEnabled": false,
+          "RepeatMinutes": 0.0,
           "FlashColorEnabled": false,
           "FlashColor": "#FFFFFFFF",
           "FlashColorSeconds": 0.0,
@@ -185,7 +189,7 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "00:00:05",
+        "TimeLeft": "-00:00:34",
         "DesktopsVisible": [],
         "DesktopsActive": [],
         "ResetShortcut": {
@@ -224,7 +228,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1200,
+              "SecondsLeft": 1164,
               "WaitForMinutes": 20.0,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -266,7 +270,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1800,
+                "SecondsLeft": 1764,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -291,6 +295,8 @@
         "ZeroOverflowAction": {
           "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
           "AfterMinutes": 0.0,
+          "RepeatEnabled": false,
+          "RepeatMinutes": 0.0,
           "FlashColorEnabled": false,
           "FlashColor": "#FF673AB7",
           "FlashColorSeconds": 0.0,
@@ -303,24 +309,15 @@
           {
             "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
             "AfterMinutes": 0.1,
+            "RepeatEnabled": true,
+            "RepeatMinutes": 0.1,
             "FlashColorEnabled": true,
             "FlashColor": "#FFE91E63",
-            "FlashColorSeconds": 3.0,
+            "FlashColorSeconds": 2.0,
             "PlaySoundEnabled": false,
             "PlaySoundFile": "C:\\Users\\alt\\Drive\\zz_Backup_Other\\ProgramConfigs\\TimeLeftSettings\\Sound\\xperror.mp3",
             "ShowMessageEnabled": true,
             "Message": "wow"
-          },
-          {
-            "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
-            "AfterMinutes": 0.2,
-            "FlashColorEnabled": false,
-            "FlashColor": "#FFDC143C",
-            "FlashColorSeconds": 0.0,
-            "PlaySoundEnabled": false,
-            "PlaySoundFile": null,
-            "ShowMessageEnabled": true,
-            "Message": "wowee"
           }
         ],
         "BackgroundColor": "#B548188C",
@@ -334,7 +331,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-02-10T19:01:00-06:00"
+        "DailyResetTime": "2021-02-11T19:01:00-06:00"
       }
     ]
   }

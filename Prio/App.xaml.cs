@@ -71,7 +71,7 @@ namespace Prio {
                          .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5)
                          .CreateLogger();
 
-            if(!Debugger.IsAttached) RegisterGlobalExceptionHandling(Log.Logger);
+            RegisterGlobalExceptionHandling(Log.Logger);
         }
 
         private void RegisterGlobalExceptionHandling(ILogger log) {
@@ -87,8 +87,8 @@ namespace Prio {
 
         private static void LogException(ILogger log, Exception exception) {
             string exceptionMessage = exception?.Message ?? "An unmanaged exception occured.";
-            log.Error(exception, exceptionMessage); //TODO not making a file??
-            MessageBox.Show(exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            log.Error(exception, exceptionMessage);
+            if(!Debugger.IsAttached) MessageBox.Show(exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         #endregion

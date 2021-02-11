@@ -103,39 +103,43 @@ namespace Timer {
 
         #region TimerActions
 
-        private class TimerAction : IComparable<TimerAction> {
-            public TimeSpan TriggerTime { get; }
-            public Action Action { get; }
-
-            public TimerAction(TimeSpan triggerTime, Action action) {
-                TriggerTime = triggerTime;
-                Action = action;
-            }
-
-            public int CompareTo(TimerAction other) => -TriggerTime.CompareTo(other.TriggerTime);
+        public void AddTimerAction(TimerAction action, bool isInsideAction) {
+            _timerActions.Add(action);
+            FixTimerActionOrder();
+            if(isInsideAction) _taPointer--;
         }
 
         private readonly List<TimerAction> _timerActions = new();
-        private int _timerActionsPointer;
+        private int _taPointer;
 
         /// <summary> Add all timer actions and move pointer to right place. Idempotent. </summary>
         private void SetupTimerActions() {
             _timerActions.Clear();
             _timerActions.Add(new TimerAction(TimeSpan.Zero, TimerFinishedRaise));
             _timerActions.Add(new TimerAction(TimeSpan.Zero, Config.ZeroOverflowAction.DoAction));
-            foreach(var x in Config.OverflowActions)
-                _timerActions.Add(new TimerAction(TimeSpan.FromMinutes(-x.AfterMinutes), x.DoAction));
+            foreach(var x in Config.OverflowActions) {
+                TimeSpan initTime = TimeSpan.FromMinutes(-x.AfterMinutes);
+                _timerActions.Add(new TimerAction(initTime, x.DoAction));
+                if(x.RepeatEnabled && Config.TimeLeft <= initTime) {
+                    double repeatTimes = Math.Ceiling((-x.AfterMinutes - Config.TimeLeft.TotalMinutes) / x.RepeatMinutes);
+                    TimeSpan nextRepeat = initTime - repeatTimes * TimeSpan.FromMinutes(x.RepeatMinutes);
+                    _timerActions.Add(new TimerAction(nextRepeat, x.DoAction));
+                }
+            }
+            FixTimerActionOrder();
+        }
+        private void FixTimerActionOrder() {
             _timerActions.Sort();
-            _timerActionsPointer = 0;
-            while(_timerActionsPointer < _timerActions.Count &&
-                  Config.TimeLeft <= _timerActions[_timerActionsPointer].TriggerTime) _timerActionsPointer++;
+            _taPointer = 0;
+            while(_taPointer < _timerActions.Count && Config.TimeLeft <= _timerActions[_taPointer].TriggerTime)
+                _taPointer++;
         }
 
         private void CheckTimerActions() {
-            while(_timerActionsPointer < _timerActions.Count &&
-                  Config.TimeLeft <= _timerActions[_timerActionsPointer].TriggerTime) {
-                _timerActions[_timerActionsPointer].Action();
-                _timerActionsPointer++;
+            while(_taPointer < _timerActions.Count &&
+                  Config.TimeLeft <= _timerActions[_taPointer].TriggerTime) {
+                _timerActions[_taPointer].Action();
+                _taPointer++;
             }
         }
 
@@ -248,7 +252,7 @@ namespace Timer {
         private void ResetTimer() {
             Config.TimeLeft = Config.Duration;
             _finishedSet = false;
-            _timerActionsPointer = 0;
+            _taPointer = 0;
             Config.ResetConditions.StopAndResetAllConditions();
         }
 
@@ -356,6 +360,7 @@ namespace Timer {
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ToggleVisibilityShortcut),
                                          ToggleVisibility, CompatibilityType.Visibility);
         }
+
         private void UnregisterShortcuts() {
             HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.ResetShortcut));
             HotkeyManager.UnregisterHotkey(Config.InstanceID, nameof(Config.StartShortcut));
