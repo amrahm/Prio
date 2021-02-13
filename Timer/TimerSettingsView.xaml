@@ -239,8 +239,13 @@
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Override" />
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
-							<CheckBox IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
-							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset While Running" />
+							<CheckBox x:Name="AllowResetWhileRunning"  IsChecked="{Binding Config.AllowResetWhileRunning}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Allow Reset Before Finished" />
+						</StackPanel>
+						<StackPanel Orientation="Horizontal" Margin="20, 0, 0, 0"
+						            Visibility="{Binding IsChecked, ElementName=AllowResetWhileRunning, Converter={StaticResource B2V}}">
+							<CheckBox IsChecked="{Binding Config.StartResetConditionsEarly}" Margin="5" />
+							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Start Conditions-Check When Timer Starts" />
 						</StackPanel>
 						<ContentControl x:Name="RootResetCondition" />
 						<Button Height="40" HorizontalAlignment="Center" Margin="0, 5, 0, 8"

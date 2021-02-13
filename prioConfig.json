@@ -33,7 +33,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:00:00",
-        "TimeLeft": "01:41:13",
+        "TimeLeft": "01:37:17",
         "DesktopsVisible": [
           -1
         ],
@@ -74,6 +74,7 @@
         "AutoResetOnConditions": false,
         "AllowResetOverride": true,
         "AllowResetWhileRunning": false,
+        "StartResetConditionsEarly": false,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
           "TimerId": "67c804a4-7e2f-4f1b-82d2-d8710c442b4a",
@@ -112,7 +113,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "00:00:02",
+        "TimeLeft": "-00:00:01",
         "DesktopsVisible": [
           1,
           2,
@@ -151,6 +152,7 @@
         "AutoResetOnConditions": false,
         "AllowResetOverride": false,
         "AllowResetWhileRunning": false,
+        "StartResetConditionsEarly": false,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
           "TimerId": "2b87ac9e-304e-4169-86e0-a79d52805ee8",
@@ -189,9 +191,11 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "-00:00:34",
+        "TimeLeft": "00:00:03",
         "DesktopsVisible": [],
-        "DesktopsActive": [],
+        "DesktopsActive": [
+          8
+        ],
         "ResetShortcut": {
           "Key": 93,
           "Modifiers": 6
@@ -210,8 +214,8 @@
         },
         "WindowPositions": {
           "2": {
-            "X": 1598.0,
-            "Y": 331.0,
+            "X": 986.0,
+            "Y": 343.0,
             "Width": 140.0,
             "Height": 100.0
           },
@@ -228,8 +232,8 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 1139,
-              "WaitForMinutes": 20.0,
+              "SecondsLeft": 2,
+              "WaitForMinutes": 0.05,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
                 1,
@@ -260,7 +264,7 @@
                 "MustRunForXEnabled": false,
                 "MustRunForXMinutes": 0.0,
                 "MustBeFinished": true,
-                "TimerFinished": false
+                "TimerFinished": true
               },
               "Left": null,
               "Right": null,
@@ -270,7 +274,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1739,
+                "SecondsLeft": 1799,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -290,7 +294,8 @@
         },
         "AutoResetOnConditions": true,
         "AllowResetOverride": true,
-        "AllowResetWhileRunning": false,
+        "AllowResetWhileRunning": true,
+        "StartResetConditionsEarly": true,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
           "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
@@ -331,7 +336,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-02-11T19:01:00-06:00"
+        "DailyResetTime": "2021-02-12T19:01:00-06:00"
       }
     ]
   }

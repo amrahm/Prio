@@ -35,6 +35,7 @@ namespace Timer {
         public bool AutoResetOnConditions { get; set; }
         public bool AllowResetOverride { get; set; }
         public bool AllowResetWhileRunning { get; set; }
+        public bool StartResetConditionsEarly { get; set; }
         public bool OverflowEnabled { get; set; } = true;
         public OverflowAction ZeroOverflowAction { get; set; }
         public List<OverflowAction> OverflowActions { get; set; } = new();

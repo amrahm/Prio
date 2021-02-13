@@ -110,6 +110,8 @@ namespace Timer {
         }
 
         public void Start() {
+            if(_conditionTimer.IsEnabled) return;
+
             if(Type == ResetConditionType.Dependency && MustBeFinished) {
                 TimerFinished |= DependencyTimer.Config.TimeLeft.TotalSeconds <= 0;
                 DependencyTimer.Finished += OnDependencyTimerOnFinished;

@@ -86,6 +86,8 @@ namespace Timer {
         public void CheckStart() {
             if(!Config.Enabled) return;
             if(Config.TimeLeft.TotalSeconds <= 0.01) TimerFinishedRaise();
+            if(Config.StartResetConditionsEarly && Config.TimeLeft < Config.Duration)
+                Config.ResetConditions.StartConditions();
         }
 
         private void OnTimerOnTick(object o, EventArgs e) {
@@ -115,7 +117,12 @@ namespace Timer {
         /// <summary> Add all timer actions and move pointer to right place. Idempotent. </summary>
         private void SetupTimerActions() {
             _timerActions.Clear();
+
             _timerActions.Add(new TimerAction(TimeSpan.Zero, TimerFinishedRaise));
+            if(Config.StartResetConditionsEarly)
+                _timerActions.Add(new TimerAction(Config.Duration - TimeSpan.FromSeconds(1),
+                                                  Config.ResetConditions.StartConditions));
+
             _timerActions.Add(new TimerAction(TimeSpan.Zero, Config.ZeroOverflowAction.DoAction));
             foreach(var x in Config.OverflowActions) {
                 TimeSpan initTime = TimeSpan.FromMinutes(-x.AfterMinutes);
@@ -126,6 +133,7 @@ namespace Timer {
                     _timerActions.Add(new TimerAction(nextRepeat, x.DoAction));
                 }
             }
+
             FixTimerActionOrder();
         }
         private void FixTimerActionOrder() {
@@ -165,9 +173,9 @@ namespace Timer {
         }
 
         public void StartStopForDesktopsActive() {
-            Config.DesktopsActive ??= new HashSet<int>();
+            if(Config.DesktopsActive == null || Config.DesktopsActive.Count == 0) return;
             if(Config.DesktopsActive.Contains(-1) || Config.DesktopsActive.Contains(VDM.CurrentDesktop())) StartTimer();
-            else if(Config.DesktopsVisible.Count > 0) StopTimer();
+            else StopTimer();
         }
 
         #endregion
@@ -277,10 +285,9 @@ namespace Timer {
         }
 
         private void ResetConditionsOnSatisfied(object sender, EventArgs e) {
-            if(Config.AutoResetOnConditions) {
-                ResetTimer();
-                StartStopForDesktopsActive();
-            }
+            if(!Config.AutoResetOnConditions) return;
+            ResetTimer();
+            StartStopForDesktopsActive();
         }
 
         #endregion

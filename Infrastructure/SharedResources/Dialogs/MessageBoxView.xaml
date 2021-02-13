@@ -16,7 +16,7 @@
 			<Setter Property="SizeToContent" Value="WidthAndHeight" />
 			<Setter Property="ShowInTaskbar" Value="False" />
 			<Setter Property="Topmost" Value="True" />
-			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/prio.ico" />
+			<Setter Property="Icon" Value="/Infrastructure;component/SharedResources/images/icons-assets/prio.png" />
 			<Setter Property="prism:Dialog.WindowStartupLocation" Value="Manual" />
 		</Style>
 	</prism:Dialog.WindowStyle>
