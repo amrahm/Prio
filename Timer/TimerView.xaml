@@ -66,9 +66,29 @@
 			<Separator />
 			<MenuItem Header="Start/Stop Timer" Command="{Binding StartStopTimer}" />
 			<MenuItem Header="Reset Timer" Command="{Binding ResetTimer}" />
-			<MenuItem Header="Add 5 Minutes" Command="{Binding AddMinutes}" CommandParameter="5" />
-			<MenuItem Header="Add 10 Minutes" Command="{Binding AddMinutes}" CommandParameter="10" />
-			<MenuItem Header="Add 30 Minutes" Command="{Binding AddMinutes}" CommandParameter="30" />
+			<MenuItem>
+				<MenuItem.Header>
+					<StackPanel Width="250" Margin="-18, 0, -50, 0">
+						<TextBlock Text="Add/Remove Minutes:" Margin="16, 0, 0, 3" />
+						<st:AutoGrid Columns="*,*,*,*,*,*" RowHeight="Auto">
+							<st:AutoGrid.Resources>
+								<Style TargetType="Button" BasedOn="{StaticResource NormalButtonDarkBordered}">
+									<Setter Property="Margin" Value="0" />
+									<Setter Property="Padding" Value="0" />
+									<Setter Property="Tag" Value="2" />
+									<Setter Property="BorderThickness" Value="2" />
+								</Style>
+							</st:AutoGrid.Resources>
+							<Button Content="-30" Command="{Binding AddMinutes}" CommandParameter="-30" />
+							<Button Content="-10" Command="{Binding AddMinutes}" CommandParameter="-10" />
+							<Button Content="-5" Command="{Binding AddMinutes}" CommandParameter="-5" />
+							<Button Content="+5" Command="{Binding AddMinutes}" CommandParameter="5" />
+							<Button Content="+10" Command="{Binding AddMinutes}" CommandParameter="10" />
+							<Button Content="+30" Command="{Binding AddMinutes}" CommandParameter="30" />
+						</st:AutoGrid>
+					</StackPanel>
+				</MenuItem.Header>
+			</MenuItem>
 			<MenuItem Header="Set Current Time" Command="{Binding SetTime}" />
 			<Separator />
 			<MenuItem Header="Keep Timers On Top" IsChecked="{Binding IsTopAll, Mode=OneWay}" Command="{Binding SetTopAll}" />

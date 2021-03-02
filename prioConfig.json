@@ -33,7 +33,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:00:00",
-        "TimeLeft": "01:37:10",
+        "TimeLeft": "01:35:48",
         "DesktopsVisible": [
           -1
         ],
@@ -191,7 +191,7 @@
         "ShowMinutes": false,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "00:00:07",
+        "TimeLeft": "00:00:05",
         "DesktopsVisible": [],
         "DesktopsActive": [
           8
@@ -220,9 +220,9 @@
             "Height": 100.0
           },
           "1": {
-            "X": 1402.0,
-            "Y": 534.0,
-            "Width": 134.0,
+            "X": 1401.6,
+            "Y": 534.4,
+            "Width": 134.4,
             "Height": 100.0
           }
         },
@@ -336,7 +336,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-02-25T19:01:00-06:00"
+        "DailyResetTime": "2021-03-02T19:01:00-06:00"
       }
     ]
   }
