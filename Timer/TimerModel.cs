@@ -40,7 +40,7 @@ namespace Timer {
 
         #region OtherFields
 
-        public Window TimerWindow { get; private set; }
+        private Window TimerWindow { get;  set; }
         public Brush TempBackgroundBrush { get; set; }
         public Brush TempTextBrush { get; set; }
 
@@ -85,7 +85,7 @@ namespace Timer {
 
         public void CheckStart() {
             if(!Config.Enabled) return;
-            if(Config.TimeLeft.TotalSeconds <= 0.01) TimerFinishedRaise();
+            if(Config.TimeLeft <= TimeSpan.Zero) TimerFinishedRaise();
             if(Config.StartResetConditionsEarly && Config.TimeLeft < Config.Duration)
                 Config.ResetConditions.StartConditions();
         }
@@ -97,6 +97,7 @@ namespace Timer {
         }
 
         private void TimerFinishedRaise() {
+            if(_finishedSet) return;
             _finishedSet = true;
             _finished.Raise(this, EventArgs.Empty);
             if(!Config.OverflowEnabled) StopTimer();
@@ -105,6 +106,7 @@ namespace Timer {
 
         #region TimerActions
 
+        /// <summary> Add a timer action. WARNING: May not be re-added when program opened or config changed </summary>
         public void AddTimerAction(TimerAction action, bool isInsideAction) {
             _timerActions.Add(action);
             FixTimerActionOrder();
@@ -380,9 +382,13 @@ namespace Timer {
         #region AdjustTime
 
         public void SetTime(TimeSpan time) {
-            if(_finishedSet) ResetTimer();
+            if(_finishedSet && time > TimeSpan.Zero) {
+                _finishedSet = false;
+                if(!Config.StartResetConditionsEarly) Config.ResetConditions.StopAndResetAllConditions();
+            }
+            if(!_finishedSet && time <= TimeSpan.Zero) TimerFinishedRaise();
             Config.TimeLeft = time;
-            SetupTimerActions();
+            FixTimerActionOrder();
         }
 
         #endregion

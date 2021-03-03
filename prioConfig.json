@@ -33,7 +33,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "02:00:00",
-        "TimeLeft": "01:35:48",
+        "TimeLeft": "01:26:01",
         "DesktopsVisible": [
           -1
         ],
@@ -77,7 +77,7 @@
         "StartResetConditionsEarly": false,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
-          "TimerId": "67c804a4-7e2f-4f1b-82d2-d8710c442b4a",
+          "TimerId": "12866e1e-d5fe-4ed7-ba62-9f116ca15ca2",
           "AfterMinutes": 0.0,
           "RepeatEnabled": false,
           "RepeatMinutes": 0.0,
@@ -113,7 +113,7 @@
         "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "-00:02:11",
+        "TimeLeft": "00:00:05",
         "DesktopsVisible": [
           1,
           2,
@@ -155,7 +155,7 @@
         "StartResetConditionsEarly": false,
         "OverflowEnabled": true,
         "ZeroOverflowAction": {
-          "TimerId": "2b87ac9e-304e-4169-86e0-a79d52805ee8",
+          "TimerId": "ebe64c8b-6141-403c-ba69-367fd614ccdf",
           "AfterMinutes": 0.0,
           "RepeatEnabled": false,
           "RepeatMinutes": 0.0,
@@ -188,10 +188,10 @@
         "Enabled": true,
         "ShowName": true,
         "ShowHours": false,
-        "ShowMinutes": false,
+        "ShowMinutes": true,
         "ShowSeconds": true,
         "Duration": "00:00:05",
-        "TimeLeft": "00:00:05",
+        "TimeLeft": "-00:00:34",
         "DesktopsVisible": [],
         "DesktopsActive": [
           8
@@ -232,7 +232,7 @@
             "Condition": {
               "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
               "Type": 0,
-              "SecondsLeft": 3,
+              "SecondsLeft": -2,
               "WaitForMinutes": 0.05,
               "OffDesktopsEnabled": true,
               "OffDesktopsSet": [
@@ -274,7 +274,7 @@
               "Condition": {
                 "TimerId": "48c7e25b-9775-4a9b-a6eb-8aed8db7a724",
                 "Type": 1,
-                "SecondsLeft": 1800,
+                "SecondsLeft": 1754,
                 "WaitForMinutes": 0.0,
                 "OffDesktopsEnabled": false,
                 "OffDesktopsSet": null,
@@ -336,7 +336,7 @@
         "InactivityPauseEnabled": true,
         "InactivityMinutes": 2.0,
         "DailyResetEnabled": true,
-        "DailyResetTime": "2021-03-02T19:01:00-06:00"
+        "DailyResetTime": "2021-03-03T19:01:00-06:00"
       }
     ]
   }

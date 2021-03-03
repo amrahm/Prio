@@ -37,7 +37,11 @@ namespace Timer {
         public bool AllowResetWhileRunning { get; set; }
         public bool StartResetConditionsEarly { get; set; }
         public bool OverflowEnabled { get; set; } = true;
-        public OverflowAction ZeroOverflowAction { get; set; }
+        private OverflowAction _zeroOverflowAction;
+        public OverflowAction ZeroOverflowAction {
+            get => _zeroOverflowAction ??= new OverflowAction(InstanceID);
+            set => _zeroOverflowAction = value;
+        }
         public List<OverflowAction> OverflowActions { get; set; } = new();
         public SolidColorBrush BackgroundColor { get; set; } = new(FromHex("#184A8C").ToMediaColor());
         public SolidColorBrush TextColor { get; set; } = new(FromHex("#F26F63").ToMediaColor());
@@ -55,11 +59,6 @@ namespace Timer {
         }
         public bool DailyResetEnabled { get; set; }
         public DateTime DailyResetTime { get; set; }
-
-
-        public TimerConfig() {
-            ZeroOverflowAction ??= new OverflowAction(InstanceID);
-        }
 
         public void SetColor(SolidColorBrush color, TimerColorZone zone) {
             switch(zone) {
