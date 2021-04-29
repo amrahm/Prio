@@ -2,6 +2,7 @@
 ##### An app to help split time amongst many tasks and manage things like procrastination (hopefully).
 ### Current Features:
 * Countdown timers, as floating windows on your desktop
+
 ![Floating Windows](https://github.com/amrahm/Prio/blob/master/sample_images/floating%20window.png?raw=true)
 ![Timers List](https://github.com/amrahm/Prio/blob/master/sample_images/timers.png?raw=true)
 * Highly configurable
