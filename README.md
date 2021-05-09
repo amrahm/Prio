@@ -1,5 +1,7 @@
-# Prio
+# <img src="https://github.com/amrahm/Prio/blob/master/Infrastructure/SharedResources/images/icons-assets/prio.png?raw=true" alt="Prio Icon" width="30" height="30"> Prio
 ##### An app to help split time amongst many tasks and manage things like procrastination (hopefully).
+
+
 ### Current Features:
 * Countdown timers, as floating windows on your desktop
 
