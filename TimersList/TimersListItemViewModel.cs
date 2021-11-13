@@ -1,12 +1,11 @@
 ﻿using System;
 using Infrastructure.SharedResources;
 using JetBrains.Annotations;
-using Prism.Ioc;
 using Prism.Commands;
 using Timer;
-using static Infrastructure.SharedResources.UnityInstance;
 
-namespace TimersList {
+namespace TimersList
+{
     public class TimersListItemViewModel : NotifyPropertyWithDependencies {
         private readonly ITimer _timer;
         public ITimer Timer {

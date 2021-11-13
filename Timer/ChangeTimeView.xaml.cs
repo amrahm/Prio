@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Infrastructure.SharedResources;
 using Color = System.Windows.Media.Color;
 
-namespace Timer {
+namespace Timer
+{
     /// <summary> Interaction logic for ChangeTimeWindow.xaml </summary>
     public partial class ChangeTimeView   {
         private Window _window;

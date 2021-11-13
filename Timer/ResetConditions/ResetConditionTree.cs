@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Infrastructure.SharedResources;
 using Newtonsoft.Json;
 using WeakEvent;
 
-namespace Timer {
+namespace Timer
+{
     /// <summary> A Boolean-Algebra-Tree that can evaluate if a set of ResetConditions are met </summary>
     [Serializable]
     public class ResetConditionTree : NotifyPropertyChanged {
