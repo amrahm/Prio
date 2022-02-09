@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shell;
+using System.Windows.Threading;
 using Infrastructure.SharedResources;
-using WpfScreenHelper;
+using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 
 namespace Timer {
@@ -22,10 +25,22 @@ namespace Timer {
 
             Loaded += (_, _) => {
                 _window = Window.GetWindow(this) as TimerWindow; // This ensures the timer is a floating window
-                if(_window != null) InitializeFloatingWindow();
+                if(_window != null) {
+                    InitializeFloatingWindow();
+                    SetPositionLock();
+                }
                 TimerAspectRatioLimits();
+
+                _vm.Timer.Config.PropertyChanged += (_,  args) => {
+                    if(args.PropertyName == nameof(TimerConfig.PositionIsLocked)) SetPositionLock();
+                };
             };
         }
+
+
+        private void SetPositionLock() =>
+            _window.ResizeMode = _vm.Timer.Config.PositionIsLocked ? ResizeMode.NoResize : ResizeMode.CanResize;
+
 
         private void InitializeFloatingWindow() {
             WindowChrome windowChrome = new()  {CaptionHeight = 0, ResizeBorderThickness = new Thickness(6)};
@@ -40,12 +55,13 @@ namespace Timer {
         }
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
-            if(_window == null) return;
+            if(_window == null || _vm.Timer.Config.PositionIsLocked) return;
             if(e.ChangedButton == MouseButton.Left) {
                 DependencyObject scope = FocusManager.GetFocusScope(Root);
                 FocusManager.SetFocusedElement(scope, _window);
 
                 _window.DragMove();
+                _window.MoveWindowInBounds();
 
                 SaveWindowPosition();
             }
@@ -77,6 +93,7 @@ namespace Timer {
             TimerViewbox.MaxHeight = TimerViewbox.ActualWidth / hToW * 1.5;
             TimerViewbox.MaxWidth = TimerViewbox.ActualHeight * hToW * 1.5;
         }
+
         private void TimerView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => _vm.StartStopTimer.Execute();
     }
 }

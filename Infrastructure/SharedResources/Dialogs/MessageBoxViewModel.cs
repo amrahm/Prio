@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Prism.Commands;
 using Prism.Services.Dialogs;
-using WpfScreenHelper;
 using DialogResult = Prism.Services.Dialogs.DialogResult;
 
 namespace Infrastructure.SharedResources {

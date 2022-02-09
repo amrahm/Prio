@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -60,7 +61,7 @@ namespace Timer {
 
                 (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
 
-                Rect screen = _window.CurrentScreen().WorkingArea;
+                Rectangle screen = _window.CurrentScreen().WorkingArea;
                 while(screen.Height - SCREEN_MARGIN < Root.ActualHeight * dpiHeightFactor &&
                       screen.Width - SCREEN_MARGIN > Root.ActualWidth * dpiWidthFactor + SNAPPING_INCREMENT) {
                     Root.Width += SNAPPING_INCREMENT;

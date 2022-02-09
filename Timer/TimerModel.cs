@@ -163,7 +163,7 @@ namespace Timer {
             TimerWindow?.Dispatcher.Invoke(() => {
                 Config.DesktopsVisible ??= new HashSet<int> {-1};
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
-                   TimersService.VisState != VisibilityState.Hidden) {
+                   TimersService.Singleton.VisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;
                     VDM.MoveToDesktop(TimerWindow, newDesktop);
                 } else if(Config.DesktopsVisible.Count > 0)  {
@@ -182,6 +182,10 @@ namespace Timer {
 
         #endregion
 
+
+        public void ToggleLockPosition() => Config.PositionIsLocked = !Config.PositionIsLocked;
+
+
         #region VisibilityStuff
 
         public void ShowTimer(bool shouldActivate = false) {
@@ -198,7 +202,7 @@ namespace Timer {
                 TimerWindow = null;
             };
 
-            switch(TimersService.VisState) {
+            switch(TimersService.Singleton.VisState) {
                 case VisibilityState.MoveBehind:
                     SetBottommost();
                     break;

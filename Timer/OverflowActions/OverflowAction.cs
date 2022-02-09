@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
-using WpfScreenHelper;
 using static Infrastructure.SharedResources.UnityInstance;
 using Brushes = System.Windows.Media.Brushes;
+using Point = System.Drawing.Point;
 
 namespace Timer {
     [Serializable]

@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Prism.Services.Dialogs;
-using WpfScreenHelper;
 using Panel = System.Windows.Controls.Panel;
 using Color = System.Drawing.Color;
+using ComboBox = System.Windows.Controls.ComboBox;
 using MColor = System.Windows.Media.Color;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
@@ -152,13 +153,13 @@ namespace Infrastructure.SharedResources {
 
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
-                Screen.FromPoint(new Point((int) window.Left, (int) window.Top));
+                Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
 
 
         public static void MoveWindowInBounds(this Window window) {
             (double dpiWidthFactor, double dpiHeightFactor) = GetDpiFactors(window);
 
-            Rect wA = window.CurrentScreen().WorkingArea;
+            Rectangle wA = window.CurrentScreen().WorkingArea;
 
             window.Left += Math.Max(wA.Left / dpiWidthFactor - window.Left, 0);
             window.Left += Math.Min(wA.Right / dpiWidthFactor - (window.Left + window.ActualWidth), 0);
@@ -169,7 +170,7 @@ namespace Infrastructure.SharedResources {
 
         public static void CenterOnScreen(this Window window, double dpiWidthFactor, double dpiHeightFactor) =>
                 CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
-        public static void CenterOnScreen(this Window window, Rect screen, double dpiWidthFactor, double dpiHeightFactor) {
+        public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor, double dpiHeightFactor) {
             window.WindowStartupLocation = WindowStartupLocation.Manual;
             window.Left = (screen.Width / dpiWidthFactor - window.ActualWidth) / 2 + screen.Left;
             window.Top = (screen.Height / dpiHeightFactor - window.ActualHeight) / 2 + screen.Top;
@@ -430,7 +431,7 @@ namespace Infrastructure.SharedResources {
         public static void SetMaxWidthFromItems(this ComboBox combo) {
             double idealWidth = combo.MinWidth;
             string longestItem = combo.Items.Cast<object>().Select(x => x.ToString()).Max(x => (x?.Length, x)).x;
-            if(longestItem != null && longestItem.Length >= 0) {
+            if(longestItem is {Length: > 0}) {
                 string tmpTxt = combo.Text;
                 combo.Text = longestItem;
                 Thickness tmpMarg = combo.Margin;

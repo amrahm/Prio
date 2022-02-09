@@ -46,7 +46,7 @@ namespace Timer {
         [DependsOnProperty(nameof(Timer))]
         public Brush TextColor => Timer.TempTextBrush ?? Config.TextColor;
 
-        public bool IsTopAll { get; private set; } = TimersService.VisState == VisibilityState.KeepOnTop;
+        public bool IsTopAll { get; private set; } = TimersService.Singleton.VisState == VisibilityState.KeepOnTop;
 
 
         public DelegateCommand OpenTimerSettings { get; }
@@ -56,6 +56,7 @@ namespace Timer {
         public DelegateCommand<object> AddMinutes { get; }
         public DelegateCommand SetTime { get; }
         public DelegateCommand SetTopAll { get; }
+        public DelegateCommand LockPosition { get; }
         public DelegateCommand HideTimer { get; }
         public DelegateCommand DisableTimer { get; }
         public DelegateCommand ExitProgram { get; }
@@ -66,7 +67,7 @@ namespace Timer {
 
             TimersService.Singleton.PropertyChanged += (_,  args) => {
                 if(args.PropertyName == nameof(TimersService.VisState))
-                    IsTopAll = TimersService.VisState == VisibilityState.KeepOnTop;
+                    IsTopAll = TimersService.Singleton.VisState == VisibilityState.KeepOnTop;
             };
 
             OpenTimerSettings = new DelegateCommand(() => Timer.OpenSettings());
@@ -93,6 +94,7 @@ namespace Timer {
                 if(IsTopAll) TimersService.Singleton.BottomAll();
                 else TimersService.Singleton.TopAll();
             });
+            LockPosition = new DelegateCommand(() => Timer.ToggleLockPosition());
             HideTimer = new DelegateCommand(() => Timer.ToggleVisibility());
             DisableTimer = new DelegateCommand(() => Timer.ToggleEnabled());
             ExitProgram = new DelegateCommand(() => Application.Current.Shutdown());

@@ -11,6 +11,7 @@ namespace Timer {
         void ShowTimer(bool shouldActivate = false);
         void SetTopmost();
         void SetBottommost();
+        void ToggleLockPosition();
         void SetVisibility(bool vis);
         void ToggleVisibility();
         void ToggleEnabled();

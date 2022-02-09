@@ -31,6 +31,7 @@ namespace Timer {
         public ShortcutDefinition StopShortcut { get; set; }
         public ShortcutDefinition ToggleVisibilityShortcut { get; set; }
         public Dictionary<int, WindowPosition> WindowPositions { get; set; } = new();
+        public bool PositionIsLocked { get; set; }
         public ResetConditionTree ResetConditions { get; set; } = new();
         public bool AutoResetOnConditions { get; set; }
         public bool AllowResetOverride { get; set; }

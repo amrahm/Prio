@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
 using Prism.Services.Dialogs;
-using WpfScreenHelper;
 using static Infrastructure.SharedResources.UnityInstance;
 using Application = System.Windows.Application;
 
@@ -17,7 +17,7 @@ namespace Timer {
             get => Singleton.Conf;
             set => Singleton.Conf = value;
         }
-        public static VisibilityState VisState {
+        public VisibilityState VisState {
             get => Config.VisState;
             set {
                 Config.VisState = value;
@@ -124,7 +124,7 @@ namespace Timer {
         private enum VisibilityHotkeyState { ShouldHide, ShouldTop, ShouldBehind }
 
         private void LoadVisStatePerDesktopProfile() {
-            if(Conf.VisStatePerDesktopProfile.TryGetValue(Screen.AllScreens.Count(), out VisibilityState state))
+            if(Conf.VisStatePerDesktopProfile.TryGetValue(Screen.AllScreens.Length, out VisibilityState state))
                 ApplyVisState(state);
         }
 
