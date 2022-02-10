@@ -112,13 +112,12 @@ namespace Timer {
             };
 
 
-            MouseDown += (_, e) => {
-                if(e.ChangedButton == MouseButton.Left) {
-                    DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
-                    FocusManager.SetFocusedElement(scope, _window);
+            MouseLeftButtonDown += (_, e) => {
+                e.Handled = true;
+                DependencyObject scope = FocusManager.GetFocusScope(MainWrapPanel);
+                FocusManager.SetFocusedElement(scope, _window);
 
-                    if(!ChildDraggables.Any(x => x.IsMouseOver)) _window.DragMove();
-                }
+                if(!ChildDraggables.Any(x => x.IsMouseOver)) _window.DragMove();
             };
         }
     }

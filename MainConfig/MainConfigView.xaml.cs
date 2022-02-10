@@ -33,12 +33,11 @@ namespace MainConfig {
                 _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
             };
 
-            MouseDown += (_, e) => {
-                if(e.ChangedButton == MouseButton.Left) {
-                    DependencyObject scope = FocusManager.GetFocusScope(Root);
-                    FocusManager.SetFocusedElement(scope, _window);
-                    _window.DragMove();
-                }
+            MouseLeftButtonDown += (_, e) => {
+                e.Handled = true;
+                DependencyObject scope = FocusManager.GetFocusScope(Root);
+                FocusManager.SetFocusedElement(scope, _window);
+                _window.DragMove();
             };
         }
 

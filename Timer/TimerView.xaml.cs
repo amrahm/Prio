@@ -50,21 +50,21 @@ namespace Timer {
             LoadWindowPosition();
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += (_,  _) => LoadWindowPosition();
 
-            MouseDown += DragMoveWindow;
+            MouseLeftButtonDown += DragMoveWindow;
+
             SizeChanged += (_, _) => SaveWindowPosition();
         }
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
             if(_window == null || _vm.Timer.Config.PositionIsLocked) return;
-            if(e.ChangedButton == MouseButton.Left) {
-                DependencyObject scope = FocusManager.GetFocusScope(Root);
-                FocusManager.SetFocusedElement(scope, _window);
+            e.Handled = true;
+            DependencyObject scope = FocusManager.GetFocusScope(Root);
+            FocusManager.SetFocusedElement(scope, _window);
 
-                _window.DragMove();
-                _window.MoveWindowInBounds();
+            _window.DragMove();
+            _window.MoveWindowInBounds();
 
-                SaveWindowPosition();
-            }
+            SaveWindowPosition();
         }
 
         private void SaveWindowPosition() {
