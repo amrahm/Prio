@@ -325,13 +325,13 @@ namespace Timer {
             }
 
             DateTime now = DateTime.Now;
-            if(now > Config.DailyResetTime.AddSeconds(-10)) {
+            if(now > Config.DailyResetTime) {
                 if(!newConfig || now > Config.DailyResetTime.AddDays(1)) ResetTimer();
 
                 Config.DailyResetTime = DateTime.Today.AddMinutes(Config.DailyResetTime.TimeOfDay.TotalMinutes);
 
-                // If it's already past DailyResetTime (10s margin of error), wait until DailyResetTime tomorrow    
-                if(now > Config.DailyResetTime.AddSeconds(-10)) Config.DailyResetTime = Config.DailyResetTime.AddDays(1.0);
+                // If it's already past DailyResetTime, wait until DailyResetTime tomorrow    
+                if(now > Config.DailyResetTime) Config.DailyResetTime = Config.DailyResetTime.AddDays(1.0);
             }
 
             _dailyResetTimer?.Dispose();

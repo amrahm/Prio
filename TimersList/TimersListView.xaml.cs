@@ -48,7 +48,7 @@ namespace TimersList {
 
             void SizeChangedEventHandler(object sender = null, SizeChangedEventArgs sizeChangedEventArgs = null) {
                 double newSizeWidth = TimerWrapPanel.ActualWidth;
-                double maxPerRow = Math.Floor(newSizeWidth / MIN_CTRL_WIDTH);
+                double maxPerRow = Math.Max(1, Math.Floor(newSizeWidth / MIN_CTRL_WIDTH));
                 double ctrlWidth = newSizeWidth / Math.Min(maxPerRow, TimerWrapPanel.Children.Count) - 10;
                 foreach(object item in TimerWrapPanel.Children) { ((FrameworkElement) item).Width = ctrlWidth; }
             }

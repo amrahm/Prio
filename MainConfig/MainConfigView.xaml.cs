@@ -29,8 +29,7 @@ namespace MainConfig {
                 };
                 WindowChrome.SetWindowChrome(_window, windowChrome);
 
-                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
-                _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
+                _window.CenterOnScreen();
             };
 
             MouseLeftButtonDown += (_, e) => {

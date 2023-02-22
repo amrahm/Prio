@@ -28,9 +28,8 @@ namespace Infrastructure.SharedResources {
 
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
                 Rectangle screen = vm.openOnScreen?.WorkingArea ?? _window.CurrentScreen().WorkingArea;
-                _window.CenterOnScreen(screen, dpiWidthFactor, dpiHeightFactor);
+                _window.CenterOnScreen(screen);
 
 
                 //Set the window style to noactivate.

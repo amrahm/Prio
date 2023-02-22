@@ -59,27 +59,27 @@ namespace Timer {
                 _startHeight = _window.Height;
                 _window.SizeToContent = SizeToContent.Height;
 
-                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
+                double dpiScaling = WindowHelpers.GetDpiFactors(_window);
 
                 Rectangle screen = _window.CurrentScreen().WorkingArea;
-                while(screen.Height - SCREEN_MARGIN < Root.ActualHeight * dpiHeightFactor &&
-                      screen.Width - SCREEN_MARGIN > Root.ActualWidth * dpiWidthFactor + SNAPPING_INCREMENT) {
+                while(screen.Height - SCREEN_MARGIN < Root.ActualHeight / dpiScaling &&
+                      screen.Width - SCREEN_MARGIN > Root.ActualWidth / dpiScaling + SNAPPING_INCREMENT) {
                     Root.Width += SNAPPING_INCREMENT;
                     _window.Width += SNAPPING_INCREMENT;
                     _window.SizeToContent = SizeToContent.WidthAndHeight;
                 }
 
-                _window.MaxWidth = (screen.Width - SCREEN_MARGIN) / dpiWidthFactor;
-                _window.MaxHeight = (screen.Height - SCREEN_MARGIN) / dpiHeightFactor;
+                _window.MaxWidth = (screen.Width - SCREEN_MARGIN) * dpiScaling;
+                _window.MaxHeight = (screen.Height - SCREEN_MARGIN) * dpiScaling;
 
-                _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
+                _window.CenterOnScreen();
             };
 
             SizeChanged += (_, e) => {
                 const double spacing = 3;
 
                 double newSizeWidth = e.NewSize.Width;
-                int maxPerRow = (int) (newSizeWidth / MIN_CTRL_WIDTH);
+                int maxPerRow = Math.Clamp((int) (newSizeWidth / MIN_CTRL_WIDTH), 1, 3);
                 int numPerRow = Math.Min(maxPerRow, MainWrapPanel.Children.Count);
                 MainWrapPanel.Width = newSizeWidth + numPerRow * spacing + 20;
                 double ctrlWidth = newSizeWidth / numPerRow - (spacing * (numPerRow - 1) + 15) / numPerRow;

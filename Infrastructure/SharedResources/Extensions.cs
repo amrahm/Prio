@@ -36,7 +36,7 @@ namespace Infrastructure.SharedResources {
         /// <param name="value"> new value for object </param>
         /// <param name="thisChanged"> Lets you specify what OnPropertyChanged method should be called </param>
         public static void BubbleSetter<T>(ref T obj, T value, PropertyChangedEventHandler thisChanged)
-                where T : class, INotifyPropertyChanged {
+            where T : class, INotifyPropertyChanged {
             if(obj != value) {
                 // Clean-up old event handler:
                 if(obj != null) obj.PropertyChanged -= thisChanged;
@@ -50,7 +50,7 @@ namespace Infrastructure.SharedResources {
 
     public static class DialogServiceExtensions {
         public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
-                                                          IDialogParameters parameters) {
+            IDialogParameters parameters) {
             var tcs = new TaskCompletionSource<IDialogResult>();
 
             try {
@@ -62,7 +62,7 @@ namespace Infrastructure.SharedResources {
         }
 
         public static Task<IDialogResult> ShowAsync(this IDialogService dialogService, string name,
-                                                    IDialogParameters parameters) {
+            IDialogParameters parameters) {
             var tcs = new TaskCompletionSource<IDialogResult>();
 
             try {
@@ -76,7 +76,7 @@ namespace Infrastructure.SharedResources {
 
     public static class BindingHelpers {
         public static void ManualBinding(object source, string sourcePropName, object target, string targetPropName,
-                                         object defaultValue = null, bool twoWay = true, Action callback = null) {
+            object defaultValue = null, bool twoWay = true, Action callback = null) {
             var sProp = source.GetType().GetProperty(sourcePropName);
             var tProp = target.GetType().GetProperty(targetPropName);
             if(tProp != null && sProp != null) {
@@ -114,12 +114,12 @@ namespace Infrastructure.SharedResources {
         public static HashSet<int> DesktopStringToSet(string listString) {
             if(string.IsNullOrEmpty(listString)) return new HashSet<int>();
             return Array.ConvertAll(listString.Trim().Trim(',').Replace(" ", "").Split(','), s => int.Parse(s) - 1)
-                        .ToHashSet();
+                .ToHashSet();
         }
 
         /// <summary> Turns the 0-indexed Set of numbers into a 1-indexed string </summary>
         public static string DesktopSetToString(IEnumerable<int> set) =>
-                string.Join(", ", set?.Select(x => x + 1) ?? new HashSet<int>());
+            string.Join(", ", set?.Select(x => x + 1) ?? new HashSet<int>());
     }
 
     public static class EnumerableExtensions {
@@ -153,35 +153,32 @@ namespace Infrastructure.SharedResources {
 
     public static class WindowHelpers {
         public static Screen CurrentScreen(this Window window) =>
-                Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
+            Screen.FromPoint(new System.Drawing.Point((int) window.Left, (int) window.Top));
 
 
         public static void MoveWindowInBounds(this Window window) {
-            (double dpiWidthFactor, double dpiHeightFactor) = GetDpiFactors(window);
+            double dpiScaling = GetDpiFactors(window);
 
             Rectangle wA = window.CurrentScreen().WorkingArea;
 
-            window.Left += Math.Max(wA.Left / dpiWidthFactor - window.Left, 0);
-            window.Left += Math.Min(wA.Right / dpiWidthFactor - (window.Left + window.ActualWidth), 0);
-            window.Top += Math.Max(wA.Top / dpiHeightFactor - window.Top, 0);
-            window.Top += Math.Min(wA.Bottom / dpiHeightFactor - (window.Top + window.ActualHeight), 0);
+            window.Left += Math.Max(wA.Left * dpiScaling - window.Left, 0);
+            window.Left += Math.Min(wA.Right * dpiScaling - (window.Left + window.ActualWidth), 0);
+            window.Top += Math.Max(wA.Top * dpiScaling - window.Top, 0);
+            window.Top += Math.Min(wA.Bottom * dpiScaling - (window.Top + window.ActualHeight), 0);
         }
 
 
-        public static void CenterOnScreen(this Window window, double dpiWidthFactor, double dpiHeightFactor) =>
-                CenterOnScreen(window, window.CurrentScreen().WorkingArea, dpiWidthFactor, dpiHeightFactor);
-        public static void CenterOnScreen(this Window window, Rectangle screen, double dpiWidthFactor, double dpiHeightFactor) {
+        public static void CenterOnScreen(this Window window) => CenterOnScreen(window, window.CurrentScreen().WorkingArea);
+
+        public static void CenterOnScreen(this Window window, Rectangle screen) {
+            double dpiScaling = GetDpiFactors(window);
+
             window.WindowStartupLocation = WindowStartupLocation.Manual;
-            window.Left = (screen.Width / dpiWidthFactor - window.ActualWidth) / 2 + screen.Left;
-            window.Top = (screen.Height / dpiHeightFactor - window.ActualHeight) / 2 + screen.Top;
+            window.Left = (screen.Width * dpiScaling - window.ActualWidth) / 2 + screen.Left;
+            window.Top = (screen.Height * dpiScaling - window.ActualHeight) / 2 + screen.Top;
         }
 
-        public static (double dpiWidthFactor, double dpiHeightFactor) GetDpiFactors(Window window) {
-            PresentationSource presentationSource = PresentationSource.FromVisual(window);
-            Debug.Assert(presentationSource?.CompositionTarget != null, nameof(presentationSource) + " != null");
-            Matrix m = presentationSource.CompositionTarget.TransformToDevice;
-            return (m.M11, m.M22);
-        }
+        public static double GetDpiFactors(Window window) => 1f/VisualTreeHelper.GetDpi(window).DpiScaleX;
     }
 
     public static class UIHelpers {
@@ -208,12 +205,13 @@ namespace Infrastructure.SharedResources {
         }
 
         /// <summary> Checks if a point (that is specified relative to this element) is contained within </summary>
-        public static bool ContainsRelativePoint(this FrameworkElement element, Point point) => point.X > 0 && point.Y > 0 &&
-                point.X < element.ActualWidth && point.Y < element.ActualHeight;
+        public static bool ContainsRelativePoint(this FrameworkElement element, Point point) =>
+            point.X > 0 && point.Y > 0 &&
+            point.X < element.ActualWidth && point.Y < element.ActualHeight;
 
         /// <summary> Checks if the mouse is contained within </summary>
         public static bool ContainsMouse(this FrameworkElement element) =>
-                element.ContainsRelativePoint(Mouse.GetPosition(element));
+            element.ContainsRelativePoint(Mouse.GetPosition(element));
     }
 
     public class EnumerationExtension : MarkupExtension {
@@ -221,7 +219,7 @@ namespace Infrastructure.SharedResources {
 
 
         public EnumerationExtension(Type enumType) =>
-                EnumType = enumType ?? throw new ArgumentNullException(nameof(enumType));
+            EnumType = enumType ?? throw new ArgumentNullException(nameof(enumType));
 
         public Type EnumType {
             get => _enumType;
@@ -248,10 +246,10 @@ namespace Infrastructure.SharedResources {
 
         private string GetDescription(object enumValue) {
             return EnumType.GetField(enumValue.ToString()!)
-                           ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
-                           .FirstOrDefault() is DescriptionAttribute descriptionAttribute ?
-                    descriptionAttribute.Description :
-                    enumValue.ToString();
+                       ?.GetCustomAttributes(typeof(DescriptionAttribute), false)
+                       .FirstOrDefault() is DescriptionAttribute descriptionAttribute ?
+                       descriptionAttribute.Description :
+                       enumValue.ToString();
         }
 
         public class EnumerationMember {
@@ -385,12 +383,12 @@ namespace Infrastructure.SharedResources {
 
     public static class ComboBoxAutoWidthBehavior {
         public static readonly DependencyProperty ComboBoxAutoWidthProperty =
-                DependencyProperty.RegisterAttached(
-                    "ComboBoxAutoWidth",
-                    typeof(bool),
-                    typeof(ComboBoxAutoWidthBehavior),
-                    new UIPropertyMetadata(false, OnComboBoxAutoWidthPropertyChanged)
-                );
+            DependencyProperty.RegisterAttached(
+                "ComboBoxAutoWidth",
+                typeof(bool),
+                typeof(ComboBoxAutoWidthBehavior),
+                new UIPropertyMetadata(false, OnComboBoxAutoWidthPropertyChanged)
+            );
 
         public static bool GetComboBoxAutoWidth(DependencyObject obj) {
             return (bool) obj.GetValue(ComboBoxAutoWidthProperty);

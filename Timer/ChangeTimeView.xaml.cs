@@ -23,8 +23,7 @@ namespace Timer
                 Debug.Assert(_window != null, nameof(_window) + " != null");
                 _window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-                (double dpiWidthFactor, double dpiHeightFactor) = WindowHelpers.GetDpiFactors(_window);
-                _window.CenterOnScreen(dpiWidthFactor, dpiHeightFactor);
+                _window.CenterOnScreen();
             };
 
             MouseDown += (_, e) => {
