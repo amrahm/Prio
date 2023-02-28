@@ -7,8 +7,7 @@ namespace Infrastructure.Prism {
         public static IRegionManager SetRMAware(this IRegionManager regionManagerA, object item) {
             if(item is IRegionManagerAware rmAware) rmAware.RegionManagerA = regionManagerA;
 
-            if(item is FrameworkElement rmAwareFrameWorkElement &&
-               rmAwareFrameWorkElement.DataContext is IRegionManagerAware rmAwareDataContext) {
+            if(item is FrameworkElement {DataContext: IRegionManagerAware rmAwareDataContext}) {
                 rmAwareDataContext.RegionManagerA = regionManagerA;
             }
             return regionManagerA;

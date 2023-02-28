@@ -76,7 +76,7 @@ namespace Infrastructure.SharedResources {
                 Shortcut ??= new ShortcutDefinition();
             };
             LostKeyboardFocus += (_, _) => {
-                if(Shortcut != null && Shortcut.Key == Key.None) Shortcut = null;
+                if(Shortcut is {Key: Key.None}) Shortcut = null;
             };
 
             foreach((ModifierKeys key, ToggleButton value) in _modToToggle) {

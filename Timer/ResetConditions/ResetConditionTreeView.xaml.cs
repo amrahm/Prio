@@ -157,7 +157,7 @@ namespace Timer {
             treeView.AdornerRectangle.Width = treeView.ActualWidth;
             treeView.AdornerRectangle.Height = treeView.ActualHeight;
 
-            if(treeView._unhighlightTimer != null && treeView._unhighlightTimer.IsEnabled) return;
+            if(treeView._unhighlightTimer is {IsEnabled: true}) return;
 
             treeView._unhighlightTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(10)};
             treeView._unhighlightTimer.Tick += (_,  _) => {

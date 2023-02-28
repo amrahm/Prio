@@ -38,8 +38,10 @@ namespace Timer {
         }
 
 
-        private void SetPositionLock() =>
-            _window.ResizeMode = _vm.Timer.Config.PositionIsLocked ? ResizeMode.NoResize : ResizeMode.CanResize;
+        private void SetPositionLock() {
+            if(_window != null)
+                _window.ResizeMode = _vm.Timer.Config.PositionIsLocked ? ResizeMode.NoResize : ResizeMode.CanResize;
+        }
 
 
         private void InitializeFloatingWindow() {
@@ -56,7 +58,7 @@ namespace Timer {
         }
 
         private void DragMoveWindow(object o, MouseButtonEventArgs e) {
-            if(_window == null || _vm.Timer.Config.PositionIsLocked) return;
+            if(_window == null) return;
             e.Handled = true;
             DependencyObject scope = FocusManager.GetFocusScope(Root);
             FocusManager.SetFocusedElement(scope, _window);
@@ -69,16 +71,20 @@ namespace Timer {
 
         private void SaveWindowPosition() {
             if(_window == null) return;
+            if(_vm.Timer.Config.PositionIsLocked) {
+                LoadWindowPosition();
+                return;
+            }
             WindowPosition newPos = new(_window.Left, _window.Top, _window.ActualWidth, _window.ActualHeight);
-            if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Count(), out WindowPosition configPos) ||
+            if(!_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition configPos) ||
                configPos != newPos) {
-                _vm.Timer.Config.WindowPositions[Screen.AllScreens.Count()] = newPos;
+                _vm.Timer.Config.WindowPositions[Screen.AllScreens.Length] = newPos;
                 _vm.Timer.SaveSettings();
             }
         }
 
         private void LoadWindowPosition() {
-            if(_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Count(), out WindowPosition position)) {
+            if(_vm.Timer.Config.WindowPositions.TryGetValue(Screen.AllScreens.Length, out WindowPosition position)) {
                 _window.Left = position.X;
                 _window.Top = position.Y;
                 _window.Width = position.Width;

@@ -174,8 +174,8 @@ namespace Infrastructure.SharedResources {
             double dpiScaling = GetDpiFactors(window);
 
             window.WindowStartupLocation = WindowStartupLocation.Manual;
-            window.Left = (screen.Width * dpiScaling - window.ActualWidth) / 2 + screen.Left;
-            window.Top = (screen.Height * dpiScaling - window.ActualHeight) / 2 + screen.Top;
+            window.Left = (screen.Width * dpiScaling - window.ActualWidth) / 2 + screen.Left * dpiScaling;
+            window.Top = (screen.Height * dpiScaling - window.ActualHeight) / 2 + screen.Top * dpiScaling;
         }
 
         public static double GetDpiFactors(Window window) => 1f/VisualTreeHelper.GetDpi(window).DpiScaleX;
@@ -206,7 +206,7 @@ namespace Infrastructure.SharedResources {
 
         /// <summary> Checks if a point (that is specified relative to this element) is contained within </summary>
         public static bool ContainsRelativePoint(this FrameworkElement element, Point point) =>
-            point.X > 0 && point.Y > 0 &&
+            point is {X: > 0, Y: > 0} &&
             point.X < element.ActualWidth && point.Y < element.ActualHeight;
 
         /// <summary> Checks if the mouse is contained within </summary>

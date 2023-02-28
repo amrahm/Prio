@@ -30,7 +30,7 @@
       <Version>2.5.2</Version>
     </PackageReference>
     <PackageReference Include="HandyControl">
-      <Version>3.3.0</Version>
+      <Version>3.4.0</Version>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
@@ -56,5 +56,8 @@
     </PackageReference>
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
     <PackageReference Include="VirtualDesktop.WPF.Net5" Version="5.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="Switch.System.Windows.DoNotScaleForDpiChanges" Value="true" />
   </ItemGroup>
 </Project>

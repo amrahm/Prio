@@ -28,7 +28,7 @@ namespace Timer {
 
                 NotificationBubbler.BubbleSetter(ref _config, value, (_, _) => this.OnPropertyChanged());
 
-                if(_config != null && _config.Enabled) {
+                if(_config is {Enabled: true}) {
                     RegisterShortcuts();
                     _config.ResetConditions.Satisfied += ResetConditionsOnSatisfied;
                     SetupTimerActions();
