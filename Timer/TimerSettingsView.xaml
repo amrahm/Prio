@@ -164,7 +164,7 @@
 							<hc:TimePicker TimeFormat="hh:mm tt" Margin="0, 5" FontSize="{StaticResource NormalFontSize}" Name="TimePicker"
 							               FontFamily="{StaticResource NormalFont}" Foreground="{StaticResource DarkBrush}">
 								<hc:TimePicker.Clock>
-									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" />
+									<hc:Clock TimeFormat="hh:mm tt" Style="{StaticResource Clok}" SelectedTime="{Binding Config.DailyResetTime, Mode=TwoWay}" />
 								</hc:TimePicker.Clock>
 							</hc:TimePicker>
 							<TextBlock Style="{StaticResource BaseControlStyle}" Text="Each Day" />

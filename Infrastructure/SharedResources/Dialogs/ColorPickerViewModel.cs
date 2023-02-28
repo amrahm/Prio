@@ -20,7 +20,7 @@ namespace Infrastructure.SharedResources {
         public ColorPicker Picker {
             set {
                 _picker = value;
-                _picker.SelectedColorChanged += (_, _) => RequestClose?.Invoke(
+                _picker.Confirmed += (_, _) => RequestClose?.Invoke(
                     new DialogResult(ButtonResult.OK, new DialogParameters {
                         {nameof(ColorPicker.SelectedBrush), _picker.SelectedBrush}
                     }));
@@ -33,7 +33,7 @@ namespace Infrastructure.SharedResources {
         public static Task<IDialogResult> ShowColorPicker(this IDialogService dialogService,
                                                           SolidColorBrush selectedBrush = null) {
             return dialogService.ShowDialogAsync(nameof(ColorPickerView),
-                                                 new DialogParameters {{nameof(ColorPicker.SelectedBrush), selectedBrush}});
+                                                 new DialogParameters { { nameof(ColorPicker.SelectedBrush), selectedBrush } });
         }
     }
 }

@@ -13,10 +13,12 @@ namespace Infrastructure.SharedResources {
             Loaded += (_, _) => {
                 Window window = Window.GetWindow(this);
                 if(window == null) return;
+                double dpiScaling = WindowHelpers.GetDpiFactor(window);
 
                 Point mousePos = ColorPicker.PointToScreen(Mouse.GetPosition(ColorPicker));
-                window.Top = mousePos.Y - window.ActualHeight / 2;
-                window.Left = mousePos.X - window.ActualWidth / 2;
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Top = mousePos.Y * dpiScaling - window.ActualHeight / 2;
+                window.Left = mousePos.X * dpiScaling - window.ActualWidth / 2;
                 window.MoveWindowInBounds();
             };
         }

@@ -59,7 +59,7 @@ namespace Timer {
                 _startHeight = _window.Height;
                 _window.SizeToContent = SizeToContent.Height;
 
-                double dpiScaling = WindowHelpers.GetDpiFactors(_window);
+                double dpiScaling = WindowHelpers.GetDpiFactor(_window);
 
                 Rectangle screen = _window.CurrentScreen().WorkingArea;
                 while(screen.Height - SCREEN_MARGIN < Root.ActualHeight / dpiScaling &&

@@ -51,10 +51,10 @@ namespace Infrastructure.SharedResources {
     public static class DialogServiceExtensions {
         public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
             IDialogParameters parameters) {
-            var tcs = new TaskCompletionSource<IDialogResult>();
+            TaskCompletionSource<IDialogResult> tcs = new();
 
             try {
-                dialogService.ShowDialog(name, parameters, result => tcs.SetResult(result));
+                dialogService.ShowDialog(name, parameters, tcs.SetResult);
             } catch(Exception ex) {
                 tcs.SetException(ex);
             }
@@ -63,10 +63,10 @@ namespace Infrastructure.SharedResources {
 
         public static Task<IDialogResult> ShowAsync(this IDialogService dialogService, string name,
             IDialogParameters parameters) {
-            var tcs = new TaskCompletionSource<IDialogResult>();
+            TaskCompletionSource<IDialogResult> tcs = new();
 
             try {
-                dialogService.Show(name, parameters, result => tcs.SetResult(result));
+                dialogService.Show(name, parameters, tcs.SetResult);
             } catch(Exception ex) {
                 tcs.SetException(ex);
             }
@@ -157,7 +157,7 @@ namespace Infrastructure.SharedResources {
 
 
         public static void MoveWindowInBounds(this Window window) {
-            double dpiScaling = GetDpiFactors(window);
+            double dpiScaling = GetDpiFactor(window);
 
             Rectangle wA = window.CurrentScreen().WorkingArea;
 
@@ -171,14 +171,14 @@ namespace Infrastructure.SharedResources {
         public static void CenterOnScreen(this Window window) => CenterOnScreen(window, window.CurrentScreen().WorkingArea);
 
         public static void CenterOnScreen(this Window window, Rectangle screen) {
-            double dpiScaling = GetDpiFactors(window);
+            double dpiScaling = GetDpiFactor(window);
 
             window.WindowStartupLocation = WindowStartupLocation.Manual;
             window.Left = (screen.Width * dpiScaling - window.ActualWidth) / 2 + screen.Left * dpiScaling;
             window.Top = (screen.Height * dpiScaling - window.ActualHeight) / 2 + screen.Top * dpiScaling;
         }
 
-        public static double GetDpiFactors(Window window) => 1f/VisualTreeHelper.GetDpi(window).DpiScaleX;
+        public static double GetDpiFactor(Window window) => 1f/VisualTreeHelper.GetDpi(window).DpiScaleX;
     }
 
     public static class UIHelpers {

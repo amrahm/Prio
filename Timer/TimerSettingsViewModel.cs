@@ -79,7 +79,7 @@ namespace Timer {
                 ApplyConfig();
                 if(TimersService.Singleton.GetTimer(Config.InstanceID) == null) TimersService.Singleton.Timers.Add(Timer);
                 TimersService.Singleton.SaveSettings();
-                Timer.ShowTimer();
+                Timer?.ShowTimer();
             });
             OkCommand = new DelegateCommand(() => {
                 ApplyConfig();
