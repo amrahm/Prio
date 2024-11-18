@@ -78,12 +78,7 @@ namespace Timer {
             });
 
             CancelCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
-            ApplyCommand = new DelegateCommand(() => {
-                ApplyConfig();
-                if(TimersService.Singleton.GetTimer(Config.InstanceID) == null) TimersService.Singleton.Timers.Add(Timer);
-                TimersService.Singleton.SaveSettings();
-                Timer?.ShowTimer();
-            });
+            ApplyCommand = new DelegateCommand(ApplyConfig);
             OkCommand = new DelegateCommand(() => {
                 ApplyConfig();
                 RequestClose.Invoke(ButtonResult.OK);
@@ -91,8 +86,10 @@ namespace Timer {
         }
 
         private void ApplyConfig() {
+            if(TimersService.Singleton.GetTimer(Config.InstanceID) == null) TimersService.Singleton.Timers.Add(Timer);
             Timer.Config = Config.DeepCopy();
             Timer.SaveSettings();
+            Timer?.ShowTimer();
         }
 
         public bool CanCloseDialog() => true;

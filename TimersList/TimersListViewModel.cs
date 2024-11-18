@@ -4,7 +4,6 @@ using Prism.Commands;
 using Prism.Ioc;
 using Timer;
 using Infrastructure.SharedResources;
-using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace TimersList {
@@ -28,14 +27,10 @@ namespace TimersList {
                         Timers.Remove(Timers.Single(tl => tl.ViewModel.Timer.Config.InstanceID == timer.Config.InstanceID));
             };
 
-            // Add new timer on button press
+            // Open settinfgs for a new timer
             AddTimerCommand = new DelegateCommand(() => {
                 ITimer timer = Container.Resolve<ITimer>();
-                if(timer.OpenSettings().Result == ButtonResult.OK) {
-                    TimersService.Singleton.Timers.Add(timer);
-                    TimersService.Singleton.SaveSettings();
-                    timer.ShowTimer();
-                }
+                timer.OpenSettings();
             });
         }
     }
