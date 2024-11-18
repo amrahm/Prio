@@ -5,16 +5,18 @@ using Infrastructure.SharedResources;
 using MainConfig;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public class TimerViewModel : NotifyPropertyWithDependencies {
         private readonly ITimer _timer;
+
         public ITimer Timer {
             get => _timer;
             init => NotificationBubbler.BubbleSetter(ref _timer, value, (_, _) => this.OnPropertyChanged());
         }
+
         private TimerConfig Config => Timer.Config;
 
         [DependsOnProperty(nameof(Timer))]
@@ -38,10 +40,11 @@ namespace Timer {
         public Visibility ShowName => Config.ShowName ? Visibility.Visible : Visibility.Collapsed;
 
         [DependsOnProperty(nameof(Timer))]
-        public Brush BackgroundColor => Timer.TempBackgroundBrush ??
-                                        (Timer.Running && Config.DifferentRunningBackgroundEnabled ?
-                                                Config.RunningBackgroundColor :
-                                                Config.BackgroundColor);
+        public Brush BackgroundColor =>
+            Timer.TempBackgroundBrush ??
+            (Timer.Running && Config.DifferentRunningBackgroundEnabled ?
+                 Config.RunningBackgroundColor :
+                 Config.BackgroundColor);
 
         [DependsOnProperty(nameof(Timer))]
         public Brush TextColor => Timer.TempTextBrush ?? Config.TextColor;

@@ -1,13 +1,13 @@
 ﻿using System;
 using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 using Prism.Commands;
-using Prism.Services.Dialogs;
-using DialogResult = Prism.Services.Dialogs.DialogResult;
+using Prism.Dialogs;
 
 namespace Timer {
     public class ChangeTimeViewModel : NotifyPropertyChanged, IDialogAware {
         public string Title { get; set; }
-        public event Action<IDialogResult> RequestClose;
+        [UsedImplicitly] public DialogCloseListener RequestClose { get; }
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
 
@@ -18,9 +18,8 @@ namespace Timer {
 
         public ChangeTimeViewModel() {
             OkCommand = new DelegateCommand(
-                () => RequestClose?.Invoke(new DialogResult(ButtonResult.OK,
-                                                            new DialogParameters {{nameof(Duration), Duration}})));
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
+                () => RequestClose.Invoke(new DialogParameters {{nameof(Duration), Duration}}, ButtonResult.OK));
+            CancelCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
         }
 
         public void OnDialogOpened(IDialogParameters parameters) {

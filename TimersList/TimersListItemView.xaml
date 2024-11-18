@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
-             xmlns:prism="http://www.codeplex.com/prism"
              xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
              xmlns:local="clr-namespace:TimersList"
+             xmlns:regions="http://prismlibrary.com/"
              mc:Ignorable="d" Height="100" Width="200" Margin="5"
              d:DataContext="{d:DesignInstance local:TimersListItemViewModel}">
 
@@ -23,7 +23,7 @@
 	<st:AutoGrid Columns="*, Auto" RowHeight="*">
 
 		<Grid>
-			<ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
+			<ContentControl Grid.Row="0" regions:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
 			<Rectangle Grid.Row="0" Fill="#00000000" />
 		</Grid>
 

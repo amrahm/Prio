@@ -3,7 +3,7 @@ using Infrastructure.Prism;
 using JetBrains.Annotations;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using TimersList;
 using static Infrastructure.Constants.RegionNames;
 

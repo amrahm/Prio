@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using Prism.Commands;
-using Prism.Services.Dialogs;
-using DialogResult = Prism.Services.Dialogs.DialogResult;
+using Prism.Dialogs;
+using DialogResult = Prism.Dialogs.DialogResult;
 
 namespace Infrastructure.SharedResources {
     public class MessageBoxViewModel : NotifyPropertyChanged, IDialogAware {
+        public DialogCloseListener RequestClose { get; }
         public string Title { get; set; }
-        public event Action<IDialogResult> RequestClose;
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
 
@@ -32,11 +32,11 @@ namespace Infrastructure.SharedResources {
             _timer.Tick += (_,  _) => {
                 _secondsLeft--;
                 OkText = $"OK ({_secondsLeft})";
-                if(_secondsLeft <= 0) RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+                if(_secondsLeft <= 0) RequestClose.Invoke(new DialogResult(ButtonResult.OK));
             };
 
-            OkCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.OK)));
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
+            OkCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.OK)));
+            CancelCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
         }
 
         public void OnDialogOpened(IDialogParameters parameters) {
@@ -72,8 +72,8 @@ namespace Infrastructure.SharedResources {
                 {nameof(MessageBoxViewModel.CancelText), customCancel}
             };
             return modal ?
-                    dialogService.ShowDialogAsync(nameof(MessageBoxView), dialogParameters) :
-                    dialogService.ShowAsync(nameof(MessageBoxView), dialogParameters);
+                       dialogService.ShowDialogAsync(nameof(MessageBoxView), dialogParameters) :
+                       dialogService.ShowAsync(nameof(MessageBoxView), dialogParameters);
         }
     }
 }

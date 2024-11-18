@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Media;
 using HandyControl.Controls;
 using Infrastructure.SharedResources;
+using JetBrains.Annotations;
 using Prism.Commands;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 using static Infrastructure.SharedResources.VirtualDesktopExtensions;
 
@@ -12,9 +12,10 @@ namespace Timer {
     public class TimerSettingsViewModel : NotifyPropertyWithDependencies, IDialogAware {
         private ITimer Timer { get; set; }
         public string Title { get; } = "Timer Settings";
-        public event Action<IDialogResult> RequestClose;
+        [UsedImplicitly] public DialogCloseListener RequestClose { get; }
 
         private TimerConfig _config;
+
         public TimerConfig Config {
             get => _config;
             set {
@@ -25,7 +26,7 @@ namespace Timer {
             }
         }
 
-        public ObservableCollection<OverflowActionView> OverflowActionViews { get; } = new();
+        public ObservableCollection<OverflowActionView> OverflowActionViews { get; } = [];
 
         public string ShowDesktopsConverter {
             get => DesktopSetToString(Config?.DesktopsVisible);
@@ -38,7 +39,9 @@ namespace Timer {
         }
 
         private OverflowActionViewModel _zeroOverflowActionVm;
-        public OverflowActionViewModel ZeroOverflowActionVm => _zeroOverflowActionVm ??=
+
+        public OverflowActionViewModel ZeroOverflowActionVm =>
+            _zeroOverflowActionVm ??=
                 Config != null ? new OverflowActionViewModel(Config.ZeroOverflowAction) : null;
 
         private void AddAction(OverflowAction overflowAction) {
@@ -64,7 +67,7 @@ namespace Timer {
 
         public TimerSettingsViewModel() {
             AddResetConditionCommand =
-                    new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Timer)));
+                new DelegateCommand(() => Config.ResetConditions.AddCondition(new ResetCondition(Timer)));
             AddOverflowActionCommand = new DelegateCommand(() => AddAction(new OverflowAction(Config.InstanceID)));
 
             SelectColorCommand = new DelegateCommand<object>(zone => {
@@ -74,7 +77,7 @@ namespace Timer {
                                     (TimerColorZone) zone);
             });
 
-            CancelCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
+            CancelCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
             ApplyCommand = new DelegateCommand(() => {
                 ApplyConfig();
                 if(TimersService.Singleton.GetTimer(Config.InstanceID) == null) TimersService.Singleton.Timers.Add(Timer);
@@ -83,7 +86,7 @@ namespace Timer {
             });
             OkCommand = new DelegateCommand(() => {
                 ApplyConfig();
-                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+                RequestClose.Invoke(ButtonResult.OK);
             });
         }
 

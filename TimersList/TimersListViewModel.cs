@@ -2,9 +2,9 @@
 using System.Linq;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
 using Timer;
 using Infrastructure.SharedResources;
+using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace TimersList {

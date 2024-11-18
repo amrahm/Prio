@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Infrastructure.Prism {
     public class RegionManagerAwareBehavior : RegionBehavior {
@@ -14,8 +14,9 @@ namespace Infrastructure.Prism {
             }
 
             if(item is FrameworkElement {DataContext: IRegionManagerAware rmAwareDataContext} rmAwareFrameWorkElement) {
-                if(rmAwareFrameWorkElement.Parent is FrameworkElement
-                           {DataContext: IRegionManagerAware rmAwareDataContextParent}  &&
+                if(rmAwareFrameWorkElement.Parent is FrameworkElement {
+                       DataContext: IRegionManagerAware rmAwareDataContextParent
+                   }  &&
                    rmAwareDataContext == rmAwareDataContextParent) return;
 
                 invocation(rmAwareDataContext);
@@ -32,7 +33,7 @@ namespace Infrastructure.Prism {
 
                             if(item is FrameworkElement element &&
                                element.GetValue(RegionManager.RegionManagerProperty) is IRegionManager
-                                       scopedRegionManager) {
+                                   scopedRegionManager) {
                                 regionManager = scopedRegionManager;
                             }
 

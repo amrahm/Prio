@@ -13,7 +13,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using Panel = System.Windows.Controls.Panel;
 using Color = System.Drawing.Color;
 using ComboBox = System.Windows.Controls.ComboBox;
@@ -49,20 +49,20 @@ namespace Infrastructure.SharedResources {
     }
 
     public static class DialogServiceExtensions {
-        public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
-            IDialogParameters parameters) {
-            TaskCompletionSource<IDialogResult> tcs = new();
-
-            try {
-                dialogService.ShowDialog(name, parameters, tcs.SetResult);
-            } catch(Exception ex) {
-                tcs.SetException(ex);
-            }
-            return tcs.Task;
-        }
+        // public static Task<IDialogResult> ShowDialogAsync(this IDialogService dialogService, string name,
+        //                                                   IDialogParameters parameters) {
+        //     TaskCompletionSource<IDialogResult> tcs = new();
+        //
+        //     try {
+        //         dialogService.ShowDialog(name, parameters, tcs.SetResult);
+        //     } catch(Exception ex) {
+        //         tcs.SetException(ex);
+        //     }
+        //     return tcs.Task;
+        // }
 
         public static Task<IDialogResult> ShowAsync(this IDialogService dialogService, string name,
-            IDialogParameters parameters) {
+                                                    IDialogParameters parameters) {
             TaskCompletionSource<IDialogResult> tcs = new();
 
             try {
@@ -76,7 +76,7 @@ namespace Infrastructure.SharedResources {
 
     public static class BindingHelpers {
         public static void ManualBinding(object source, string sourcePropName, object target, string targetPropName,
-            object defaultValue = null, bool twoWay = true, Action callback = null) {
+                                         object defaultValue = null, bool twoWay = true, Action callback = null) {
             var sProp = source.GetType().GetProperty(sourcePropName);
             var tProp = target.GetType().GetProperty(targetPropName);
             if(tProp != null && sProp != null) {
@@ -178,7 +178,7 @@ namespace Infrastructure.SharedResources {
             window.Top = (screen.Height * dpiScaling - window.ActualHeight) / 2 + screen.Top * dpiScaling;
         }
 
-        public static double GetDpiFactor(Window window) => 1f/VisualTreeHelper.GetDpi(window).DpiScaleX;
+        public static double GetDpiFactor(Window window) => 1f / VisualTreeHelper.GetDpi(window).DpiScaleX;
     }
 
     public static class UIHelpers {
@@ -428,7 +428,8 @@ namespace Infrastructure.SharedResources {
     public static class ComboBoxExtensionMethods {
         public static void SetMaxWidthFromItems(this ComboBox combo) {
             double idealWidth = combo.MinWidth;
-            string longestItem = combo.Items.Cast<object>().Select(x => x.ToString()).Max(x => (x?.Length, x)).x;
+            string longestItem = combo.Items.Cast<object>().Select(x => x.ToString()).DefaultIfEmpty("")
+                .Max(x => (x?.Length, x)).x;
             if(longestItem is {Length: > 0}) {
                 string tmpTxt = combo.Text;
                 combo.Text = longestItem;

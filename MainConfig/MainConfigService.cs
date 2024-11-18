@@ -1,8 +1,8 @@
 ﻿using System;
 using Infrastructure.Prism;
 using JetBrains.Annotations;
-using Prism.Regions;
 using Prism.Ioc;
+using Prism.Navigation.Regions;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace MainConfig {

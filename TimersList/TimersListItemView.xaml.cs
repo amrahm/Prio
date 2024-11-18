@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Prism;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using Timer;
 using static Infrastructure.Constants.RegionNames;
 

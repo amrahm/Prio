@@ -11,7 +11,7 @@ using Prio.GlobalServices;
 using Prio.RegionAdapters;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using Serilog;
 using ILogger = Serilog.ILogger;
 
@@ -19,6 +19,7 @@ namespace Prio {
     /// <summary> Interaction logic for App.xaml </summary>
     public partial class App {
         [UsedImplicitly] private static Mutex _mutex;
+
         protected override void OnStartup(StartupEventArgs e) {
             string appName = $"{nameof(Prio)}{(Debugger.IsAttached ? "_DEBUG" : "")}";
 
@@ -68,8 +69,8 @@ namespace Prio {
 
         public App() {
             Log.Logger = new LoggerConfiguration()
-                         .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5)
-                         .CreateLogger();
+                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5)
+                .CreateLogger();
 
             RegisterGlobalExceptionHandling(Log.Logger);
         }

@@ -2,7 +2,7 @@
 using Prism.Modularity;
 using Infrastructure.Constants;
 using JetBrains.Annotations;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Timer {
     /// <summary> Register components of module with Unity/Prism </summary>

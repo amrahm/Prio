@@ -7,12 +7,13 @@ using GeneralConfig;
 using Infrastructure.Constants;
 using Infrastructure.Prism;
 using Infrastructure.SharedResources;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace MainConfig {
     /// <summary> Interaction logic for MainConfigView.xaml </summary>
     public partial class MainConfigView : IRegionManagerAware {
         private Window _window;
+
         public MainConfigView() {
             InitializeComponent();
             Loaded += (_,  _) => {

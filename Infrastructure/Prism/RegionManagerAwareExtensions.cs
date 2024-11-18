@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Prism.Ioc;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Infrastructure.Prism {
     public static class RegionManagerAwareExtensions {

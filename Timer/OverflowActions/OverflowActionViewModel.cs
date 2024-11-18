@@ -5,12 +5,13 @@ using System.Windows.Media;
 using HandyControl.Controls;
 using Microsoft.Win32;
 using Prism.Commands;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 
 namespace Timer {
     public class OverflowActionViewModel : NotifyPropertyWithDependencies {
         private readonly OverflowAction _model;
+
         public OverflowAction Model {
             get => _model;
             private init => NotificationBubbler.BubbleSetter(ref _model, value, (_, _) => this.OnPropertyChanged());
@@ -46,7 +47,8 @@ namespace Timer {
         }
 
         [DependsOnProperty(nameof(Model))]
-        public string PlaySoundFile => Model == null || string.IsNullOrEmpty(Model.PlaySoundFile) ?
+        public string PlaySoundFile =>
+            Model == null || string.IsNullOrEmpty(Model.PlaySoundFile) ?
                 null :
                 $"...\\{Model.PlaySoundFile.Split('\\').Last()}";
     }

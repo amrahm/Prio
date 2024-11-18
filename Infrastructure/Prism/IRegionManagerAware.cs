@@ -1,4 +1,4 @@
-﻿using Prism.Regions;
+﻿using Prism.Navigation.Regions;
 
 namespace Infrastructure.Prism {
     public interface IRegionManagerAware {

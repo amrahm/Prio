@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows;
 using Infrastructure.Prism;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using static Infrastructure.Constants.RegionNames;
 
 namespace TimersList {

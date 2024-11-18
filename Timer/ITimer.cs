@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 
 namespace Timer {
     public interface ITimer : INotifyPropertyChanged, IDisposable {

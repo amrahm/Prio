@@ -7,7 +7,7 @@ using System.Windows.Threading;
 using Infrastructure.SharedResources;
 using Microsoft.Win32;
 using Prio.GlobalServices;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using WeakEvent;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
@@ -45,6 +45,7 @@ namespace Timer {
         public Brush TempTextBrush { get; set; }
 
         private readonly WeakEventSource<EventArgs> _finished = new();
+
         public event EventHandler<EventArgs> Finished {
             add => _finished.Subscribe(value);
             remove => _finished.Unsubscribe(value);
@@ -72,6 +73,7 @@ namespace Timer {
 
             VDM.DesktopChanged += (_, _) => HandleDesktopChanged();
         }
+
         public ITimer Duplicate() {
             var copyconfig = Config.DeepCopy();
             copyconfig.InstanceID = Guid.NewGuid();
@@ -138,6 +140,7 @@ namespace Timer {
 
             FixTimerActionOrder();
         }
+
         private void FixTimerActionOrder() {
             _timerActions.Sort();
             _taPointer = 0;
@@ -219,12 +222,14 @@ namespace Timer {
             if(Config.Visible) ShowTimer();
             else TimerWindow?.Close();
         }
+
         public void ToggleVisibility() => SetVisibility(!Config.Visible);
 
         public void SetTopmost() {
             if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = true;
         }
+
         public void SetBottommost() {
             if(!(Config.Enabled && Config.Visible)) return;
             TimerWindow.Topmost = false;
@@ -257,6 +262,7 @@ namespace Timer {
                 TimerWindow?.Close();
             }
         }
+
         public void ToggleEnabled() => SetEnabled(!Config.Enabled);
 
         #endregion
@@ -360,6 +366,7 @@ namespace Timer {
         private enum TimerHotkeyState { ShouldStart, ShouldStop }
 
         public void RegisterShortcuts() { RegisterShortcuts(Config); }
+
         public void RegisterShortcuts(TimerConfig timerConfig) {
             HotkeyManager.RegisterHotkey(timerConfig.InstanceID, timerConfig, nameof(timerConfig.ResetShortcut),
                                          RequestResetTimer, CompatibilityType.Reset);
@@ -457,6 +464,7 @@ namespace Timer {
 
         // To detect redundant calls
         private bool _disposed;
+
         public void Dispose() {
             if(_disposed) return;
             SetEnabled(false);

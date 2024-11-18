@@ -1,8 +1,7 @@
-﻿using System;
-using Infrastructure.SharedResources;
+﻿using Infrastructure.SharedResources;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Mvvm;
-using Prism.Services.Dialogs;
 
 namespace MainConfig {
     public class MainConfigViewModel : BindableBase, IDialogAware {
@@ -10,7 +9,8 @@ namespace MainConfig {
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() {  }
         public void OnDialogOpened(IDialogParameters parameters) {  }
-        public event Action<IDialogResult> RequestClose;
+
+        DialogCloseListener IDialogAware.RequestClose { get; }
 
 
         public DelegateCommand ExitCommand { get; }

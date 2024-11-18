@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using JetBrains.Annotations;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Prio.RegionAdapters {
     [UsedImplicitly]

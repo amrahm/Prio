@@ -6,17 +6,19 @@ using System.Windows.Threading;
 using Infrastructure.Constants;
 using Infrastructure.SharedResources;
 using Prio.GlobalServices;
-using Prism.Services.Dialogs;
+using Prism.Dialogs;
 using static Infrastructure.SharedResources.UnityInstance;
 using Application = System.Windows.Application;
 
 namespace Timer {
     public class TimersService : NotifyPropertyChanged {
         public static readonly TimersService Singleton = new();
+
         public static TimersGeneralConfig Config {
             get => Singleton.Conf;
             set => Singleton.Conf = value;
         }
+
         public VisibilityState VisState {
             get => Config.VisState;
             set {
@@ -86,6 +88,7 @@ namespace Timer {
             VisState = show ? _lastNonHiddenVisState : VisibilityState.Hidden;
             foreach(ITimer timer in Timers) timer.SetVisibility(VisState != VisibilityState.Hidden);
         }
+
         private void ShowHideAll() => SetShowHide(VisState == VisibilityState.Hidden);
 
         public void TopAll() {

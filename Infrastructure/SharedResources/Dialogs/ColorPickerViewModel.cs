@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Media;
 using HandyControl.Controls;
-using Prism.Services.Dialogs;
+using JetBrains.Annotations;
+using Prism.Dialogs;
 
 namespace Infrastructure.SharedResources {
     public class ColorPickerViewModel : IDialogAware {
         public string Title { get; } = "Color Picker";
-        public event Action<IDialogResult> RequestClose;
+        [UsedImplicitly] public DialogCloseListener RequestClose { get; }
         public bool CanCloseDialog() => true;
         public void OnDialogClosed() { }
 
@@ -17,23 +17,27 @@ namespace Infrastructure.SharedResources {
         }
 
         private ColorPicker _picker;
+
         public ColorPicker Picker {
             set {
                 _picker = value;
-                _picker.Confirmed += (_, _) => RequestClose?.Invoke(
-                    new DialogResult(ButtonResult.OK, new DialogParameters {
-                        {nameof(ColorPicker.SelectedBrush), _picker.SelectedBrush}
-                    }));
-                _picker.Canceled += (_, _) => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
+                _picker.Confirmed += (_, _) => RequestClose.Invoke(new DialogParameters {
+                                                                       {
+                                                                           nameof(ColorPicker.SelectedBrush),
+                                                                           _picker.SelectedBrush
+                                                                       }
+                                                                   },
+                                                                   ButtonResult.OK);
+                _picker.Canceled += (_, _) => RequestClose.Invoke(ButtonResult.Cancel);
             }
         }
     }
 
     public static class DialogServiceColorPickerExtension {
         public static Task<IDialogResult> ShowColorPicker(this IDialogService dialogService,
-                                                          SolidColorBrush selectedBrush = null) {
+                                                          SolidColorBrush selectedBrush) {
             return dialogService.ShowDialogAsync(nameof(ColorPickerView),
-                                                 new DialogParameters { { nameof(ColorPicker.SelectedBrush), selectedBrush } });
+                                                 new DialogParameters {{nameof(ColorPicker.SelectedBrush), selectedBrush}});
         }
     }
 }
