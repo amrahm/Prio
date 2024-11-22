@@ -3,15 +3,11 @@
     <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
     <OutputType>Library</OutputType>
     <UseWPF>true</UseWPF>
+    <AssemblyName>TimersList</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GeneralConfig\GeneralConfig.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\TimersList\TimersList.csproj" />
-    <ProjectReference Include="..\TimeOfDayList\TimeOfDayList.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <ProjectReference Include="..\Timer\Timer.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
@@ -42,5 +38,4 @@
     </PackageReference>
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
   </ItemGroup>
-  <PropertyGroup />
 </Project>

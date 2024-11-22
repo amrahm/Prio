@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:NavigationMenuViewModel}"
              d:DesignHeight="400"
-             Width="150">
+             Width="180">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -38,8 +38,11 @@
 					<hc:ColorMatrixEffect M22="1" x:Name="TimersEffect" />
 				</Button.Effect>
 			</Button>
-			<Button Content="Etc." />
-			<Button Content="About" />
+            <Button Content="  Time of Day" Command="{Binding TimeOfDayButton}" x:Name="TimeOfDay" HorizontalAlignment="Right">
+                <Button.Effect>
+                    <hc:ColorMatrixEffect M22="1" x:Name="TimeOfDayEffect" />
+                </Button.Effect>
+            </Button>
 		</StackPanel>
 	</Grid>
 </UserControl>

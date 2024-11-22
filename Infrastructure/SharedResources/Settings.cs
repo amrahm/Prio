@@ -9,7 +9,7 @@ namespace Infrastructure.SharedResources {
     public static class Settings {
         private const string PATH = "./prioConfig.json";
 
-        private static readonly List<string> BakAdditions = new() {""};
+        private static readonly List<string> BakAdditions = [""];
 
         static Settings() {
             for(int i = 0; i <= 5; i++) BakAdditions.Add($".bak{i}");
@@ -18,7 +18,7 @@ namespace Infrastructure.SharedResources {
         public static bool SettingsExists() => BakAdditions.Any(addition => _SettingsExists($"{PATH}{addition}"));
 
         private static bool _SettingsExists(string path = PATH) =>
-                File.Exists(path) && File.ReadAllText(path).Trim().Length > 5;
+            File.Exists(path) && File.ReadAllText(path).Trim().Length > 5;
 
         /// <summary> Save settings for a module, or a specific instance of a module if an instanceID is supplied </summary>
         /// <typeparam name="T"> Settings class for the module </typeparam>
@@ -63,7 +63,7 @@ namespace Infrastructure.SharedResources {
                     var fullConfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(path));
                     setting = (fullConfig.GetValueOrDefault(moduleName, null) as JObject)?.ToObject<T>();
                     if(setting != null) break;
-                } catch(Exception) {
+                } catch {
                     // ignored
                 }
             }

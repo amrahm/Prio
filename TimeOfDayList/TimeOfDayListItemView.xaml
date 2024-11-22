@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="TimeOfDayList.TimeOfDayListItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:st="clr-namespace:AutoGrid;assembly=SpicyTaco.AutoGrid"
+             xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
+             xmlns:local="clr-namespace:TimeOfDayList"
+             xmlns:regions="http://prismlibrary.com/"
+             mc:Ignorable="d" Height="100" Width="200" Margin="5"
+             d:DataContext="{d:DesignInstance local:TimeOfDayListItemViewModel}">
+
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+
+	<st:AutoGrid Columns="*, Auto" RowHeight="*">
+
+		<Grid>
+			<ContentControl Grid.Row="0" regions:RegionManager.RegionName="{x:Static constants:RegionNames.TIMER_IN_LIST_REGION}" />
+			<Rectangle Grid.Row="0" Fill="#00000000" />
+		</Grid>
+
+		<st:AutoGrid Rows="*, *, *" ChildMargin="0" ColumnWidth="*" Margin="5, 0">
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding OpenTimerSettings}">
+				<Image Source="/Infrastructure;component/SharedResources/images/settings.png"
+				       RenderOptions.BitmapScalingMode="Fant" />
+			</Button>
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding ToggleVisState}">
+				<Image Source="{Binding VisImagePath}" RenderOptions.BitmapScalingMode="Fant" />
+			</Button>
+			<Button Style="{StaticResource IconButton}" Margin="0" Command="{Binding DeleteTimer}">
+				<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/delete.png"
+				       RenderOptions.BitmapScalingMode="Fant" />
+			</Button>
+		</st:AutoGrid>
+	</st:AutoGrid>
+
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Edit Timer" Command="{Binding OpenTimerSettings}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/settings.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Toggle Visibility" Command="{Binding ToggleVisState}">
+				<MenuItem.Icon>
+					<Image Source="{Binding VisImagePath}" RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete Timer" Command="{Binding DeleteTimer}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/delete.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<Separator />
+			<MenuItem Header="Duplicate Timer" Command="{Binding DuplicateTimer}">
+				<MenuItem.Icon>
+					<Image Source="/Infrastructure;component/SharedResources/images/icons-assets/duplicate.png"
+					       RenderOptions.BitmapScalingMode="Fant" />
+				</MenuItem.Icon>
+			</MenuItem>
+		</ContextMenu>
+	</UserControl.ContextMenu>
+</UserControl>

@@ -11,6 +11,7 @@ namespace MainConfig {
         private static readonly Duration Duration = new(TimeSpan.FromMilliseconds(200));
         private double _genConfigWidth;
         private double _timersWidth;
+        private double _timeOfDayWidth;
 
         public NavigationMenuView() {
             InitializeComponent();
@@ -18,7 +19,9 @@ namespace MainConfig {
             Loaded += (_,  _) => {
                 _genConfigWidth = GenConfig.ActualWidth;
                 _timersWidth = Timers.ActualWidth;
+                _timeOfDayWidth = TimeOfDay.ActualWidth;
                 Timers.Width = MainGrid.ActualWidth;
+                TimeOfDay.Width = MainGrid.ActualWidth;
 
                 GenConfig.IsEnabled = false;
                 GenEffect.M22 = 2;
@@ -33,6 +36,9 @@ namespace MainConfig {
                             break;
                         case NavigationMenuViewModel.SelectedButton.Timers:
                             SelectButton(Timers, TimersEffect, _timersWidth);
+                            break;
+                        case NavigationMenuViewModel.SelectedButton.TimeOfDayButton:
+                            SelectButton(TimeOfDay, TimeOfDayEffect, _timeOfDayWidth);
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -51,6 +57,10 @@ namespace MainConfig {
             if(button != Timers) {
                 Timers.IsEnabled = true;
                 AnimateButton(Timers, TimersEffect, MainGrid.ActualWidth, 1);
+            }
+            if(button != TimeOfDay) {
+                TimeOfDay.IsEnabled = true;
+                AnimateButton(TimeOfDay, TimeOfDayEffect, MainGrid.ActualWidth, 1);
             }
         }
 

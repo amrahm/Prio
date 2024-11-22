@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="TimeOfDayList.TimeOfDayListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TimeOfDayList"
+             xmlns:constants="clr-namespace:Infrastructure.Constants;assembly=Infrastructure"
+             xmlns:regions="http://prismlibrary.com/"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="420"
+             x:Name="Root">
+
+	<UserControl.DataContext>
+		<local:TimeOfDayListViewModel />
+	</UserControl.DataContext>
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Infrastructure;component/SharedResources/ResourceDictionary.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+	              Background="{StaticResource LightBrush}">
+		<StackPanel>
+			<WrapPanel Name="TimerWrapPanel"
+			           regions:RegionManager.RegionName="{x:Static constants:RegionNames.TIMERS_LIST_REGION}" />
+			<Button Margin="10" Height="40" HorizontalAlignment="Center" Background="Transparent"
+			        Style="{StaticResource IconButtonBordered}" Command="{Binding AddTimerCommand}">
+				<Viewbox>
+					<TextBlock Text="+" FontSize="36" Margin="0, -17, 0, -8" Style="{StaticResource HintControlDark}" />
+				</Viewbox>
+			</Button>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>
