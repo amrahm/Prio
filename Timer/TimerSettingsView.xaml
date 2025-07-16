@@ -206,6 +206,11 @@
 								         TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
 								         Visibility="{Binding IsChecked, ElementName=ShowMessageCheckbox, Converter={StaticResource B2V}}" />
 							</st:AutoGrid>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Margin="5" x:Name="ForceOffDesktop"
+                                          IsChecked="{Binding Config.ZeroOverflowAction.ForceOffDesktop}" />
+                                <TextBlock Style="{StaticResource BaseControlStyle}" Text="Force Off Desktop" />
+                            </StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<CheckBox Margin="5" x:Name="OverflowCheckbox" IsChecked="{Binding Config.OverflowEnabled}" />
 								<TextBlock Style="{StaticResource BaseControlStyle}" Text="Overflow" />

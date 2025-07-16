@@ -8,7 +8,6 @@
     <ProjectReference Include="..\GeneralConfig\GeneralConfig.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\TimersList\TimersList.csproj" />
-    <ProjectReference Include="..\TimeOfDayList\TimeOfDayList.csproj" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

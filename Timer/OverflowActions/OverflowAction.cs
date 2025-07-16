@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.SharedResources;
+using WindowsDesktop;
 using static Infrastructure.SharedResources.UnityInstance;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Drawing.Point;
@@ -14,6 +15,7 @@ namespace Timer {
         private const double FLASH_COLOR_TICK_RATE = 0.3;
 
         private Guid _timerId;
+
         public Guid TimerId {
             get => _timerId;
             set {
@@ -21,6 +23,7 @@ namespace Timer {
                 _timer = null;
             }
         }
+
         private ITimer _timer;
         private ITimer Timer => _timer ??= TimersService.Singleton.GetTimer(TimerId);
         public double AfterMinutes { get; set; }
@@ -34,6 +37,7 @@ namespace Timer {
         public string PlaySoundFile { get; set; }
         public bool ShowMessageEnabled { get; set; }
         public string Message { get; set; }
+        public bool ForceOffDesktop { get; set; }
 
         public event EventHandler<EventArgs> DeleteRequested;
         public void DeleteMe() => DeleteRequested?.Invoke(this, EventArgs.Empty);
@@ -80,6 +84,25 @@ namespace Timer {
             if(RepeatEnabled)
                 Timer.AddTimerAction(new TimerAction(Timer.Config.TimeLeft - TimeSpan.FromMinutes(RepeatMinutes), DoAction),
                                      true);
+
+            if(ForceOffDesktop) {
+                VDM.DesktopChanged += VDMOnDesktopChanged;
+                if(Timer.Config.DesktopsActive.Contains(VDM.CurrentDesktop())) {
+                    for(int i = 0; i < VDM.NumDesktops(); i++) {
+                        if(Timer.Config.DesktopsActive.Contains(i)) continue;
+                        VDM.SwitchToDesktop(i);
+                        break;
+                    }
+                }
+            } else {
+                VDM.DesktopChanged -= VDMOnDesktopChanged;
+            }
+        }
+
+        private void VDMOnDesktopChanged(object sender, VirtualDesktopChangedEventArgs e) {
+            if(Timer.Config.TimeLeft.Ticks <= 0 && Timer.Config.DesktopsActive.Contains(e.NewDesktop.Index)) {
+                VDM.SwitchToDesktop(e.OldDesktop.Index);
+            }
         }
     }
 }

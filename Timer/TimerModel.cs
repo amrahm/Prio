@@ -164,7 +164,7 @@ namespace Timer {
             if(!Config.Enabled) return;
             int newDesktop = VDM.CurrentDesktop();
             TimerWindow?.Dispatcher.Invoke(() => {
-                Config.DesktopsVisible ??= new HashSet<int> {-1};
+                Config.DesktopsVisible ??= [-1];
                 if((Config.DesktopsVisible.Contains(-1) || Config.DesktopsVisible.Contains(newDesktop)) && Config.Visible &&
                    TimersService.Singleton.VisState != VisibilityState.Hidden) {
                     TimerWindow.Visibility = Visibility.Visible;

@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleTemplate", "ModuleTem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainConfig", "MainConfig\MainConfig.csproj", "{84024AAF-356F-4991-8475-30CE46879392}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeOfDayList", "TimeOfDayList\TimeOfDayList.csproj", "{97D96701-FF03-41BC-A5D1-93681A0278AF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,10 +53,6 @@ Global
 		{84024AAF-356F-4991-8475-30CE46879392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84024AAF-356F-4991-8475-30CE46879392}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84024AAF-356F-4991-8475-30CE46879392}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97D96701-FF03-41BC-A5D1-93681A0278AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97D96701-FF03-41BC-A5D1-93681A0278AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97D96701-FF03-41BC-A5D1-93681A0278AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97D96701-FF03-41BC-A5D1-93681A0278AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,7 +63,6 @@ Global
 		{11A53EC0-290A-4724-B446-E13484D014A6} = {C287085E-6A80-4D43-8D35-E033D7FC1BF7}
 		{3E67931A-5313-48D6-B536-5ACC62CD123D} = {C287085E-6A80-4D43-8D35-E033D7FC1BF7}
 		{84024AAF-356F-4991-8475-30CE46879392} = {C287085E-6A80-4D43-8D35-E033D7FC1BF7}
-		{97D96701-FF03-41BC-A5D1-93681A0278AF} = {C287085E-6A80-4D43-8D35-E033D7FC1BF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19B85C08-F1A5-4F94-8E01-9EA5E4CE41C0}

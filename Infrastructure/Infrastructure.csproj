@@ -38,6 +38,7 @@
       <Version>1.2.29</Version>
     </PackageReference>
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
+    <PackageReference Include="VirtualDesktop.WPF.Net5" Version="5.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="SharedResources\Dialogs\MessageBoxView.xaml.cs">
